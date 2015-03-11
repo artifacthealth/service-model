@@ -1,0 +1,7 @@
+
+class ServiceHost {
+
+
+}
+
+export = ServiceHost;
