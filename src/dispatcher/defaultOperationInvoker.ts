@@ -12,15 +12,19 @@ class DefaultOperationInvoker implements OperationInvoker {
     private _method: reflect.Symbol;
     private _isAsync: boolean;
 
-    constructor(od: OperationDescription) {
+    constructor(description: OperationDescription) {
 
-        if(!od) {
+        if(!description) {
             throw new Error("Missing required argument 'operationDescription'.");
         }
 
-        this._method = od.method;
-        this._parameterCount = od.method.getType().getCallSignatures()[0].getParameters().length;
-        this._isAsync = od.isAsync;
+        this._method = description.method;
+        this._parameterCount = description.method.getType().getCallSignatures()[0].getParameters().length;
+        if(description.isAsync) {
+            // do not include callback in parameter count if async
+            this._parameterCount--;
+        }
+        this._isAsync = description.isAsync;
     }
 
     invoke(instance: any, args: any[], callback: ResultCallback<any>): void {
@@ -40,16 +44,10 @@ class DefaultOperationInvoker implements OperationInvoker {
             return;
         }
 
-        var operation = this._method.getValue(instance);
-        if(!operation) {
-            process.nextTick(() => callback(new Error("Instance is missing operation.")));
-            return;
-        }
-
         // synchronous invoke
         if(!this._isAsync) {
             try {
-                process.nextTick(() => callback(null, operation.apply(instance, args)));
+                process.nextTick(() => callback(null, this._method.invoke(instance, args)));
             }
             catch(err) {
                 process.nextTick(() => callback(err));
@@ -82,7 +80,7 @@ class DefaultOperationInvoker implements OperationInvoker {
 
         // catch any exceptions because we don't want any errors to cause timeout
         try {
-            operation.apply(instance, args.concat(done));
+            this._method.invoke(instance, args.concat(done));
         }
         catch(err) {
             clearTimeout(timeoutHandle);

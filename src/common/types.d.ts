@@ -13,10 +13,10 @@ interface ResultCallback<T> {
     (err?: Error, result?: T): void;
 }
 
-interface Constructor<T> {
+interface Constructor {
 
     name?: string;
-    new(...args: any[]): T;
+    new(...args: any[]): any;
 }
 
 interface Lookup<T> {

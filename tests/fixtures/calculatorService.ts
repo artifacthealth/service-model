@@ -13,7 +13,7 @@ class CalculatorService implements Calculator {
     }
 
     divide(x: number, y: number, callback: (err: Error, result: number) => void): void {
-        callback(null, x / y);
+        process.nextTick(() => callback(null, x / y));
     }
 }
 

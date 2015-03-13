@@ -5,18 +5,19 @@ import ErrorHandler = require("./errorHandler");
 import RequestDispatcher = require("./requestDispatcher");
 import Message = require("../message");
 import BaseAddressMessageFilter = require("./baseAddressMessageFilter");
+import Url = require("../url");
 
 class DispatchService {
 
     name: string;
-    baseAddress: string;
+    baseAddress: Url;
     endpoints: DispatchEndpoint[] = [];
     filter: MessageFilter;
     filterPriority: number = 0;
     errorHandlers: ErrorHandler[] = [];
     includeDetailsInFault: boolean;
 
-    constructor(public dispatcher: RequestDispatcher, baseAddress: string, name: string) {
+    constructor(public dispatcher: RequestDispatcher, baseAddress: Url, name: string) {
 
         if(!dispatcher) {
             throw new Error("Missing required parameter 'dispatcher'.");

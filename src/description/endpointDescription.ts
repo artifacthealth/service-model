@@ -1,17 +1,18 @@
 import ContractDescription = require("./contractDescription");
 import EndpointBehavior = require("./endpointBehavior");
+import Url = require("../url");
 
 class EndpointDescription {
 
     name: string;
     behaviors: EndpointBehavior[] = [];
     contract: ContractDescription;
-    address: string;
+    address: Url;
 
-    constructor(contract: ContractDescription, address: string, name?: string) {
+    constructor(contract: ContractDescription, address: Url | string, name?: string) {
 
+        this.address = new Url(address);
         this.contract = contract;
-        this.address = address;
         this.name = name;
     }
 }

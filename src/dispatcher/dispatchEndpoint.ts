@@ -7,11 +7,13 @@ import MessageFilter = require("./messageFilter");
 import EndpointDescription = require("../description/endpointDescription");
 import AddressMessageFilter = require("./addressMessageFilter");
 import DefaultInstanceProvider = require("./defaultInstanceProvider")
+import Message = require("../message");
+import Url = require("../url");
 
 class DispatchEndpoint {
 
     name: string;
-    address: string;
+    address: Url;
     filter: MessageFilter;
     filterPriority: number = 0;
     instanceProvider: InstanceProvider;
@@ -19,7 +21,7 @@ class DispatchEndpoint {
     operationSelector: OperationSelector;
     unhandledOperation: DispatchOperation;
 
-    constructor(public service: DispatchService, address: string, name: string) {
+    constructor(public service: DispatchService, address: Url, name: string) {
 
         if(!service) {
             throw new Error("Missing required parameter 'service'.");
@@ -29,13 +31,18 @@ class DispatchEndpoint {
             throw new Error("Missing required parameter 'address'.");
         }
 
-        if(!name) {
-            throw new Error("Missing required parameter 'name'.");
-        }
-
         this.address = address;
         this.name = name;
         this.filter = new AddressMessageFilter(address);
+    }
+
+    chooseOperation(message: Message): DispatchOperation {
+
+        var operation = this.operationSelector.selectOperation(message);
+        if(!operation) {
+            operation = this.unhandledOperation;
+        }
+        return operation;
     }
 }
 

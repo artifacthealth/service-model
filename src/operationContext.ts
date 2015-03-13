@@ -3,7 +3,7 @@
 import cls = require("continuation-local-storage");
 import RequestContext = require("./requestContext");
 
-var ns = cls.createNamespace("services.artifacthealth.com");
+var ns: cls.Namespace;
 
 class OperationContext {
 
@@ -19,13 +19,17 @@ class OperationContext {
 
     static get current(): OperationContext {
 
+        if(!ns) return undefined;
         return ns.get("operationContext");
     }
 
     static create(block: (operationContext: OperationContext) => void): void {
 
-        ns.run(() => {
+        if(!ns) {
+            ns = cls.createNamespace("__operation_context_" + (new Date().getTime().toString()) + "__");
+        }
 
+        ns.run(() => {
             var context = new OperationContext();
             ns.set('operationContext', context);
             block(context);

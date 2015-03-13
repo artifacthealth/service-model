@@ -3,16 +3,20 @@ import Message = require("../message");
 
 class RegExpAddressMessageFilter implements MessageFilter {
 
-    private _address: RegExp;
+    private _pattern: RegExp;
 
-    constructor(address: RegExp) {
+    constructor(pattern: RegExp) {
 
-        this._address = address;
+        if(!pattern) {
+            throw new Error("Missing required argument 'pattern'.");
+        }
+
+        this._pattern = pattern;
     }
 
     match(message: Message): boolean {
 
-        return this._address.test(message.url);
+        return this._pattern.test(message.url.pathname);
     }
 }
 

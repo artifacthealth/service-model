@@ -1,4 +1,4 @@
-import OperationDescription = require("./contractDescription");
+import OperationDescription = require("./operationDescription");
 import DispatchOperation = require("../dispatcher/dispatchOperation");
 
 interface OperationBehavior {

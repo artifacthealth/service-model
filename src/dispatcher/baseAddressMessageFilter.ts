@@ -1,19 +1,23 @@
 import MessageFilter = require("./messageFilter");
 import Message = require("../message");
-import UrlUtil = require("../common/urlUtil");
+import Url = require("../url");
 
 class PartialAddressMessageFilter implements MessageFilter {
 
-    private _address: string;
+    private _url: Url;
 
-    constructor(address: string) {
+    constructor(url: Url) {
 
-        this._address = UrlUtil.normalize(address);
+        if(!url) {
+            throw new Error("Missing required argument 'url'.");
+        }
+
+        this._url = url;
     }
 
     match(message: Message): boolean {
 
-        return message.url.indexOf(this._address) == 0;
+        return message.url.pathname.indexOf(this._url.pathname) == 0;
     }
 }
 

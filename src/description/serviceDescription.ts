@@ -1,11 +1,12 @@
 /// <reference path="../common/types.d.ts" />
 
 import reflect = require("tsreflect");
-import url = require("url");
+import changeCase = require("change-case");
 
 import EndpointDescription = require("./endpointDescription");
 import ContractDescription = require("./contractDescription");
 import ServiceBehavior = require("./serviceBehavior");
+import Url = require("../url");
 
 class ServiceDescription {
 
@@ -13,23 +14,32 @@ class ServiceDescription {
     behaviors: ServiceBehavior[] = [];
     endpoints: EndpointDescription[] = [];
     serviceSymbol: reflect.Symbol;
-    baseAddress: string;
+    baseAddress: Url;
 
-    constructor(serviceSymbol: reflect.Symbol, baseAddress: string, name?: string) {
+    constructor(serviceSymbol: reflect.Symbol, baseAddress?: Url | string, name?: string) {
 
+        this.baseAddress = new Url(baseAddress);
         this.serviceSymbol = serviceSymbol;
-        this.baseAddress = baseAddress;
         this.name = name || serviceSymbol.getName();
     }
 
-    addServiceEndpoint(implementedContract: string, address?: string, name?: string): EndpointDescription {
+    addEndpoint(implementedContract: string, address?: string, name?: string): EndpointDescription {
 
-        var contractType = this.serviceSymbol.getDeclaredType().getBaseType(implementedContract);
+        var contractType = this.serviceSymbol.getDeclaredType().getInterface(implementedContract);
         if (!contractType) {
             throw new Error("Service '" + this.name + "' does not implemented contract '" + implementedContract + "'.");
         }
 
-        var endpoint = new EndpointDescription(new ContractDescription(contractType), url.resolve(this.baseAddress, address || ""), name);
+        var url = this.baseAddress.resolve(address);
+
+        // validate that endpoint address is unique
+        for(var i = 0; i < this.endpoints.length; i++) {
+            if(this.endpoints[i].address.equals(url)) {
+                throw new Error("There is already an endpoint with address '" + url + "'.");
+            }
+        }
+
+        var endpoint = new EndpointDescription(new ContractDescription(contractType), url, name);
         this.endpoints.push(endpoint);
         return endpoint;
     }

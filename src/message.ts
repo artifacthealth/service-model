@@ -1,19 +1,29 @@
-import UrlUtil = require("./common/urlUtil");
+import Url = require("./url");
 
 class Message {
 
-    url: string;
+    url: Url;
     status: number;
     method: string;
+    headers: Lookup<string> = {};
 
     body: any;
 
-    constructor(url: string) {
-        this.url = UrlUtil.normalize(url);
+    constructor(body?: any) {
+
+        this.body = body;
     }
 
-    header(name: string, value?: any): any {
-        return null;
+    setHeader(name: string, value: string): void {
+        if(!this.headers) {
+            this.headers = {};
+        }
+        this.headers[name] = value;
+    }
+
+    getHeader(name: string): string {
+        if(!this.headers) return undefined;
+        return this.headers[name];
     }
 }
 

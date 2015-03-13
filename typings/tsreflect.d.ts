@@ -26,7 +26,8 @@ declare module "tsreflect" {
     function reference(fileName: string): void;
 
     /**
-     * Asynchronously load type information for the given filename pattern(s) in the global context.
+     * Asynchronously load type information for the given filename pattern(s) in the global context. If the path is not
+     * specified then symbol information is loaded, if available, for all required modules.
      *
      * This method assumes that the .d.json files are in the same directory as the .js file that they contain type
      * information for. The load method supports [glob](https://github.com/isaacs/node-glob) patterns for filename
@@ -35,11 +36,31 @@ declare module "tsreflect" {
      * Once all declaration files have been loaded, the callback is called with the symbols for any external
      * modules and any top level global declarations in the processed files.
      *
-     * @param path The path(s) to load. Glob patterns are supported.
+     * @param path Optional. The path(s) to load. Glob patterns are supported. If not specified symbol information is
+     * loaded, if available, for all required modules.
      * @param callback Called when the load operation completes.
      */
+    function load(callback: (err: DiagnosticError, symbols: Symbol[]) => void): void;
     function load(path: string, callback: (err: DiagnosticError, symbols: Symbol[]) => void): void;
     function load(path: string[], callback: (err: DiagnosticError, symbols: Symbol[]) => void): void;
+
+    /**
+     * Synchronously load type information for the given filename pattern(s) in the global context.  If the path is not
+     * specified then symbol information is loaded, if available, for all required modules.
+     *
+     * This method assumes that the .d.json files are in the same directory as the .js file that they contain type
+     * information for. The load method supports [glob](https://github.com/isaacs/node-glob) patterns for filename
+     * matching. Relative paths are considered to be relative to the current working directory.
+     *
+     * Once all declaration files have been loaded, a list of symbols is returned any external modules and any top
+     * level global declarations in the processed files.
+     *
+     * @param path Optional. The path(s) to load. Glob patterns are supported. If not specified symbol information is
+     * loaded, if available, for all required modules.
+     */
+    function loadSync(): Symbol[];
+    function loadSync(path: string): Symbol[];
+    function loadSync(path: string[]): Symbol[];
 
     /**
      * Finds the symbol for the given entity name in the global context. If a global symbol with the given name cannot
@@ -53,6 +74,11 @@ declare module "tsreflect" {
      */
     function createContext(): ReflectContext;
 
+    /**
+     * Searches all loaded symbol information for the given constructor and returns the symbol if found.
+     * @param ctr The constructor to search for. Note this does not work for global symbols.
+     */
+    function getSymbol(ctr: Constructor): Symbol;
 
     /**
      * Reflection context.
@@ -97,8 +123,28 @@ declare module "tsreflect" {
          * @param path The path(s) to load. Glob patterns are supported.
          * @param callback Called when the load operation completes.
          */
+        load(callback: (err: DiagnosticError, symbols: Symbol[]) => void): void;
         load(path: string, callback: (err: DiagnosticError, symbols: Symbol[]) => void): void;
         load(path: string[], callback: (err: DiagnosticError, symbols: Symbol[]) => void): void;
+
+        /**
+         * Synchronously load type information for the given filename pattern(s) in the global context.  If the path is not
+         * specified then symbol information is loaded, if available, for all required modules.
+         *
+         * This method assumes that the .d.json files are in the same directory as the .js file that they contain type
+         * information for. The load method supports [glob](https://github.com/isaacs/node-glob) patterns for filename
+         * matching. Relative paths are considered to be relative to the current working directory.
+         *
+         * Once all declaration files have been loaded, a list of symbols is returned any external modules and any top
+         * level global declarations in the processed files.
+         *
+         * @param path Optional. The path(s) to load. Glob patterns are supported. If not specified symbol information is
+         * loaded, if available, for all required modules.
+         */
+        loadSync(): Symbol[];
+        loadSync(path: string): Symbol[];
+        loadSync(path: string[]): Symbol[];
+
 
         /**
          * Finds the symbol for the given entity name in the current context. If a global symbol with the given name cannot
@@ -106,6 +152,12 @@ declare module "tsreflect" {
          * @param entityName The global entity name to resolve.
          */
         resolve(entityName: string): Symbol;
+
+        /**
+         * Searches all loaded symbol information in the current context for the given constructor and returns the symbol if found.
+         * @param ctr The constructor to search for. Note this does not work for global symbols.
+         */
+        getSymbol(ctr: Constructor): Symbol;
     }
 
     /**
@@ -177,6 +229,13 @@ declare module "tsreflect" {
          * @param value The value to set.
          */
         setValue(obj: any, value: any): void;
+
+        /**
+         * Invokes the method described by the symbol on the given object. The symbol must be a method.
+         * @param obj The object to call the method on.
+         * @param args The arguments to pass to the method.
+         */
+        invoke(obj: any, args?: any[]): any;
 
         /**
          * Returns true if the symbol is a variable; Otherwise, returns false.
@@ -385,26 +444,43 @@ declare module "tsreflect" {
         isSubclassOf(target: Type): boolean;
 
         /**
-         * Gets the base class of a class type.
-         */
-        getBaseClass(): Type;
-
-        /**
-         * Gets the base types of a class or interface type.
+         * Gets a list of types that this class or interface extends.
          */
         getBaseTypes(): Type[];
 
         /**
-         * Gets the base type that matches the specified name or `undefined` if no match is found.
+         * Gets the type that this class or interface extends that matches the specified name or undefined if no match is found.
          * @param name The name of the base type to find.
          */
         getBaseType(name: string): Type;
 
         /**
-         * Returns true if the target type is a base type of the current type; Otherwise, returns false.
+         * Returns true if the target type is extended by the current type; Otherwise, returns false.
          * @param target The target type.
          */
         hasBaseType(target: Type): boolean;
+
+        /**
+         * Gets the base class of a class type.
+         */
+        getBaseClass(): Type;
+
+        /**
+         * Gets a list of interface that this class implements.
+         */
+        getInterfaces(): Type[];
+
+        /**
+         * Gets the interface that is implemented or inherited by the current class that matches the specified name.
+         * @param name The name of the base type to find.
+         */
+        getInterface(name: string): Type;
+
+        /**
+         * Returns true if the target interface is implemented or inherited by the current class; Otherwise, returns false.
+         * @param target The target type.
+         */
+        hasInterface(target: Type): boolean;
 
         /**
          * Returns true if the type is a class; Otherwise, returns false.
@@ -616,5 +692,14 @@ declare module "tsreflect" {
          * Array of Diagnostics that provides details on the error that occurred.
          */
         diagnostics: Diagnostic[];
+    }
+
+    /**
+     * A Constructor.
+     */
+    interface Constructor {
+
+        name?: string;
+        new(...args: any[]): any;
     }
 }
