@@ -1,7 +1,0 @@
-
-class ServiceHost {
-
-
-}
-
-export = ServiceHost;

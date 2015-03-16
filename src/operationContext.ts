@@ -1,38 +1,36 @@
-/// <reference path="../typings/continuation-local-storage.d.ts" />
+/// <reference path="./common/types.d.ts" />
 
-import cls = require("continuation-local-storage");
+import domain = require("domain");
 import RequestContext = require("./requestContext");
 
-var ns: cls.Namespace;
+var key = "__operation_context_" + (new Date().getTime().toString()) + "__";
 
 class OperationContext {
 
     requestContext: RequestContext;
+    private _values: Lookup<any> = {};
 
     get(name: string): any {
-        return ns.get(name);
+        return this._values[name];
     }
 
     set(name: string, value: any): void {
-        ns.set(name, value);
+        this._values[name] = value;
     }
 
     static get current(): OperationContext {
 
-        if(!ns) return undefined;
-        return ns.get("operationContext");
+        var active = (<any>domain).active;
+        if(!active) return undefined;
+        return active[key];
     }
 
     static create(block: (operationContext: OperationContext) => void): void {
 
-        if(!ns) {
-            ns = cls.createNamespace("__operation_context_" + (new Date().getTime().toString()) + "__");
-        }
+        var d = domain.create();
 
-        ns.run(() => {
-            var context = new OperationContext();
-            ns.set('operationContext', context);
-            block(context);
+        d.run(() => {
+            block((<any>d)[key] = new OperationContext());
         });
     }
 }

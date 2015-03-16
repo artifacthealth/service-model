@@ -1,22 +1,17 @@
 /// <reference path="../common/types.d.ts" />
 
-import Fault = require("../fault");
+import FaultError = require("../faultError");
+import RequestContext = require("../requestContext");
 
 interface ErrorHandler {
 
     /**
-     * Converts an Error into a Fault.
+     * Handles an error. Note that next must be called with the error that is being handled.
      * @param err The error.
-     * @param callback Called with the Fault.
+     * @param request The request context.
+     * @param next Callback to call the next error handled.
      */
-    provideFault?(err: Error): Fault;
-
-    /**
-     * Handles an error. Async actions can be performed. However, the dispatcher will not wait for completion
-     * of the handler to move on to the next request.
-     * @param err The error.
-     */
-    handleError?(err: Error): void;
+    handleError(err: Error, request: RequestContext, next: Callback): void;
 }
 
 export = ErrorHandler;

@@ -1,6 +1,6 @@
 import MessageFormatter = require("./messageFormatter");
 import Message = require("../message");
-import Fault = require("../fault");
+import FaultError = require("../faultError");
 import OperationDescription = require("../description/operationDescription");
 
 class RpcMessageFormatter implements MessageFormatter {
@@ -31,15 +31,18 @@ class RpcMessageFormatter implements MessageFormatter {
         callback(null, new Message({ response: result }));
     }
 
-    serializeFault(fault: Fault, callback: ResultCallback<Message>): void {
+    serializeFault(fault: FaultError, callback: ResultCallback<Message>): void {
 
         var body: any = {
-            message: fault.message,
-            code: fault.code
+            message: fault.message
         }
 
-        if(fault.details) {
-            body.details = fault.details;
+        if(fault.code) {
+            body.code = fault.code;
+        }
+
+        if(fault.detail) {
+            body.detail = fault.detail;
         }
 
         callback(null, new Message({ fault: body }));

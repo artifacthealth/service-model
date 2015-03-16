@@ -3,8 +3,7 @@ import Calculator = require("./calculator");
 class CalculatorService implements Calculator {
 
     add(x: number, y: number): number {
-
-        return x + y;
+       return x + y;
     }
 
     subtract(x: number, y: number): number {
@@ -13,7 +12,7 @@ class CalculatorService implements Calculator {
     }
 
     divide(x: number, y: number, callback: (err: Error, result: number) => void): void {
-        process.nextTick(() => callback(null, x / y));
+        callback(null, x / y);
     }
 }
 

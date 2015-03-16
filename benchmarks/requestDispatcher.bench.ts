@@ -7,6 +7,8 @@ import CalculatorService = require("../tests/fixtures/calculatorService");
 import RequestContext = require("../src/requestContext");
 import Message = require("../src/message");
 import Url = require("../src/url");
+import FaultError = require("../src/faultError");
+import OperationContext = require('../src/operationContext');
 
 suite("RequestDispatcher", () => {
 

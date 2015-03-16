@@ -1,9 +1,10 @@
 import Url = require("./url");
+import HttpStatusCode = require("./httpStatusCode");
 
 class Message {
 
     url: Url;
-    status: number;
+    status: HttpStatusCode;
     method: string;
     headers: Lookup<string> = {};
 
@@ -24,6 +25,13 @@ class Message {
     getHeader(name: string): string {
         if(!this.headers) return undefined;
         return this.headers[name];
+    }
+
+    static create(status: HttpStatusCode): Message {
+
+        var ret = new Message();
+        ret.status = status;
+        return ret;
     }
 }
 

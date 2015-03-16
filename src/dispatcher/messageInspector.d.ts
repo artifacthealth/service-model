@@ -11,7 +11,7 @@ interface MessageInspector {
 
     /**
      * Called after the operation has returned but before the reply message is sent.
-     * @param reply The reply message. The value is undefined if the operation is one way.
+     * @param reply The reply message.
      * @param state The value returned from afterReceiveRequest.
      */
     beforeSendReply(reply: Message, state: any): void;

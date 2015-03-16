@@ -7,8 +7,10 @@ import MessageFilter = require("./messageFilter");
 import EndpointDescription = require("../description/endpointDescription");
 import AddressMessageFilter = require("./addressMessageFilter");
 import DefaultInstanceProvider = require("./defaultInstanceProvider")
+import MessageInspector = require("./messageInspector");
 import Message = require("../message");
 import Url = require("../url");
+import ErrorHandler = require("./errorHandler");
 
 class DispatchEndpoint {
 
@@ -20,6 +22,9 @@ class DispatchEndpoint {
     operations: DispatchOperation[] = [];
     operationSelector: OperationSelector;
     unhandledOperation: DispatchOperation;
+    messageInspectors: MessageInspector[] = [];
+    errorHandlers: ErrorHandler[] = [];
+    includeErrorDetailsInFault: boolean;
 
     constructor(public service: DispatchService, address: Url, name: string) {
 

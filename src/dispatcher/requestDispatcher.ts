@@ -5,6 +5,7 @@ import RequestContext = require("../requestContext");
 import Message = require("../message");
 import RequestHandler = require("./requestHandler");
 import RequestQueue = require("./requestQueue");
+import HttpStatusCode = require("../httpStatusCode");
 
 class RequestDispatcher {
 
@@ -23,8 +24,7 @@ class RequestDispatcher {
 
     dispatch(request: RequestContext): boolean {
 
-        // TODO: once we've gone through the trouble of creating the request object, shouldn't we throw an error
-        // if we can't find the service?
+        // TODO: once we've gone through the trouble of creating the request object, shouldn't we throw an errorif we can't find the service?
 
         var service = this.chooseService(request.message);
         if(!service) {
@@ -33,15 +33,12 @@ class RequestDispatcher {
 
         var endpoint = service.chooseEndpoint(request.message);
         if(!endpoint) {
-            return false;
+            request.reply(Message.create(HttpStatusCode.NotFound));
+        }
+        else {
+            this._queue.add(new RequestHandler(endpoint, request));
         }
 
-        var operation = endpoint.chooseOperation(request.message);
-        if(!operation) {
-            return false;
-        }
-
-        this._queue.add(new RequestHandler(operation, request));
         return true;
     }
 

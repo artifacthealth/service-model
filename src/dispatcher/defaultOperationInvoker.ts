@@ -3,9 +3,13 @@
 import reflect = require("tsreflect");
 import OperationInvoker = require("./operationInvoker");
 import OperationDescription = require("../description/operationDescription");
+import FaultError = require("../faultError");
 
 class DefaultOperationInvoker implements OperationInvoker {
 
+    /**
+     * Timeout for operation. Defaults to 60,000ms (1 minute).
+     */
     timeout: number;
 
     private _parameterCount: number;
@@ -30,27 +34,34 @@ class DefaultOperationInvoker implements OperationInvoker {
     invoke(instance: any, args: any[], callback: ResultCallback<any>): void {
 
         if(!instance) {
-            process.nextTick(() => callback(new Error("Missing required argument 'instance'.")));
-            return;
+            throw new Error("Missing required argument 'instance'.");
         }
 
         if(!args) {
-            process.nextTick(() => callback(new Error("Missing required argument 'args'.")));
-            return;
+            throw new Error("Missing required argument 'args'.");
         }
 
         if(args.length != this._parameterCount) {
-            process.nextTick(() => callback(new Error("Wrong number of arguments for operation in 'args'.")));
+            process.nextTick(() => callback(new Error("Wrong number of arguments for operation.")));
             return;
         }
 
+        // TODO: get rid of support of sync functions?
         // synchronous invoke
         if(!this._isAsync) {
             try {
-                process.nextTick(() => callback(null, this._method.invoke(instance, args)));
+                var result = this._method.invoke(instance, args);
+                process.nextTick(() => callback(null, result));
             }
             catch(err) {
-                process.nextTick(() => callback(err));
+                // If it's a FaultError then pass the error to the callback for further processing; otherwise, rethrow
+                // the  error.
+                if(err.name == "FaultError") {
+                    process.nextTick(() => callback(err));
+                }
+                else {
+                    throw err;
+                }
             }
             return;
         }
@@ -60,6 +71,8 @@ class DefaultOperationInvoker implements OperationInvoker {
             finished = false;
 
         var timeoutHandle = setTimeout(() => {
+
+            if(finished) return;
             timeout = true;
             callback(new Error("Timeout of " + this.timeout + "ms exceeded."));
         }, this.timeout || 60000);
@@ -70,22 +83,13 @@ class DefaultOperationInvoker implements OperationInvoker {
             clearTimeout(timeoutHandle);
 
             if(finished) {
-                callback(new Error("done() called multiple times."));
-                return;
+                throw new Error("Callback already called.");
             }
             finished = true;
-
             callback(err, result);
         }
 
-        // catch any exceptions because we don't want any errors to cause timeout
-        try {
-            this._method.invoke(instance, args.concat(done));
-        }
-        catch(err) {
-            clearTimeout(timeoutHandle);
-            process.nextTick(() => callback(err));
-        }
+        this._method.invoke(instance, args.concat(done));
     }
 }
 
