@@ -20,24 +20,17 @@ class OperationContext {
 
         var active = (<any>domain).active;
         if(!active) return undefined;
-        return getContext(active);
+        return active["__operation_context__"];
     }
 
     static create(block: (operationContext: OperationContext) => void): void {
 
         var d = domain.create();
         d.run(() => {
-            block(setContext(d, new OperationContext()));
+            var context = (<any>d)["__operation_context__"] = new OperationContext();
+            block(context);
         });
     }
 }
-
-// Create a key to store the OperationContext on the Domain
-var key = "__operation_context_" + (new Date().getTime().toString()) + "__";
-
-// Generate accessor functions to allow V8 to optimize property access.
-var getContext = <any>(new Function("o", "return o['" + key + "'];"));
-var setContext = <any>(new Function("o", "v", "return o['" + key + "'] = v;"));
-
 
 export = OperationContext;

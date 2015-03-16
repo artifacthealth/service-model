@@ -7,7 +7,9 @@ import Message = require("../message");
 import HttpStatusCode = require("../httpStatusCode");
 import FaultError = require("../faultError");
 import Callback = require("../common/callback");
+import OperationContext = require("../operationContext");
 
+// TODO: Consider use of Vary header https://www.subbu.org/blog/2007/12/vary-header-for-restful-applications
 class RequestHandler implements RequestContext {
 
     private _endpoint: DispatchEndpoint;
