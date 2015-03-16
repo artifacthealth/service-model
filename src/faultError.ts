@@ -1,6 +1,9 @@
 /// <reference path="./common/types.d.ts" />
 
-class FaultError implements Error {
+import HttpError = require("./httpError");
+import HttpStatusCode = require("./httpStatusCode");
+
+class FaultError extends HttpError {
 
     /**
      * The name of the error.
@@ -8,42 +11,31 @@ class FaultError implements Error {
     name = "FaultError";
 
     /**
-     * A human readable message explaining the reason for the fault.
-     */
-    message: string;
-
-    /**
-     * A machine readable code identifying the fault.
+     * Application specific machine readable code identifying the fault.
      */
     code: string;
-
-    /**
-     * The stack trace.
-     */
-    stack: string;
 
     /**
      * Application specific information about the fault that is passed to the client.
      */
     detail: any;
 
-    constructor(detail?: any, message?: string, code?: string) {
+    constructor(detail?: any, message?: string, code?: string, statusCode?: HttpStatusCode) {
+        super(statusCode, message);
 
-        if(!message) {
-            message = "Unspecified service fault.";
-        }
-
-        this.message = message;
-        this.detail = detail;
         this.code = code;
+        this.detail = detail;
+    }
 
-        Error.call(this, message);
-        (<any>Error).captureStackTrace(this, this.constructor);
+    /**
+     * Returns true if the error is a FaultError; otherwise, returns false.
+     * @param err The error.
+     */
+    static isFaultError(err: Error): boolean {
+
+        // Use duck-typing
+        return HttpError.isHttpError(err) && err.hasOwnProperty("code") && err.hasOwnProperty("detail");
     }
 }
-
-// TypeScript declares Error as an Interface instead of a class so use prototypical inheritance
-FaultError.prototype = Object.create(Error.prototype);
-FaultError.prototype.constructor = FaultError;
 
 export = FaultError;

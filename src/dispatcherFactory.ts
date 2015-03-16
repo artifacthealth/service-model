@@ -19,6 +19,7 @@ import OperationBehavior = require("./description/operationBehavior");
 import ContractDescription = require("./description/contractDescription");
 import RpcOperationSelector = require("./dispatcher/rpcOperationSelector");
 import RpcMessageFormatter = require("./dispatcher/rpcMessageFormatter");
+import RpcFaultFormatter = require("./dispatcher/rpcFaultFormatter");
 import Url = require("./url");
 
 class DispatcherFactory {
@@ -88,12 +89,14 @@ class DispatcherFactory {
 
     private _createDispatchEndpoint(service: DispatchService, serviceDescription: ServiceDescription, endpoint: EndpointDescription): DispatchEndpoint {
 
-        var ret = new DispatchEndpoint(service, endpoint.address, endpoint.name);
+        var ret = new DispatchEndpoint(service, endpoint.address, endpoint.contract.name);
 
         for(var i = 0; i < endpoint.contract.operations.length; i++) {
             ret.operations.push(this._createDispatchOperation(ret, endpoint.contract.operations[i]));
         }
 
+        ret.contractVersion = endpoint.contract.version;
+        ret.faultFormatter = new RpcFaultFormatter();
         ret.instanceProvider = new DefaultInstanceProvider(serviceDescription);
         ret.operationSelector = new RpcOperationSelector(ret);
 
@@ -111,14 +114,25 @@ class DispatcherFactory {
 
     private _applyServiceBehaviors(service: DispatchService, description: ServiceDescription): void {
 
+        // apply service behaviors
         description.behaviors.forEach(behavior => behavior.applyBehavior(description, service));
 
+        // apply contract behaviors
+        for(var i = 0; i < description.endpoints.length; i++) {
+            this._applyContractBehaviors(service.endpoints[i], description.endpoints[i].contract);
+        }
+
+        // apply endpoint behaviors
         for(var i = 0; i < description.endpoints.length; i++) {
             this._applyEndpointBehaviors(service.endpoints[i], description.endpoints[i]);
         }
 
+        // apply operation behaviors
         for(var i = 0; i < description.endpoints.length; i++) {
-            this._applyContractBehaviors(service.endpoints[i], description.endpoints[i].contract);
+            var operations = description.endpoints[i].contract.operations;
+            for (var j = 0; j < operations.length; j++) {
+                this._applyOperationBehaviors(service.endpoints[i].operations[j], operations[j]);
+            }
         }
     }
 
@@ -130,10 +144,6 @@ class DispatcherFactory {
     private _applyContractBehaviors(endpoint: DispatchEndpoint, description: ContractDescription): void {
 
         description.behaviors.forEach(behavior => behavior.applyBehavior(description, endpoint));
-
-        for(var i = 0; i < description.operations.length; i++) {
-            this._applyOperationBehaviors(endpoint.operations[i], description.operations[i]);
-        }
     }
 
     private _applyOperationBehaviors(operation: DispatchOperation, description: OperationDescription): void {

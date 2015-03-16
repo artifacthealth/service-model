@@ -1,4 +1,4 @@
-declare const enum HttpStatusCode {
+enum HttpStatusCode {
 
     Continue = 100,
     SwitchingProtocols = 101,
@@ -34,6 +34,7 @@ declare const enum HttpStatusCode {
     UnsupportedMediaType = 415,
     RequestRangeNotSatisfiable = 416,
     ExpectationFailed = 417,
+    TooManyRequests = 429,
     InternalServerError = 500,
     NotImplemented = 501,
     BadGateway = 502,

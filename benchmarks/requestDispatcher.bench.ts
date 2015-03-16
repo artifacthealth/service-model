@@ -8,6 +8,8 @@ import RequestContext = require("../src/requestContext");
 import Message = require("../src/message");
 import Url = require("../src/url");
 import FaultError = require("../src/faultError");
+import HttpError = require("../src/httpError");
+import HttpStatusCode = require("../src/httpStatusCode");
 import OperationContext = require('../src/operationContext');
 
 suite("RequestDispatcher", () => {
@@ -21,7 +23,7 @@ suite("RequestDispatcher", () => {
 
     test("dispatch", (done) => {
 
-        var message = new Message({"add": [1, 1]});
+        var message = new Message({"add2": [1, 1]});
         message.url = new Url("/services/calculator-service/");
 
         var queued = dispatcher.dispatch(new DummyRequestContext(message, (err, result) => {
@@ -33,7 +35,6 @@ suite("RequestDispatcher", () => {
         }
     });
 });
-
 
 class DummyRequestContext implements RequestContext {
 

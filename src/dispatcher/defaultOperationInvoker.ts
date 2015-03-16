@@ -56,7 +56,7 @@ class DefaultOperationInvoker implements OperationInvoker {
             catch(err) {
                 // If it's a FaultError then pass the error to the callback for further processing; otherwise, rethrow
                 // the  error.
-                if(err.name == "FaultError") {
+                if(FaultError.isFaultError(err)) {
                     process.nextTick(() => callback(err));
                 }
                 else {

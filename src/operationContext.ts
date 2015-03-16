@@ -3,8 +3,6 @@
 import domain = require("domain");
 import RequestContext = require("./requestContext");
 
-var key = "__operation_context_" + (new Date().getTime().toString()) + "__";
-
 class OperationContext {
 
     requestContext: RequestContext;
@@ -22,17 +20,24 @@ class OperationContext {
 
         var active = (<any>domain).active;
         if(!active) return undefined;
-        return active[key];
+        return getContext(active);
     }
 
     static create(block: (operationContext: OperationContext) => void): void {
 
         var d = domain.create();
-
         d.run(() => {
-            block((<any>d)[key] = new OperationContext());
+            block(setContext(d, new OperationContext()));
         });
     }
 }
+
+// Create a key to store the OperationContext on the Domain
+var key = "__operation_context_" + (new Date().getTime().toString()) + "__";
+
+// Generate accessor functions to allow V8 to optimize property access.
+var getContext = <any>(new Function("o", "return o['" + key + "'];"));
+var setContext = <any>(new Function("o", "v", "return o['" + key + "'] = v;"));
+
 
 export = OperationContext;

@@ -11,6 +11,7 @@ import MessageInspector = require("./messageInspector");
 import Message = require("../message");
 import Url = require("../url");
 import ErrorHandler = require("./errorHandler");
+import FaultFormatter = require("./faultFormatter");
 
 class DispatchEndpoint {
 
@@ -18,15 +19,18 @@ class DispatchEndpoint {
     address: Url;
     filter: MessageFilter;
     filterPriority: number = 0;
+    contractName: string;
+    contractVersion: string;
     instanceProvider: InstanceProvider;
     operations: DispatchOperation[] = [];
     operationSelector: OperationSelector;
     unhandledOperation: DispatchOperation;
     messageInspectors: MessageInspector[] = [];
     errorHandlers: ErrorHandler[] = [];
-    includeErrorDetailsInFault: boolean;
+    faultFormatter: FaultFormatter;
+    includeErrorDetailInFault: boolean;
 
-    constructor(public service: DispatchService, address: Url, name: string) {
+    constructor(public service: DispatchService, address: Url, contractName: string) {
 
         if(!service) {
             throw new Error("Missing required parameter 'service'.");
@@ -36,8 +40,13 @@ class DispatchEndpoint {
             throw new Error("Missing required parameter 'address'.");
         }
 
+        if(!contractName) {
+            throw new Error("Missing required parameter 'contractName'.");
+        }
+
         this.address = address;
-        this.name = name;
+        this.contractName = contractName;
+        // TODO: take contract version into account if present in the request. Need to decide how to specify version requested.
         this.filter = new AddressMessageFilter(address);
     }
 

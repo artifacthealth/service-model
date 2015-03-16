@@ -23,7 +23,7 @@ class ServiceDescription {
         this.name = name || serviceSymbol.getName();
     }
 
-    addEndpoint(implementedContract: string, address?: string, name?: string): EndpointDescription {
+    addEndpoint(implementedContract: string, address?: string): EndpointDescription {
 
         var contractType = this.serviceSymbol.getDeclaredType().getInterface(implementedContract);
         if (!contractType) {
@@ -39,7 +39,7 @@ class ServiceDescription {
             }
         }
 
-        var endpoint = new EndpointDescription(new ContractDescription(contractType), url, name);
+        var endpoint = new EndpointDescription(new ContractDescription(contractType), url);
         this.endpoints.push(endpoint);
         return endpoint;
     }

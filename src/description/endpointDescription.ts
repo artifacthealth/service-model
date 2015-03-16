@@ -4,16 +4,14 @@ import Url = require("../url");
 
 class EndpointDescription {
 
-    name: string;
     behaviors: EndpointBehavior[] = [];
     contract: ContractDescription;
     address: Url;
 
-    constructor(contract: ContractDescription, address: Url | string, name?: string) {
+    constructor(contract: ContractDescription, address: Url | string) {
 
         this.address = new Url(address);
         this.contract = contract;
-        this.name = name;
     }
 }
 

@@ -4,7 +4,7 @@ import HttpStatusCode = require("./httpStatusCode");
 class Message {
 
     url: Url;
-    status: HttpStatusCode;
+    statusCode: HttpStatusCode;
     method: string;
     headers: Lookup<string> = {};
 
@@ -30,7 +30,7 @@ class Message {
     static create(status: HttpStatusCode): Message {
 
         var ret = new Message();
-        ret.status = status;
+        ret.statusCode = status;
         return ret;
     }
 }

@@ -31,22 +31,6 @@ class RpcMessageFormatter implements MessageFormatter {
         callback(null, new Message({ response: result }));
     }
 
-    serializeFault(fault: FaultError, callback: ResultCallback<Message>): void {
-
-        var body: any = {
-            message: fault.message
-        }
-
-        if(fault.code) {
-            body.code = fault.code;
-        }
-
-        if(fault.detail) {
-            body.detail = fault.detail;
-        }
-
-        callback(null, new Message({ fault: body }));
-    }
 }
 
 export = RpcMessageFormatter;

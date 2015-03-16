@@ -24,8 +24,7 @@ class RequestDispatcher {
 
     dispatch(request: RequestContext): boolean {
 
-        // TODO: once we've gone through the trouble of creating the request object, shouldn't we throw an errorif we can't find the service?
-
+        // TODO: error if we can't find the service?
         var service = this.chooseService(request.message);
         if(!service) {
             return false

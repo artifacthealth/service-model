@@ -1,19 +1,12 @@
 /// <reference path="../common/types.d.ts" />
 
-import FaultError = require("../faultError");
 import DispatchEndpoint = require("./dispatchEndpoint");
 import DispatchOperation = require("./dispatchOperation");
 import RequestContext = require("../requestContext");
 import Message = require("../message");
 import HttpStatusCode = require("../httpStatusCode");
+import FaultError = require("../faultError");
 import Callback = require("../common/callback");
-
-/*
- OperationContext.create((operationContext) => {
- operationContext.requestContext = this._request;
-
- */
-
 
 class RequestHandler implements RequestContext {
 
@@ -43,7 +36,7 @@ class RequestHandler implements RequestContext {
 
         this._operation = this._endpoint.chooseOperation(this.message);
         if (!this._operation) {
-            this._handleError(new Error("Unable to determine operation."));
+            this._handleError(new Error("Unable to choose operation"));
             return;
         }
 
@@ -77,8 +70,6 @@ class RequestHandler implements RequestContext {
     private _invoke(args: any[]): void {
 
         var instance = this._operation.endpoint.instanceProvider.getInstance(this.message);
-
-        // TODO: try using domains for operation context.
 
         this._operation.invoker.invoke(instance, args, (err, result) => {
             if (err) return this._handleError(err);
@@ -123,41 +114,41 @@ class RequestHandler implements RequestContext {
 
         var step = -1;
 
-        var next = (err: Error) => {
+        var next = (e: Error) => {
             var handler = this._endpoint.errorHandlers[++step];
             if(handler) {
-                handler.handleError(err, this, Callback.onlyOnce(next));
+                handler.handleError(e, this, Callback.onlyOnce(next));
             }
             else {
-                if(!this._operation) {
-                    this.reply(Message.create(HttpStatusCode.NotFound));
-                }
-                this._operation.formatter.serializeFault(this._createFault(err), (err, message) => {
-                    if(err) return this.abort(err);
-                    this.reply(message);
-                });
+                // We've reached the end of the error handler chain. Send a reply.
+                this._sendFault(e);
             }
         }
 
         next(err);
     }
 
-    private _createFault(err: Error): FaultError {
+    private _sendFault(err: Error): void {
 
-        if(err.name == "FaultError") {
-            return <FaultError>err;
+        var fault: FaultError;
+        if(FaultError.isFaultError(err)) {
+            fault = <FaultError>err;
+        }
+        else {
+            // If the error is not a FaultError, then create one. By default we return a generic message that does not
+            // include any details about the error.
+            if(!this._endpoint.includeErrorDetailInFault) {
+                fault = new FaultError(null, "The server was unable to process the request due to an internal error.", "InternalError");
+            }
+            else {
+                fault = new FaultError((<any>err).stack, err.message, "InternalError");
+            }
         }
 
-        if(!this._endpoint.includeErrorDetailsInFault) {
-            return new FaultError(null, "The server was unable to process the request due to an internal error.", "InternalError");
-        }
-
-        return new FaultError(this._getStackTrace(err), err.message, "InternalError");
-    }
-
-    private _getStackTrace(err: any): string {
-
-        return err.stack;
+        this._endpoint.faultFormatter.serializeFault(fault, (err, message) => {
+            if(err) return this.abort(err);
+            this.reply(message);
+        });
     }
 }
 
