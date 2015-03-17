@@ -4,11 +4,11 @@ import semver = require("semver");
 
 import MessageFilter = require("./messageFilter");
 import Message = require("../message");
-import Url = require("../url");
 
 class VersionMessageFilter extends MessageFilter {
 
     private _version: string;
+    private _cache: Lookup<boolean> = {};
 
     constructor(version: string) {
         super();
@@ -21,9 +21,15 @@ class VersionMessageFilter extends MessageFilter {
     }
 
     match(message: Message): boolean {
+        var acceptVersion = message.headers["Accept-Version"];
+        if(!acceptVersion) return true;
 
-        var acceptVersion = message.getHeader("Accept-Version");
-        return !acceptVersion || semver.satisfies(this._version, acceptVersion);
+        var satisfies = this._cache[acceptVersion];
+        if(satisfies === undefined) {
+            satisfies = this._cache[acceptVersion] = semver.satisfies(this._version, acceptVersion);
+        }
+
+        return satisfies;
     }
 }
 

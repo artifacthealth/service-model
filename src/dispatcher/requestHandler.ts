@@ -7,7 +7,6 @@ import Message = require("../message");
 import HttpStatusCode = require("../httpStatusCode");
 import FaultError = require("../faultError");
 import Callback = require("../common/callback");
-import OperationContext = require("../operationContext");
 
 // TODO: Consider use of Vary header https://www.subbu.org/blog/2007/12/vary-header-for-restful-applications
 class RequestHandler implements RequestContext {
@@ -100,7 +99,7 @@ class RequestHandler implements RequestContext {
         this._beforeSendReply();
 
         this._request.reply(message);
-        this._callback && this._callback();
+        this._callback();
     }
 
     // TODO: should we get rid of abort?
@@ -109,7 +108,7 @@ class RequestHandler implements RequestContext {
         if(this.finished) return;
 
         this._request.abort();
-        this._callback && this._callback(err);
+        this._callback(err);
     }
 
     private _handleError(err: Error): void {

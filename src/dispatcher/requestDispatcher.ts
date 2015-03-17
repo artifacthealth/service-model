@@ -11,7 +11,16 @@ class RequestDispatcher {
 
     services: DispatchService[] = [];
 
+    /**
+     * Maximum number of concurrent operations. If the number is exceeded, any additional operations are queued.
+     */
     maxConcurrentCalls = 16;
+
+    _queue: RequestQueue;
+
+    constructor() {
+        this._queue = new RequestQueue(this);
+    }
 
     dispatch(request: RequestContext): boolean {
 
@@ -26,7 +35,8 @@ class RequestDispatcher {
             request.reply(Message.create(HttpStatusCode.NotFound));
         }
         else {
-            new RequestHandler(endpoint, request).process();
+            this._queue.add(new RequestHandler(endpoint, request));
+            //new RequestHandler(endpoint, request).process();
         }
 
         return true;

@@ -11,6 +11,7 @@ import FaultError = require("../src/faultError");
 import HttpError = require("../src/httpError");
 import HttpStatusCode = require("../src/httpStatusCode");
 import OperationContext = require('../src/operationContext');
+import VersioningBehavior = require("../src/behaviors/versioningBehavior");
 
 suite("RequestDispatcher", () => {
 
@@ -18,12 +19,14 @@ suite("RequestDispatcher", () => {
 
     var service = factory.addService(CalculatorService);
     var endpoint = service.addEndpoint("Calculator");
+    endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
 
     test("dispatch", (done) => {
 
         var message = new Message({"add2": [1, 1]});
+        message.headers["Accept-Version"] = "^1.0.0";
         message.url = new Url("/services/calculator-service/");
 
         var queued = dispatcher.dispatch(new DummyRequestContext(message, (err, result) => {

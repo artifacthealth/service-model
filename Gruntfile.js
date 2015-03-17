@@ -80,6 +80,17 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            build: {
+                files: [
+                    {
+                        expand: true,
+                        src: [
+                            'package.json'
+                        ],
+                        dest: 'build/'
+                    }
+                ]
+            },
             lib: {
                 files: [
                     {
@@ -118,7 +129,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask("default", [ "build", "tests" ]);
-    grunt.registerTask("build", [ "clean:build", "typescript:build" ]);
+    grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build" ]);
     grunt.registerTask("lib", [ "clean:lib",  "copy:lib" ]);
     grunt.registerTask("tests", [ "typescript:tests", "tsreflect:fixtures", "mochaTest:tests" ]);
     grunt.registerTask("benchmarks", [ "typescript:benchmarks", "baseline:benchmarks" ]);

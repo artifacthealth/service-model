@@ -6,15 +6,7 @@ import RequestContext = require("./requestContext");
 class OperationContext {
 
     requestContext: RequestContext;
-    private _values: Lookup<any> = {};
-
-    get(name: string): any {
-        return this._values[name];
-    }
-
-    set(name: string, value: any): void {
-        this._values[name] = value;
-    }
+    items: Lookup<any> = {};
 
     static get current(): OperationContext {
 

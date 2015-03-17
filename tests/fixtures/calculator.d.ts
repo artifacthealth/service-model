@@ -1,6 +1,6 @@
 /**
  * Calculator service contract.
- * @serviceContract version: "1.0.0"
+ * @serviceContract version: "1.1.0"
  */
 interface Calculator {
 
