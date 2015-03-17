@@ -14,8 +14,6 @@ class DispatchService {
     endpoints: DispatchEndpoint[] = [];
     filter: MessageFilter;
     filterPriority: number = 0;
-    errorHandlers: ErrorHandler[] = [];
-    includeDetailsInFault: boolean;
 
     constructor(public dispatcher: RequestDispatcher, baseAddress: Url, name: string) {
 

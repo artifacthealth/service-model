@@ -20,7 +20,6 @@ class DispatchEndpoint {
     filter: MessageFilter;
     filterPriority: number = 0;
     contractName: string;
-    contractVersion: string;
     instanceProvider: InstanceProvider;
     operations: DispatchOperation[] = [];
     operationSelector: OperationSelector;

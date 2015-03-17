@@ -95,7 +95,6 @@ class DispatcherFactory {
             ret.operations.push(this._createDispatchOperation(ret, endpoint.contract.operations[i]));
         }
 
-        ret.contractVersion = endpoint.contract.version;
         ret.faultFormatter = new RpcFaultFormatter();
         ret.instanceProvider = new DefaultInstanceProvider(serviceDescription);
         ret.operationSelector = new RpcOperationSelector(ret);
