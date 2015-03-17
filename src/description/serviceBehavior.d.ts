@@ -3,7 +3,7 @@ import DispatchService = require("../dispatcher/dispatchService");
 
 interface ServiceBehavior {
 
-    applyBehavior (description: ServiceDescription, service: DispatchService): void;
+    applyServiceBehavior (description: ServiceDescription, service: DispatchService): void;
 }
 
 export = ServiceBehavior;

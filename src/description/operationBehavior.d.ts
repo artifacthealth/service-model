@@ -3,7 +3,7 @@ import DispatchOperation = require("../dispatcher/dispatchOperation");
 
 interface OperationBehavior {
 
-    applyBehavior (description: OperationDescription, operation: DispatchOperation): void;
+    applyOperationBehavior (description: OperationDescription, operation: DispatchOperation): void;
 }
 
 export = OperationBehavior;

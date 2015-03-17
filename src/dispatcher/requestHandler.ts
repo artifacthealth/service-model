@@ -30,7 +30,7 @@ class RequestHandler implements RequestContext {
         this._request = request;
     }
 
-    process(callback: Callback): void {
+    process(callback?: Callback): void {
 
         this._callback = callback;
 
@@ -100,7 +100,7 @@ class RequestHandler implements RequestContext {
         this._beforeSendReply();
 
         this._request.reply(message);
-        this._callback();
+        this._callback && this._callback();
     }
 
     // TODO: should we get rid of abort?
@@ -109,7 +109,7 @@ class RequestHandler implements RequestContext {
         if(this.finished) return;
 
         this._request.abort();
-        this._callback(err);
+        this._callback && this._callback(err);
     }
 
     private _handleError(err: Error): void {

@@ -1,11 +1,12 @@
 import MessageFilter = require("./messageFilter");
 import Message = require("../message");
 
-class RegExpAddressMessageFilter implements MessageFilter {
+class RegExpAddressMessageFilter extends MessageFilter {
 
     private _pattern: RegExp;
 
     constructor(pattern: RegExp) {
+        super();
 
         if(!pattern) {
             throw new Error("Missing required argument 'pattern'.");

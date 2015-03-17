@@ -2,11 +2,12 @@ import MessageFilter = require("./messageFilter");
 import Message = require("../message");
 import Url = require("../url");
 
-class PartialAddressMessageFilter implements MessageFilter {
+class PartialAddressMessageFilter extends MessageFilter {
 
     private _url: Url;
 
     constructor(url: Url) {
+        super();
 
         if(!url) {
             throw new Error("Missing required argument 'url'.");

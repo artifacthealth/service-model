@@ -115,7 +115,7 @@ class DispatcherFactory {
     private _applyServiceBehaviors(service: DispatchService, description: ServiceDescription): void {
 
         // apply service behaviors
-        description.behaviors.forEach(behavior => behavior.applyBehavior(description, service));
+        description.behaviors.forEach(behavior => behavior.applyServiceBehavior(description, service));
 
         // apply contract behaviors
         for(var i = 0; i < description.endpoints.length; i++) {
@@ -138,17 +138,17 @@ class DispatcherFactory {
 
     private _applyEndpointBehaviors(endpoint: DispatchEndpoint, description: EndpointDescription): void {
 
-        description.behaviors.forEach(behavior => behavior.applyBehavior(description, endpoint));
+        description.behaviors.forEach(behavior => behavior.applyEndpointBehavior(description, endpoint));
     }
 
     private _applyContractBehaviors(endpoint: DispatchEndpoint, description: ContractDescription): void {
 
-        description.behaviors.forEach(behavior => behavior.applyBehavior(description, endpoint));
+        description.behaviors.forEach(behavior => behavior.applyContractBehavior(description, endpoint));
     }
 
     private _applyOperationBehaviors(operation: DispatchOperation, description: OperationDescription): void {
 
-        description.behaviors.forEach(behavior => behavior.applyBehavior(description, operation));
+        description.behaviors.forEach(behavior => behavior.applyOperationBehavior(description, operation));
     }
 }
 
