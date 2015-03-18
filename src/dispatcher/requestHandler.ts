@@ -69,9 +69,9 @@ class RequestHandler implements RequestContext {
 
         var instance = this._operation.endpoint.instanceProvider.getInstance(this.message);
 
-        var d = domain.create();
-        d.run(() => {
-            OperationContext.current = new OperationContext();
+        //var d = domain.create();
+        //d.run(() => {
+        //    OperationContext.current = new OperationContext();
 
             this._operation.invoker.invoke(instance, args, (err, result) => {
                 if (err) return this._handleError(err);
@@ -85,7 +85,7 @@ class RequestHandler implements RequestContext {
                     this.reply(message);
                 });
             });
-        });
+        //});
 
         // If this is a one-way operation then reply immediately. We don't wait for the callback from invoke. Note
         // that this means that errors as a result of the invoke will not be reported to the client.

@@ -1,6 +1,5 @@
 /// <reference path="../common/types.d.ts" />
 
-import FaultError = require("../faultError");
 import RequestContext = require("../requestContext");
 
 interface ErrorHandler {

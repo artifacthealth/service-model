@@ -13,7 +13,6 @@ class OperationContext {
         return OperationContext._activeDomain().__operation_context__;
     }
 
-
     static set current(context: OperationContext) {
 
         OperationContext._activeDomain().__operation_context__ = context;
