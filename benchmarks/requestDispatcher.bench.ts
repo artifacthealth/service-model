@@ -19,18 +19,18 @@ suite("RequestDispatcher", () => {
 
     var service = factory.addService(CalculatorService);
     var endpoint = service.addEndpoint("Calculator");
-    endpoint.contract.behaviors.push(new VersioningBehavior());
+    //endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
 
     test("dispatch", (done) => {
 
-        var message = new Message({"add2": [1, 1]});
+        var message = new Message({"add2": [ 1, 2 ]});
         message.headers["Accept-Version"] = "^1.0.0";
         message.url = new Url("/services/calculator-service/");
 
         var queued = dispatcher.dispatch(new DummyRequestContext(message, (err, result) => {
-            done(err);
+            process.nextTick(() => done(err));
         }));
 
         if (!queued) {

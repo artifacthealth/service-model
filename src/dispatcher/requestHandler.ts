@@ -1,5 +1,7 @@
 /// <reference path="../common/types.d.ts" />
 
+import domain = require("domain");
+
 import DispatchEndpoint = require("./dispatchEndpoint");
 import DispatchOperation = require("./dispatchOperation");
 import RequestContext = require("../requestContext");
@@ -7,6 +9,7 @@ import Message = require("../message");
 import HttpStatusCode = require("../httpStatusCode");
 import FaultError = require("../faultError");
 import Callback = require("../common/callback");
+import OperationContext = require("../operationContext");
 
 // TODO: Consider use of Vary header https://www.subbu.org/blog/2007/12/vary-header-for-restful-applications
 class RequestHandler implements RequestContext {
@@ -14,14 +17,10 @@ class RequestHandler implements RequestContext {
     private _endpoint: DispatchEndpoint;
     private _operation: DispatchOperation;
     private _request: RequestContext;
-    private _callback: Callback;
     private _correlationStates: any[];
+    private _finished: boolean;
 
     message: Message;
-
-    finished: boolean;
-    next: RequestHandler;
-
 
     constructor(endpoint: DispatchEndpoint, request: RequestContext) {
         this.message = request.message;
@@ -29,9 +28,7 @@ class RequestHandler implements RequestContext {
         this._request = request;
     }
 
-    process(callback?: Callback): void {
-
-        this._callback = callback;
+    process(): void {
 
         this._afterReceiveRequest();
 
@@ -72,16 +69,21 @@ class RequestHandler implements RequestContext {
 
         var instance = this._operation.endpoint.instanceProvider.getInstance(this.message);
 
-        this._operation.invoker.invoke(instance, args, (err, result) => {
-            if (err) return this._handleError(err);
+        var d = domain.create();
+        d.run(() => {
+            OperationContext.current = new OperationContext();
 
-            // No need to serialize the reply if this is a one way message.
-            if (this._operation.isOneWay) return;
-
-            this._operation.formatter.serializeReply(result, (err, message) => {
+            this._operation.invoker.invoke(instance, args, (err, result) => {
                 if (err) return this._handleError(err);
 
-                this.reply(message);
+                // No need to serialize the reply if this is a one way message.
+                if (this._operation.isOneWay) return;
+
+                this._operation.formatter.serializeReply(result, (err, message) => {
+                    if (err) return this._handleError(err);
+
+                    this.reply(message);
+                });
             });
         });
 
@@ -94,21 +96,19 @@ class RequestHandler implements RequestContext {
 
     reply(message?: Message): void {
 
-        if(this.finished) return;
+        if(this._finished) return;
+        this._finished = true;
 
         this._beforeSendReply();
-
         this._request.reply(message);
-        this._callback();
     }
 
     // TODO: should we get rid of abort?
     abort(err?: Error): void {
 
-        if(this.finished) return;
-
+        if(this._finished) return;
+        this._finished = true;
         this._request.abort();
-        this._callback(err);
     }
 
     private _handleError(err: Error): void {

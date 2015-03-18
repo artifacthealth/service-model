@@ -5,7 +5,8 @@ import OperationDescription = require("../description/operationDescription");
 
 class RpcMessageFormatter implements MessageFormatter {
 
-    private _operation: OperationDescription;
+    private _operationName: string;
+    private _parameterNames: string[];
 
     constructor(operation: OperationDescription) {
 
@@ -13,17 +14,44 @@ class RpcMessageFormatter implements MessageFormatter {
             throw new Error("Missing required argument 'operation'.");
         }
 
-        this._operation = operation;
+        this._operationName = operation.name;
+
+        var parameters = operation.method.getType().getCallSignatures()[0].getParameters();
+        var count = parameters.length;
+        if(operation.isAsync) {
+            // do not include callback in parameter count if async
+            count--;
+        }
+
+        this._parameterNames = new Array(count);
+        for(var i = 0; i < count; i++) {
+            this._parameterNames[i] = parameters[i].getName();
+        }
     }
+
+    getArgs: (obj: any) => any;
 
     deserializeRequest(message: Message, callback: ResultCallback<any[]>): void {
 
-        var keys = Object.keys(message.body);
-        if(keys.length != 1) {
-            return callback(new Error("Bad request format. Expected exactly one root node."));
+        var args = message.body[this._operationName];
+        if(args == null) {
+            return callback(new Error("Missing root element '" + this._operationName + "'."));
         }
 
-        callback(null, message.body[keys[0]]);
+        if(Array.isArray(args)) {
+            if(args.length != this._parameterNames.length) {
+                return callback(new Error("Wrong number of arguments."));
+            }
+        }
+        else {
+            var obj = args;
+            args = new Array(this._parameterNames.length);
+            for(var i = 0; i < this._parameterNames.length; i++) {
+                args[i] = obj[this._parameterNames[i]];
+            }
+        }
+
+        callback(null, args);
     }
 
     serializeReply(result: any, callback: ResultCallback<Message>): void {

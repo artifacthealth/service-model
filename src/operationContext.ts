@@ -10,18 +10,22 @@ class OperationContext {
 
     static get current(): OperationContext {
 
-        var active = (<any>domain).active;
-        if(!active) return undefined;
-        return active["__operation_context__"];
+        return OperationContext._activeDomain().__operation_context__;
     }
 
-    static create(block: (operationContext: OperationContext) => void): void {
 
-        var d = domain.create();
-        d.run(() => {
-            var context = (<any>d)["__operation_context__"] = new OperationContext();
-            block(context);
-        });
+    static set current(context: OperationContext) {
+
+        OperationContext._activeDomain().__operation_context__ = context;
+    }
+
+    private static _activeDomain(): any {
+
+        var active = (<any>domain).active;
+        if(!active) {
+            throw new Error("There is not an active domain.");
+        }
+        return active;
     }
 }
 
