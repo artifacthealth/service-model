@@ -19,7 +19,7 @@ suite("RequestDispatcher", () => {
 
     var service = factory.addService(CalculatorService);
     var endpoint = service.addEndpoint("Calculator");
-    //endpoint.contract.behaviors.push(new VersioningBehavior());
+    endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
 

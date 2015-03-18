@@ -11,7 +11,6 @@ import FaultError = require("../faultError");
 import Callback = require("../common/callback");
 import OperationContext = require("../operationContext");
 
-// TODO: Consider use of Vary header https://www.subbu.org/blog/2007/12/vary-header-for-restful-applications
 class RequestHandler implements RequestContext {
 
     private _endpoint: DispatchEndpoint;
@@ -55,13 +54,13 @@ class RequestHandler implements RequestContext {
         }
     }
 
-    private _beforeSendReply(): void {
+    private _beforeSendReply(reply: Message): void {
 
         if(!this._correlationStates) return;
 
         var messageInspectors = this._endpoint.messageInspectors;
         for(var i = 0; i < messageInspectors.length; i++) {
-            messageInspectors[i].beforeSendReply(this.message, this._correlationStates[i]);
+            messageInspectors[i].beforeSendReply(reply, this._correlationStates[i]);
         }
     }
 
@@ -99,7 +98,7 @@ class RequestHandler implements RequestContext {
         if(this._finished) return;
         this._finished = true;
 
-        this._beforeSendReply();
+        this._beforeSendReply(message);
         this._request.reply(message);
     }
 

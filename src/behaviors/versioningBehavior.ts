@@ -2,7 +2,9 @@ import ContractBehavior = require("../description/contractBehavior");
 import ContractDescription = require("../description/contractDescription");
 import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
 import VersionMessageFilter = require("../dispatcher/versionMessageFilter");
+import VersionMessageInspector = require("../dispatcher/versionMessageInspector");
 
+// TODO: Consider use of Vary header https://www.subbu.org/blog/2007/12/vary-header-for-restful-applications
 class VersioningBehavior implements  ContractBehavior {
 
     private _version: string;
@@ -21,6 +23,7 @@ class VersioningBehavior implements  ContractBehavior {
         var version = this._version || description.version;
         if(version) {
             endpoint.filter = endpoint.filter.and(new VersionMessageFilter(version))
+            endpoint.messageInspectors.push(new VersionMessageInspector());
         }
     }
 }
