@@ -18,8 +18,13 @@ class RequestHandler implements RequestContext {
     private _request: RequestContext;
     private _correlationStates: any[];
     private _finished: boolean;
+    private _callback: Callback;
+    private _errored: boolean;
+    private _uncaughtException: Error;
 
     message: Message;
+    prev: RequestHandler;
+    next: RequestHandler;
 
     constructor(endpoint: DispatchEndpoint, request: RequestContext) {
         this.message = request.message;
@@ -27,7 +32,20 @@ class RequestHandler implements RequestContext {
         this._request = request;
     }
 
-    process(): void {
+    /**
+     * Process the request.
+     * @param callback Called when processing completes. Any uncaught exceptions are passed to callback.
+     */
+    process(callback?: Callback): void {
+
+        if(this._callback) {
+            throw new Error("Process called multiple times.");
+        }
+
+        if(!callback) {
+            throw new Error("Missing required argument 'callback'.");
+        }
+        this._callback = callback;
 
         this._afterReceiveRequest();
 
@@ -41,6 +59,32 @@ class RequestHandler implements RequestContext {
             if (err) return this._handleError(err);
             this._invoke(args);
         });
+    }
+
+    /**
+     * Reply to the request.
+     * @param message The message to send as a reply.
+     */
+    reply(message?: Message): void {
+
+        if(this._finished) return;
+        this._finished = true;
+
+        this._beforeSendReply(message);
+        this._request.reply(message);
+        this._callback(this._uncaughtException);
+    }
+
+    /**
+     * Abort the request without normal error handling.
+     */
+    abort(): void {
+
+        if(this._finished) return;
+        this._finished = true;
+
+        this._request.abort();
+        this._callback(this._uncaughtException);
     }
 
     private _afterReceiveRequest(): void {
@@ -68,9 +112,10 @@ class RequestHandler implements RequestContext {
 
         var instance = this._operation.endpoint.instanceProvider.getInstance(this.message);
 
-        //var d = domain.create();
-        //d.run(() => {
-        //    OperationContext.current = new OperationContext();
+        var d = domain.create();
+        d.on('error', (err: Error) => this._handleUncaughtException(err));
+        d.run(() => {
+            OperationContext.current = new OperationContext();
 
             this._operation.invoker.invoke(instance, args, (err, result) => {
                 if (err) return this._handleError(err);
@@ -84,7 +129,7 @@ class RequestHandler implements RequestContext {
                     this.reply(message);
                 });
             });
-        //});
+        });
 
         // If this is a one-way operation then reply immediately. We don't wait for the callback from invoke. Note
         // that this means that errors as a result of the invoke will not be reported to the client.
@@ -93,27 +138,40 @@ class RequestHandler implements RequestContext {
         }
     }
 
-    reply(message?: Message): void {
+    private _handleUncaughtException(err: Error): void {
 
-        if(this._finished) return;
-        this._finished = true;
+        if(this._uncaughtException) {
+            // Subsequent uncaught exceptions are tossed. Once we get the first uncaught exception, the system is an
+            // unpredictable state anyways so subsequent exceptions are not that meaningful.
+            return;
+        }
 
-        this._beforeSendReply(message);
-        this._request.reply(message);
-    }
+        // Make note of the uncaught exception. It will be passed to the callback for the dispatcher to emit
+        // after close.
+        this._uncaughtException = err;
 
-    // TODO: should we get rid of abort?
-    abort(err?: Error): void {
+        // Tell the dispatcher to start shutting down.
+        this._endpoint.service.dispatcher.close();
 
-        if(this._finished) return;
-        this._finished = true;
-        this._request.abort();
+        if(this._errored) {
+            // The uncaught exception occurred while in the error handler. Nothing else we can do but abort.
+            this.abort();
+        }
+        else {
+            // Give error handlers a chance to process the error for logging, etc.
+            this._handleError(err);
+        }
     }
 
     private _handleError(err: Error): void {
 
-        var step = -1;
+        // Make sure the error handlers are just executed once. For example, _handleError could be called multiple
+        // times if an exception occurs which is caught by the domain and passed to _handleError and then the timeout
+        // for the operation invoker fires.
+        if(this._errored || this._finished) return;
+        this._errored = true;
 
+        var step = -1;
         var next = (e: Error) => {
             var handler = this._endpoint.errorHandlers[++step];
             if(handler) {
@@ -124,7 +182,6 @@ class RequestHandler implements RequestContext {
                 this._sendFault(e);
             }
         }
-
         next(err);
     }
 
@@ -146,7 +203,14 @@ class RequestHandler implements RequestContext {
         }
 
         this._endpoint.faultFormatter.serializeFault(fault, (err, message) => {
-            if(err) return this.abort(err);
+            // If we get an error while trying to serialize the fault then we can't reply with the error so abort request.
+            if(err) {
+                // TODO: use logger
+                if(err) {
+                    console.log(err);
+                }
+                return this.abort();
+            }
             this.reply(message);
         });
     }

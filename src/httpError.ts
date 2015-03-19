@@ -48,7 +48,7 @@ class HttpError implements Error {
         this.statusCode = statusCode;
 
         Error.call(this, message);
-        (<any>Error).captureStackTrace(this, this.constructor);
+        Error.captureStackTrace(this, this.constructor);
     }
 
     /**

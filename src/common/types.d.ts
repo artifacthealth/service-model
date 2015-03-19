@@ -23,3 +23,11 @@ interface Lookup<T> {
 
     [key: string]: T;
 }
+
+interface Error {
+    stack?: string;
+}
+
+interface ErrorConstructor {
+    captureStackTrace(error: Error, constructorOpt: Function): void;
+}

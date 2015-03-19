@@ -129,7 +129,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask("default", [ "build", "tests" ]);
-    grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build" ]);
+    grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build", "typescript:benchmarks" ]);
     grunt.registerTask("lib", [ "clean:lib",  "copy:lib" ]);
     grunt.registerTask("tests", [ "typescript:tests", "tsreflect:fixtures", "mochaTest:tests" ]);
     grunt.registerTask("benchmarks", [ "typescript:benchmarks", "baseline:benchmarks" ]);

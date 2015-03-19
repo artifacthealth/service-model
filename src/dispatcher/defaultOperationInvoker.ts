@@ -71,11 +71,10 @@ class DefaultOperationInvoker implements OperationInvoker {
             finished = false;
 
         var timeoutHandle = setTimeout(() => {
-
             if(finished) return;
             timeout = true;
-            callback(new Error("Timeout of " + this.timeout + "ms exceeded."));
-        }, this.timeout || 60000);
+            callback(new Error("Timeout of " + this.timeout + "ms exceeded while invoking operation."));
+        }, this.timeout || 10000);
 
         var done = (err: Error, result: any) => {
 

@@ -1,6 +1,7 @@
 /// <reference path="../typings/baseline.d.ts" />
 /// <reference path="../typings/tsreflect.d.ts" />
 import reflect = require("tsreflect");
+import domain = require("domain");
 
 import DispatcherFactory = require("../src/dispatcherFactory");
 import CalculatorService = require("../tests/fixtures/calculatorService");
@@ -19,22 +20,28 @@ suite("RequestDispatcher", () => {
 
     var service = factory.addService(CalculatorService);
     var endpoint = service.addEndpoint("Calculator");
-    endpoint.contract.behaviors.push(new VersioningBehavior());
+    //endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
+    dispatcher.on('closing', () => console.log("Closing..."));
+    dispatcher.on('closed', () => console.log("Closed"));
+    dispatcher.on('error', (err: Error) => {
+        console.log("Uncaught exception...\n" + err.stack);
+        console.log("Exiting...");
+        throw err;
+    });
 
     test("dispatch", (done) => {
 
-        var message = new Message({"add2": [ 1, 2 ]});
-        message.headers["Accept-Version"] = "^1.0.0";
+        var message = new Message({"divide": [ 1, 2 ]});
+        //message.headers["Accept-Version"] = "^1.0.0";
         message.url = new Url("/services/calculator-service/");
 
-        var queued = dispatcher.dispatch(new DummyRequestContext(message, (err, result) => {
-            process.nextTick(() => done(err));
-        }));
-
-        if (!queued) {
-            done(new Error("Unable to dispatch request."));
+        var completed = 0;
+        for(var i = 0; i < 1000; i++) {
+            dispatcher.dispatch(new DummyRequestContext(message, (err, result) => {
+                if(++completed == 1000) process.nextTick(() => done(err));
+            }));
         }
     });
 });

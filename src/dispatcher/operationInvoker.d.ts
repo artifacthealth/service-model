@@ -2,7 +2,7 @@
 
 interface OperationInvoker {
 
-    invoke(instance: Object, args: any[], callback: ResultCallback<any>): void;
+    invoke(instance: Object, args: any[], callback: ResultCallback<any>):  void;
 }
 
 export = OperationInvoker;
