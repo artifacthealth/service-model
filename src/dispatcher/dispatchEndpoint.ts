@@ -28,7 +28,6 @@ class DispatchEndpoint {
     errorHandlers: ErrorHandler[] = [];
     faultFormatter: FaultFormatter;
     includeErrorDetailInFault: boolean;
-    createOperationContext = true;
 
     constructor(public service: DispatchService, address: Url, contractName: string) {
 
