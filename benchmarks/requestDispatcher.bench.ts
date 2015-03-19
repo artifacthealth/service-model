@@ -23,17 +23,20 @@ suite("RequestDispatcher", () => {
     //endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
+    dispatcher.services[0].endpoints[0].createOperationContext = false;
     dispatcher.on('closing', () => console.log("Closing..."));
     dispatcher.on('closed', () => console.log("Closed"));
     dispatcher.on('error', (err: Error) => {
         console.log("Uncaught exception...\n" + err.stack);
-        console.log("Exiting...");
-        throw err;
+        dispatcher.close(() => {
+            console.log("Exiting...");
+            throw err;
+        });
     });
 
     test("dispatch", (done) => {
 
-        var message = new Message({"divide": [ 1, 2 ]});
+        var message = new Message({"add2": [ 1, 2 ]});
         //message.headers["Accept-Version"] = "^1.0.0";
         message.url = new Url("/services/calculator-service/");
 

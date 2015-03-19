@@ -18,7 +18,6 @@ class RequestDispatcher extends events.EventEmitter {
     private _requestCount = 0;
     private _closing: boolean;
     private _closeTimer: NodeJS.Timer;
-    private _uncaughtException: Error;
 
     /**
      * Dispatches a request.
@@ -41,22 +40,19 @@ class RequestDispatcher extends events.EventEmitter {
         else {
             var handler = new RequestHandler(endpoint, request);
             this._addRequest(handler);
-            handler.process((err: Error) => {
-                // Any uncaught exceptions will be passed to the callback. After all handlers complete, the exception
-                // will be emitter as an 'error' event. Only the first exception will be emitted; subsequent exceptions
-                // will be ignored.
-                if(err && !this._uncaughtException) {
-                    this._uncaughtException = err;
-                }
-                this._removeRequest(handler)
-            });
+            handler.process(() => this._removeRequest(handler));
         }
     }
 
     /**
      * Closes the dispatcher. If any requests do not complete within 'closeTimeout', they are aborted.
+     * @param callback Optional. Called after dispatcher is closed.
      */
-    close(): void {
+    close(callback?: Callback): void {
+
+        if(callback) {
+            this.on('closed', callback);
+        }
 
         if(this._closing) return;
         this._closing = true;
@@ -66,9 +62,6 @@ class RequestDispatcher extends events.EventEmitter {
         this._closeTimer = setTimeout(() => {
             // TODO: use logger
             console.log("Timeout of " + this.closeTimeout + "ms exceeded while closing dispatcher.");
-
-            // Call abort on any handler that did not close within timeout period. If we didn't call abort, any
-            // uncaught exceptions would not be passed back to dispatcher.
             var handler = this._head;
             while(handler) {
                 handler.abort();
@@ -127,14 +120,7 @@ class RequestDispatcher extends events.EventEmitter {
         this._requestCount--;
         if(this._requestCount == 0 && this._closing) {
             clearTimeout(this._closeTimer);
-
-            // If there is an uncaught exception the 'closed' event is never fired.
-            if(this._uncaughtException) {
-                this.emit('error', this._uncaughtException);
-            }
-            else {
-                this.emit('closed');
-            }
+            this.emit('closed');
         }
     }
 }

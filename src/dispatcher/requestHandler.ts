@@ -18,9 +18,8 @@ class RequestHandler implements RequestContext {
     private _request: RequestContext;
     private _correlationStates: any[];
     private _finished: boolean;
-    private _callback: Callback;
+    private _callback: () => void;
     private _errored: boolean;
-    private _uncaughtException: Error;
 
     message: Message;
     prev: RequestHandler;
@@ -34,9 +33,9 @@ class RequestHandler implements RequestContext {
 
     /**
      * Process the request.
-     * @param callback Called when processing completes. Any uncaught exceptions are passed to callback.
+     * @param callback Called when processing completes.
      */
-    process(callback?: Callback): void {
+    process(callback: () => void): void {
 
         if(this._callback) {
             throw new Error("Process called multiple times.");
@@ -72,7 +71,7 @@ class RequestHandler implements RequestContext {
 
         this._beforeSendReply(message);
         this._request.reply(message);
-        this._callback(this._uncaughtException);
+        this._callback();
     }
 
     /**
@@ -84,7 +83,7 @@ class RequestHandler implements RequestContext {
         this._finished = true;
 
         this._request.abort();
-        this._callback(this._uncaughtException);
+        this._callback();
     }
 
     private _afterReceiveRequest(): void {
@@ -140,19 +139,11 @@ class RequestHandler implements RequestContext {
 
     private _handleUncaughtException(err: Error): void {
 
-        if(this._uncaughtException) {
-            // Subsequent uncaught exceptions are tossed. Once we get the first uncaught exception, the system is an
-            // unpredictable state anyways so subsequent exceptions are not that meaningful.
-            return;
-        }
+        // Emit the error from the dispatcher.
+        this._endpoint.service.dispatcher.emit('error', err);
 
-        // Make note of the uncaught exception. It will be passed to the callback for the dispatcher to emit
-        // after close.
-        this._uncaughtException = err;
-
-        // Tell the dispatcher to start shutting down.
-        this._endpoint.service.dispatcher.close();
-
+        // The default behavior will crash the process immediately once the error is emitted. However, if the host
+        // handles the event and gives us a chane to shutdown, process the error.
         if(this._errored) {
             // The uncaught exception occurred while in the error handler. Nothing else we can do but abort.
             this.abort();
