@@ -23,7 +23,6 @@ suite("RequestDispatcher", () => {
     //endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
-    dispatcher.services[0].endpoints[0].createOperationContext = false;
     dispatcher.on('closing', () => console.log("Closing..."));
     dispatcher.on('closed', () => console.log("Closed"));
     dispatcher.on('error', (err: Error) => {

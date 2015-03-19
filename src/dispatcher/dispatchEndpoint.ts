@@ -27,6 +27,11 @@ class DispatchEndpoint {
     messageInspectors: MessageInspector[] = [];
     errorHandlers: ErrorHandler[] = [];
     faultFormatter: FaultFormatter;
+
+    /**
+     * Specifies whether to include the error message and stack trace in faults created from errors. This should not
+     * be turned on in production.
+     */
     includeErrorDetailInFault: boolean;
 
     constructor(public service: DispatchService, address: Url, contractName: string) {

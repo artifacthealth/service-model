@@ -12,6 +12,8 @@ class VersionMessageInspector implements MessageInspector {
 
     beforeSendReply(reply: Message, state: any): void {
 
+        if(!reply) return;
+
         var value = reply.headers["Vary"];
         if(value) {
             if(value != '*') {

@@ -15,6 +15,11 @@ class DispatchService {
     filter: MessageFilter;
     filterPriority: number = 0;
 
+    /**
+     * Specifies whether to create an OperationContext for operations in this service. The default value is 'true'.
+     */
+    createOperationContext = true;
+
     constructor(public dispatcher: RequestDispatcher, baseAddress: Url, name: string) {
 
         if(!dispatcher) {

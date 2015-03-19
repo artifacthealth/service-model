@@ -14,7 +14,6 @@ import OperationContext = require("../operationContext");
 class RequestHandler implements RequestContext {
 
     private _endpoint: DispatchEndpoint;
-    private _operation: DispatchOperation;
     private _request: RequestContext;
     private _correlationStates: any[];
     private _finished: boolean;
@@ -46,17 +45,33 @@ class RequestHandler implements RequestContext {
         }
         this._callback = callback;
 
+        if(!this._endpoint.service.createOperationContext) {
+            this._handleRequest();
+        }
+        else {
+            var d = domain.create();
+            d.on('error', (err: Error) => this._handleUncaughtException(err));
+            d.run(() => {
+                var context = new OperationContext();
+                context.requestContext = this;
+                OperationContext.current = context;
+                this._handleRequest();
+            });
+        }
+    }
+
+    private _handleRequest(): void {
         this._afterReceiveRequest();
 
-        this._operation = this._endpoint.chooseOperation(this.message);
-        if (!this._operation) {
+        var operation = this._endpoint.chooseOperation(this.message);
+        if (!operation) {
             this._handleError(new Error("Unable to choose operation"));
             return;
         }
 
-        this._operation.formatter.deserializeRequest(this.message, (err, args) => {
+        operation.formatter.deserializeRequest(this.message, (err, args) => {
             if (err) return this._handleError(err);
-            this._invoke(args);
+            this._invoke(operation, args);
         });
     }
 
@@ -107,32 +122,28 @@ class RequestHandler implements RequestContext {
         }
     }
 
-    private _invoke(args: any[]): void {
+    private _invoke(operation: DispatchOperation, args: any[]): void {
 
-        var instance = this._operation.endpoint.instanceProvider.getInstance(this.message);
+        var instance = this._endpoint.instanceProvider.getInstance(this.message);
 
-        var d = domain.create();
-        d.on('error', (err: Error) => this._handleUncaughtException(err));
-        d.run(() => {
-            OperationContext.current = new OperationContext();
+        operation.invoker.invoke(instance, args, (err, result) => {
+            if (err) return this._handleError(err);
 
-            this._operation.invoker.invoke(instance, args, (err, result) => {
+            // No need to serialize the reply if this is a one way message.
+            if (operation.isOneWay) return;
+
+            operation.formatter.serializeReply(result, (err, message) => {
                 if (err) return this._handleError(err);
 
-                // No need to serialize the reply if this is a one way message.
-                if (this._operation.isOneWay) return;
-
-                this._operation.formatter.serializeReply(result, (err, message) => {
-                    if (err) return this._handleError(err);
-
-                    this.reply(message);
-                });
+                this.reply(message);
             });
         });
 
         // If this is a one-way operation then reply immediately. We don't wait for the callback from invoke. Note
         // that this means that errors as a result of the invoke will not be reported to the client.
-        if (this._operation.isOneWay) {
+        if (operation.isOneWay) {
+            // TODO: consider replying earlier to one-way operations. Maybe we should reply as soon as the operation is determined.
+            // TODO: consider replying with empty message. Since this is HTTP request/response we need to send something back. So maybe it should be an empty message so message inspectors have a chance to add headers, etc.
             this.reply();
         }
     }
