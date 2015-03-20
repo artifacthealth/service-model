@@ -17,12 +17,10 @@ import RpcBehavior = require("../src/behaviors/rpcBehavior");
 
 suite("RequestDispatcher", () => {
 
-    var factory = new DispatcherFactory("services");
+    var factory = new DispatcherFactory();
 
     var service = factory.addService(CalculatorService);
-
-    var endpoint = service.addEndpoint("Calculator");
-    endpoint.behaviors.push(new RpcBehavior());
+    service.addEndpoint("Calculator", "/services/calculator-service/", new RpcBehavior());
 
     //endpoint.contract.behaviors.push(new VersioningBehavior());
 
@@ -37,11 +35,11 @@ suite("RequestDispatcher", () => {
         });
     });
 
-    test("dispatch", (done) => {
+    var message = new Message({"add2": [ 1, 2 ]});
+    message.headers["Accept-Version"] = "^1.0.0";
+    message.url = new Url("/services/calculator-service/");
 
-        var message = new Message({"divide": [ 1, 2 ]});
-        //message.headers["Accept-Version"] = "^1.0.0";
-        message.url = new Url("/services/calculator-service/");
+    test("dispatch", (done) => {
 
         var completed = 0;
         for(var i = 0; i < 1000; i++) {

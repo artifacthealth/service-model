@@ -15,9 +15,9 @@ class Message {
         this.body = body;
     }
 
-    static create(status: HttpStatusCode): Message {
+    static createReply(status: HttpStatusCode, body?: any): Message {
 
-        var ret = new Message();
+        var ret = new Message(body);
         ret.statusCode = status;
         return ret;
     }

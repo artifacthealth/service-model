@@ -1,6 +1,5 @@
 /// <reference path="../../typings/node.d.ts" />
 /// <reference path="../../typings/tsreflect.d.ts" />
-/// <reference path="../../typings/change-case.d.ts" />
 
 interface Callback {
 

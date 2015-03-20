@@ -2,6 +2,7 @@ import MessageFormatter = require("./messageFormatter");
 import Message = require("../message");
 import FaultError = require("../faultError");
 import OperationDescription = require("../description/operationDescription");
+import HttpStatusCode = require("../httpStatusCode");
 
 class RpcMessageFormatter implements MessageFormatter {
 
@@ -29,8 +30,6 @@ class RpcMessageFormatter implements MessageFormatter {
         }
     }
 
-    getArgs: (obj: any) => any;
-
     deserializeRequest(message: Message, callback: ResultCallback<any[]>): void {
 
         var args = message.body[this._operationName];
@@ -56,7 +55,7 @@ class RpcMessageFormatter implements MessageFormatter {
 
     serializeReply(result: any, callback: ResultCallback<Message>): void {
 
-        callback(null, new Message({ response: result }));
+        callback(null, Message.createReply(HttpStatusCode.Ok, { response: result }));
     }
 
 }

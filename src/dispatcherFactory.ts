@@ -2,7 +2,6 @@
 
 import util = require("util");
 import reflect = require("tsreflect");
-import changeCase = require("change-case");
 
 import RequestDispatcher = require("./dispatcher/requestDispatcher");
 import ServiceDescription = require("./description/serviceDescription");
@@ -27,14 +26,12 @@ class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
     private _loadedSymbols: boolean;
-    private _baseAddress: Url;
 
-    constructor(baseAddress?: Url | string) {
+    addService(ctr: Constructor, name?: string): ServiceDescription {
 
-        this._baseAddress = new Url(baseAddress);
-    }
-
-    addService(ctr: Constructor, baseAddress?: Url | string, name?: string): ServiceDescription {
+        if(!ctr) {
+            throw new Error("Missing required argument 'ctr'.");
+        }
 
         if(!this._loadedSymbols) {
             reflect.loadSync();
@@ -46,17 +43,7 @@ class DispatcherFactory {
             throw new Error("Unable to find symbol information for '" + ctr.name + "'. Make sure you have a .d.json file in the same directory as as the module containing this constructor. See tsreflect-compiler on npm for more information.");
         }
 
-        var serviceName = name || symbol.getName();
-        var url = baseAddress ? new Url(baseAddress) : (this._baseAddress.resolve(changeCase.paramCase(serviceName)));
-
-        // validate that base address is unique
-        for(var i = 0; i < this._services.length; i++) {
-            if(this._services[i].baseAddress.equals(url)) {
-                throw new Error("There is already a service with base address '" + url + "'.");
-            }
-        }
-
-        var service = new ServiceDescription(symbol, url, serviceName);
+        var service = new ServiceDescription(symbol, name || symbol.getName());
         this._services.push(service);
         return service;
     }
@@ -81,16 +68,18 @@ class DispatcherFactory {
 
     private _createDispatchService(dispatcher: RequestDispatcher, service: ServiceDescription): DispatchService {
 
-        var ret = new DispatchService(dispatcher, service.baseAddress, service.name);
+        var ret = new DispatchService(dispatcher, service.name);
 
         for(var i = 0; i < service.endpoints.length; i++) {
-            ret.endpoints.push(this._createDispatchEndpoint(ret, service, service.endpoints[i]));
+            ret.endpoints.push(this._createDispatchEndpoint(ret, service.endpoints[i]));
         }
+
+        ret.instanceProvider = new DefaultInstanceProvider(service);
 
         return ret;
     }
 
-    private _createDispatchEndpoint(service: DispatchService, serviceDescription: ServiceDescription, endpoint: EndpointDescription): DispatchEndpoint {
+    private _createDispatchEndpoint(service: DispatchService, endpoint: EndpointDescription): DispatchEndpoint {
 
         var ret = new DispatchEndpoint(service, endpoint.address, endpoint.contract.name);
 
@@ -98,7 +87,6 @@ class DispatcherFactory {
             ret.operations.push(this._createDispatchOperation(ret, endpoint.contract.operations[i]));
         }
 
-        ret.instanceProvider = new DefaultInstanceProvider(serviceDescription);
         return ret;
     }
 

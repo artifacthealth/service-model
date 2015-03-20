@@ -25,9 +25,21 @@ class Url {
         this.hash = parsed.hash;
     }
 
-    resolve(path: string): Url {
+    resolve(address: Url | string): Url {
 
-        return new Url(url.resolve(this.toString() + "/", (path || "")));
+        if(!address) {
+            return this;
+        }
+
+        var other: Url;
+        if(typeof address === "string") {
+            other = new Url(address);
+        }
+        else {
+            other = address;
+        }
+
+        return new Url(url.resolve(this.toString() + "/", other.pathname));
     }
 
     equals(other: Url): boolean {

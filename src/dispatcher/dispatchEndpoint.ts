@@ -1,4 +1,3 @@
-import InstanceProvider = require("./instanceProvider");
 import OperationSelector = require("./operationSelector");
 import DispatchOperation = require("./dispatchOperation");
 import DispatchService = require("./dispatchService");
@@ -14,16 +13,22 @@ import FaultFormatter = require("./faultFormatter");
 
 class DispatchEndpoint {
 
-    name: string;
+    /**
+     * The endpoint address.
+     */
     address: Url;
+
     filter: MessageFilter;
     filterPriority: number = 0;
+
     contractName: string;
-    instanceProvider: InstanceProvider;
+
     operations: DispatchOperation[] = [];
     operationSelector: OperationSelector;
     unhandledOperation: DispatchOperation;
+
     messageInspectors: MessageInspector[] = [];
+
     errorHandlers: ErrorHandler[] = [];
     faultFormatter: FaultFormatter;
 
@@ -60,10 +65,6 @@ class DispatchEndpoint {
             this._throwConfigError("Undefined 'filter'.");
         }
 
-        if(!this.instanceProvider) {
-            this._throwConfigError("Undefined 'instanceProvider'.");
-        }
-
         if(!this.operationSelector) {
             this._throwConfigError("Undefined 'operationSelector'.");
         }
@@ -75,7 +76,7 @@ class DispatchEndpoint {
 
     private _throwConfigError(message: string): void {
 
-        throw new Error("Endpoint on service '" + this.service.name + "' incorrectly configured." + message);
+        throw new Error("Endpoint at address '" + this.address + "' incorrectly configured." + message);
     }
 
     chooseOperation(message: Message): DispatchOperation {

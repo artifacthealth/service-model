@@ -25,6 +25,7 @@ class RequestHandler implements RequestContext {
     next: RequestHandler;
 
     constructor(endpoint: DispatchEndpoint, request: RequestContext) {
+
         this.message = request.message;
         this._endpoint = endpoint;
         this._request = request;
@@ -124,7 +125,7 @@ class RequestHandler implements RequestContext {
 
     private _invoke(operation: DispatchOperation, args: any[]): void {
 
-        var instance = this._endpoint.instanceProvider.getInstance(this.message);
+        var instance = this._endpoint.service.instanceProvider.getInstance(this.message);
 
         operation.invoker.invoke(instance, args, (err, result) => {
             if (err) return this._handleError(err);
@@ -142,9 +143,7 @@ class RequestHandler implements RequestContext {
         // If this is a one-way operation then reply immediately. We don't wait for the callback from invoke. Note
         // that this means that errors as a result of the invoke will not be reported to the client.
         if (operation.isOneWay) {
-            // TODO: consider replying earlier to one-way operations. Maybe we should reply as soon as the operation is determined.
-            // TODO: consider replying with empty message. Since this is HTTP request/response we need to send something back. So maybe it should be an empty message so message inspectors have a chance to add headers, etc.
-            this.reply();
+            this.reply(Message.createReply(HttpStatusCode.Ok));
         }
     }
 

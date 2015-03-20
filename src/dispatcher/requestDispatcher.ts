@@ -3,6 +3,7 @@
 import events = require("events");
 
 import DispatchService = require("./dispatchService");
+import DispatchEndpoint = require("./dispatchEndpoint");
 import RequestContext = require("../requestContext");
 import Message = require("../message");
 import RequestHandler = require("./requestHandler");
@@ -14,7 +15,7 @@ class RequestDispatcher extends events.EventEmitter {
 
     closeTimeout = 30000;
     services: DispatchService[] = [];
-    logger: Logger;
+    logger: Logger = NullLogger.instance;
 
     private _head: RequestHandler;
     private _tail: RequestHandler;
@@ -22,29 +23,19 @@ class RequestDispatcher extends events.EventEmitter {
     private _closing: boolean;
     private _closeTimer: NodeJS.Timer;
 
-    constructor() {
-        super();
-
-        this.logger = NullLogger.instance;
-    }
-
     /**
      * Dispatches a request.
      * @param request The request to dispatch.
      */
     dispatch(request: RequestContext): void {
         if(this._closing) {
-            request.reply(Message.create(HttpStatusCode.ServiceUnavailable));
+            request.reply(Message.createReply(HttpStatusCode.ServiceUnavailable));
             return;
         }
 
-        var service = this._chooseService(request.message);
-        if(service) {
-            var endpoint = service.chooseEndpoint(request.message);
-        }
-
+        var endpoint = this._chooseEndpoint(request.message);
         if(!endpoint) {
-            request.reply(Message.create(HttpStatusCode.NotFound));
+            request.reply(Message.createReply(HttpStatusCode.NotFound));
         }
         else {
             var handler = new RequestHandler(endpoint, request);
@@ -87,23 +78,29 @@ class RequestDispatcher extends events.EventEmitter {
         this._closeTimer.unref();
     }
 
-    private _chooseService(message: Message): DispatchService {
+    private _chooseEndpoint(message: Message): DispatchEndpoint {
 
         var max = -Infinity,
-            match: DispatchService;
+            match: DispatchEndpoint;
 
         for(var i = 0; i < this.services.length; i++) {
             var service = this.services[i];
-            if(service.filter.match(message)) {
-                if(service.filterPriority > max) {
-                    max = service.filterPriority;
-                    match = service;
+
+            for (var j = 0; j < service.endpoints.length; j++) {
+                var endpoint = service.endpoints[j];
+
+                if (endpoint.filter.match(message)) {
+                    if (endpoint.filterPriority > max) {
+                        max = endpoint.filterPriority;
+                        match = endpoint;
+                    }
                 }
             }
         }
 
         return match;
     }
+
 
     private _addRequest(handler: RequestHandler): void {
 
