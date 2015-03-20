@@ -13,13 +13,17 @@ import HttpError = require("../src/httpError");
 import HttpStatusCode = require("../src/httpStatusCode");
 import OperationContext = require('../src/operationContext');
 import VersioningBehavior = require("../src/behaviors/versioningBehavior");
+import RpcBehavior = require("../src/behaviors/rpcBehavior");
 
 suite("RequestDispatcher", () => {
 
     var factory = new DispatcherFactory("services");
 
     var service = factory.addService(CalculatorService);
+
     var endpoint = service.addEndpoint("Calculator");
+    endpoint.behaviors.push(new RpcBehavior());
+
     //endpoint.contract.behaviors.push(new VersioningBehavior());
 
     var dispatcher = factory.createDispatcher();
@@ -35,7 +39,7 @@ suite("RequestDispatcher", () => {
 
     test("dispatch", (done) => {
 
-        var message = new Message({"add2": [ 1, 2 ]});
+        var message = new Message({"divide": [ 1, 2 ]});
         //message.headers["Accept-Version"] = "^1.0.0";
         message.url = new Url("/services/calculator-service/");
 

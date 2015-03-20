@@ -39,6 +39,14 @@ class DispatchService {
         this.filter = new BaseAddressMessageFilter(baseAddress);
     }
 
+    /**
+     * Validates that the service is correctly configured.
+     */
+    validate(): void {
+
+        this.endpoints.forEach(endpoint => endpoint.validate());
+    }
+
     chooseEndpoint(message: Message): DispatchEndpoint {
 
         var max = -Infinity,

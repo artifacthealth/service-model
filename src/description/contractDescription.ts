@@ -14,6 +14,10 @@ class ContractDescription {
 
     constructor(contractType: reflect.Type, name?: string) {
 
+        if(!contractType) {
+            throw new Error("Missing required argument 'contractType'.");
+        }
+
         this.contractType = contractType;
         this.name = name || contractType.getName();
 

@@ -1,5 +1,6 @@
 /// <reference path="./common/types.d.ts" />
 
+import util = require("util");
 import reflect = require("tsreflect");
 import changeCase = require("change-case");
 
@@ -73,6 +74,8 @@ class DispatcherFactory {
             this._applyServiceBehaviors(dispatcher.services[i], this._services[i]);
         }
 
+        dispatcher.validate();
+
         return dispatcher;
     }
 
@@ -95,10 +98,7 @@ class DispatcherFactory {
             ret.operations.push(this._createDispatchOperation(ret, endpoint.contract.operations[i]));
         }
 
-        ret.faultFormatter = new RpcFaultFormatter();
         ret.instanceProvider = new DefaultInstanceProvider(serviceDescription);
-        ret.operationSelector = new RpcOperationSelector(ret);
-
         return ret;
     }
 
@@ -107,7 +107,6 @@ class DispatcherFactory {
         var ret = new DispatchOperation(endpoint, operation.name);
         ret.isOneWay = operation.isOneWay;
         ret.invoker = new DefaultOperationInvoker(operation);
-        ret.formatter = new RpcMessageFormatter(operation);
         return ret;
     }
 

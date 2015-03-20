@@ -24,6 +24,25 @@ class DispatchOperation {
 
         this.name = name;
     }
+
+    /**
+     * Validates that the operation is correctly configured.
+     */
+    validate(): void {
+
+        if(!this.formatter) {
+            this._throwConfigError("Undefined 'formatter'.");
+        }
+
+        if(!this.invoker) {
+            this._throwConfigError("Undefined 'invoker'.");
+        }
+    }
+
+    private _throwConfigError(message: string): void {
+
+        throw new Error("Operation '" + this.name + "' on service '" + this.endpoint.service + "' incorrectly configured. " + message);
+    }
 }
 
 export = DispatchOperation;

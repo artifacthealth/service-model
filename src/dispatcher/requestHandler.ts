@@ -157,6 +157,7 @@ class RequestHandler implements RequestContext {
         // handles the event and gives us a chane to shutdown, process the error.
         if(this._errored) {
             // The uncaught exception occurred while in the error handler. Nothing else we can do but abort.
+            this._endpoint.service.dispatcher.logger.trace(err, "Uncaught exception in error handler. Aborting request.");
             this.abort();
         }
         else {
@@ -205,11 +206,10 @@ class RequestHandler implements RequestContext {
         }
 
         this._endpoint.faultFormatter.serializeFault(fault, (err, message) => {
-            // If we get an error while trying to serialize the fault then we can't reply with the error so abort request.
+            // If we get an error while trying to serialize the fault then we can't reply with the error so abort request and log the error.
             if(err) {
-                // TODO: use logger
                 if(err) {
-                    console.log(err);
+                    this._endpoint.service.dispatcher.logger.error({ err: err, endpoint: this._endpoint }, "Error serializing fault. Aborting request.");
                 }
                 return this.abort();
             }

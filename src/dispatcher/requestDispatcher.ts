@@ -7,17 +7,26 @@ import RequestContext = require("../requestContext");
 import Message = require("../message");
 import RequestHandler = require("./requestHandler");
 import HttpStatusCode = require("../httpStatusCode");
+import Logger = require("../logger");
+import NullLogger = require("../nullLogger");
 
 class RequestDispatcher extends events.EventEmitter {
 
     closeTimeout = 30000;
     services: DispatchService[] = [];
+    logger: Logger;
 
     private _head: RequestHandler;
     private _tail: RequestHandler;
     private _requestCount = 0;
     private _closing: boolean;
     private _closeTimer: NodeJS.Timer;
+
+    constructor() {
+        super();
+
+        this.logger = NullLogger.instance;
+    }
 
     /**
      * Dispatches a request.
@@ -45,6 +54,14 @@ class RequestDispatcher extends events.EventEmitter {
     }
 
     /**
+     * Validates that the dispatcher is correctly configured.
+     */
+    validate(): void {
+
+        this.services.forEach(service => service.validate());
+    }
+
+    /**
      * Closes the dispatcher. If any requests do not complete within 'closeTimeout', they are aborted.
      * @param callback Optional. Called after dispatcher is closed.
      */
@@ -60,8 +77,7 @@ class RequestDispatcher extends events.EventEmitter {
         this.emit('closing');
 
         this._closeTimer = setTimeout(() => {
-            // TODO: use logger
-            console.log("Timeout of " + this.closeTimeout + "ms exceeded while closing dispatcher.");
+            this.logger.warn("Timeout of %dms exceeded while closing dispatcher.", this.closeTimeout);
             var handler = this._head;
             while(handler) {
                 handler.abort();

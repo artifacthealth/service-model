@@ -7,10 +7,12 @@ class MessageFilter {
     }
 
     and(other: MessageFilter): MessageFilter {
+        if(!other) return this;
         return new AndMessageFilter(this, other);
     }
 
     or(other: MessageFilter): MessageFilter {
+        if(!other) return this;
         return new OrMessageFilter(this, other);
     }
 

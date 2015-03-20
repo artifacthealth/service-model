@@ -5,7 +5,6 @@ import DispatchService = require("./dispatchService");
 import RequestContext = require("../requestContext");
 import MessageFilter = require("./messageFilter");
 import EndpointDescription = require("../description/endpointDescription");
-import AddressMessageFilter = require("./addressMessageFilter");
 import DefaultInstanceProvider = require("./defaultInstanceProvider")
 import MessageInspector = require("./messageInspector");
 import Message = require("../message");
@@ -50,8 +49,33 @@ class DispatchEndpoint {
 
         this.address = address;
         this.contractName = contractName;
-        // TODO: take contract version into account if present in the request. Need to decide how to specify version requested.
-        this.filter = new AddressMessageFilter(address);
+    }
+
+    /**
+     * Validates that the endpoint is correctly configured.
+     */
+    validate(): void {
+
+        if(!this.filter) {
+            this._throwConfigError("Undefined 'filter'.");
+        }
+
+        if(!this.instanceProvider) {
+            this._throwConfigError("Undefined 'instanceProvider'.");
+        }
+
+        if(!this.operationSelector) {
+            this._throwConfigError("Undefined 'operationSelector'.");
+        }
+
+        if(!this.faultFormatter) {
+            this._throwConfigError("Undefined 'faultFormatter'.");
+        }
+    }
+
+    private _throwConfigError(message: string): void {
+
+        throw new Error("Endpoint on service '" + this.service.name + "' incorrectly configured." + message);
     }
 
     chooseOperation(message: Message): DispatchOperation {

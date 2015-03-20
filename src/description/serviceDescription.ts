@@ -18,6 +18,10 @@ class ServiceDescription {
 
     constructor(serviceSymbol: reflect.Symbol, baseAddress?: Url | string, name?: string) {
 
+        if(!serviceSymbol) {
+            throw new Error("Missing required argument 'serviceSymbol'.");
+        }
+
         this.baseAddress = new Url(baseAddress);
         this.serviceSymbol = serviceSymbol;
         this.name = name || serviceSymbol.getName();
@@ -43,7 +47,6 @@ class ServiceDescription {
         this.endpoints.push(endpoint);
         return endpoint;
     }
-
 }
 
 export = ServiceDescription;

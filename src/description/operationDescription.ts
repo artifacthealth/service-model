@@ -16,6 +16,14 @@ class OperationDescription {
 
     constructor(contract: ContractDescription, method: reflect.Symbol, name?: string) {
 
+        if(!contract) {
+            throw new Error("Missing required argument 'contract'.");
+        }
+
+        if(!method) {
+            throw new Error("Missing required argument 'method'.");
+        }
+
         this.contract = contract;
         this.method = method;
         this.name = name || method.getName();
