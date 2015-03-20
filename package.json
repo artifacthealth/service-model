@@ -1,6 +1,6 @@
 {
-  "name": "express-service",
-  "description": "Web services middleware for Express.",
+  "name": "service-model",
+  "description": "A web services framework for node servers built with Typescript.",
   "version": "0.1.0",
   "author": {
     "name": "Artifact Health, LLC",
@@ -9,7 +9,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/mgottlieb/express-service.git"
+    "url": "git+ssh://git@bitbucket.org/mgottlieb/service-model.git"
   },
   "licenses": [
     {
@@ -43,6 +43,6 @@
   "keywords": [
     "service",
     "rpc",
-    "express"
+    "typescript"
   ]
 }
