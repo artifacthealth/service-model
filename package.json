@@ -16,7 +16,7 @@
       "type": "Apache-2.0"
     }
   ],
-  "main": "lib/express-service.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "grunt"
   },

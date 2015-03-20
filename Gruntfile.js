@@ -190,7 +190,7 @@ module.exports = function(grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask("default", [ "build", "tests" ]);
+    grunt.registerTask("default", [ "build", "lib", "tests" ]);
     grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build", "typescript:benchmarks" ]);
     grunt.registerTask("lib", [ "clean:lib", "copy:lib", "ts_clean:lib", "dts_bundle:lib", "copy:dts" ]);
     grunt.registerTask("tests", [ "typescript:tests", "tsreflect:fixtures", "mochaTest:tests" ]);
