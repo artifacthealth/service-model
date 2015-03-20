@@ -14,6 +14,7 @@ import HttpStatusCode = require("../src/httpStatusCode");
 import OperationContext = require('../src/operationContext');
 import VersioningBehavior = require("../src/behaviors/versioningBehavior");
 import RpcBehavior = require("../src/behaviors/rpcBehavior");
+import ResultCallback = require("../src/common/resultCallback");
 
 suite("RequestDispatcher", () => {
 
@@ -28,7 +29,7 @@ suite("RequestDispatcher", () => {
     dispatcher.on('closing', () => console.log("Closing..."));
     dispatcher.on('closed', () => console.log("Closed"));
     dispatcher.on('error', (err: Error) => {
-        console.log("Uncaught exception...\n" + err.stack);
+        console.log("Uncaught exception...\n" + (<any>err).stack);
         dispatcher.close(() => {
             console.log("Exiting...");
             throw err;

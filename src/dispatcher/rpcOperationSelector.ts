@@ -1,3 +1,4 @@
+import Lookup = require("../common/lookup");
 import OperationSelector = require("./operationSelector");
 import Message = require("../message");
 import DispatchOperation = require("./dispatchOperation");

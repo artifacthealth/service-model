@@ -1,5 +1,4 @@
-/// <reference path="../common/types.d.ts" />
-
+import Callback = require("../common/callback");
 import RequestContext = require("../requestContext");
 
 interface ErrorHandler {

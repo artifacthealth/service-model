@@ -1,5 +1,4 @@
-/// <reference path="../common/types.d.ts" />
-
+import ResultCallback = require("../common/resultCallback");
 import Message = require("../message");
 import FaultError = require("../faultError");
 

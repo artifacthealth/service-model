@@ -1,4 +1,4 @@
-/// <reference path="../common/types.d.ts" />
+import ResultCallback = require("../common/resultCallback");
 
 interface OperationInvoker {
 

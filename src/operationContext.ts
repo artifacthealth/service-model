@@ -1,8 +1,13 @@
-/// <reference path="./common/types.d.ts" />
+/// <reference path="../typings/node.d.ts" />
 
 import domain = require("domain");
+
+import Lookup = require("./common/lookup");
 import RequestContext = require("./requestContext");
 
+/**
+ * The operation context.
+ */
 class OperationContext {
 
     /**

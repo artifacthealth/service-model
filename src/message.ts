@@ -1,5 +1,6 @@
 import Url = require("./url");
 import HttpStatusCode = require("./httpStatusCode");
+import Lookup = require("./common/lookup");
 
 class Message {
 

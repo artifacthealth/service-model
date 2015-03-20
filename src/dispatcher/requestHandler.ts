@@ -1,4 +1,4 @@
-/// <reference path="../common/types.d.ts" />
+/// <reference path="../../typings/node.d.ts" />
 
 import domain = require("domain");
 

@@ -1,7 +1,8 @@
-/// <reference path="../common/types.d.ts" />
+/// <reference path="../../typings/node.d.ts" />
 
 import events = require("events");
 
+import Callback = require("../common/callback");
 import DispatchService = require("./dispatchService");
 import DispatchEndpoint = require("./dispatchEndpoint");
 import RequestContext = require("../requestContext");

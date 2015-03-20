@@ -1,6 +1,8 @@
-/// <reference path="../common/types.d.ts" />
+/// <reference path="../../typings/tsreflect.d.ts" />
 
 import reflect = require("tsreflect");
+
+import ResultCallback = require("../common/resultCallback");
 import OperationInvoker = require("./operationInvoker");
 import OperationDescription = require("../description/operationDescription");
 import FaultError = require("../faultError");

@@ -1,4 +1,4 @@
-/// <reference path="../common/types.d.ts" />
+/// <reference path="../../typings/tsreflect.d.ts" />
 
 import reflect = require("tsreflect");
 import OperationBehavior = require("./operationBehavior")

@@ -1,3 +1,4 @@
+import ResultCallback = require("../common/resultCallback");
 import FaultFormatter = require("./faultFormatter");
 import Message = require("../message");
 import FaultError = require("../faultError");

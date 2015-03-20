@@ -2,6 +2,7 @@
 
 import semver = require("semver");
 
+import Lookup = require("../common/lookup");
 import MessageFilter = require("./messageFilter");
 import Message = require("../message");
 

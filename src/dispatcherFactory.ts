@@ -1,8 +1,9 @@
-/// <reference path="./common/types.d.ts" />
+/// <reference path="../typings/node.d.ts" />
 
 import util = require("util");
 import reflect = require("tsreflect");
 
+import Constructor = require("./common/constructor");
 import RequestDispatcher = require("./dispatcher/requestDispatcher");
 import ServiceDescription = require("./description/serviceDescription");
 import DispatchService = require("./dispatcher/dispatchService");

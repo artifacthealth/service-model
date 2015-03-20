@@ -1,4 +1,3 @@
-/// <reference path="./common/types.d.ts" />
 import HttpStatusCode = require("./httpStatusCode");
 
 class HttpError implements Error {
@@ -48,7 +47,7 @@ class HttpError implements Error {
         this.statusCode = statusCode;
 
         Error.call(this, message);
-        Error.captureStackTrace(this, this.constructor);
+        (<any>Error).captureStackTrace(this, this.constructor);
     }
 
     /**

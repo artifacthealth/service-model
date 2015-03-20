@@ -8,6 +8,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadNpmTasks("grunt-tsreflect");
+    grunt.loadNpmTasks('grunt-dts-bundle');
+    grunt.loadNpmTasks('grunt-ts-clean');
 
     // Project configuration.
     grunt.initConfig({
@@ -29,10 +31,14 @@ module.exports = function(grunt) {
         typescript: {
             build: {
                 options: {
+                    references: [
+                        "core",
+                        "webworker"
+                    ],
                     target: "es5",
                     module: "commonjs",
                     sourceMap: true,
-                    declaration: false,
+                    declaration: true,
                     noImplicitAny: true
                 },
                 src: ['src/**/*.ts'],
@@ -40,6 +46,10 @@ module.exports = function(grunt) {
             },
             tests: {
                 options: {
+                    references: [
+                        "core",
+                        "webworker"
+                    ],
                     target: "es5",
                     module: "commonjs",
                     sourceMap: true,
@@ -52,6 +62,10 @@ module.exports = function(grunt) {
             },
             benchmarks: {
                 options: {
+                    references: [
+                        "core",
+                        "webworker"
+                    ],
                     target: "es5",
                     module: "commonjs",
                     sourceMap: true,
@@ -88,7 +102,22 @@ module.exports = function(grunt) {
                             'package.json'
                         ],
                         dest: 'build/'
+                    },
+                    {
+                        expand: true,
+                        src: [
+                            "src/**/*.d.ts"
+                        ],
+                        dest: "build/"
+                    },
+                    {
+                        expand: true,
+                        src: [
+                            "typings/**/*.d.ts"
+                        ],
+                        dest: "build"
                     }
+
                 ]
             },
             lib: {
@@ -97,7 +126,20 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'build/src/',
                         src: [
-                            '**/*.js'
+                            '**/*.js',
+                            'service-model.d.ts'
+                        ],
+                        dest: 'lib/'
+                    }
+                ]
+            },
+            dts: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/src/',
+                        src: [
+                            'service-model.d.ts'
                         ],
                         dest: 'lib/'
                     }
@@ -124,13 +166,33 @@ module.exports = function(grunt) {
                     "build/benchmarks/**/*.bench.js"
                 ]
             }
+        },
+
+        dts_bundle: {
+            lib: {
+                options: {
+                    indent: "  ",
+                    name: 'service-model',
+                    main: 'build/src/index.d.ts'
+                }
+            }
+        },
+
+        ts_clean: {
+            lib: {
+                options: {
+                    verbose: false
+                },
+                src: ['lib/**/*'],
+                dot: false
+            }
         }
     });
 
     // Default task(s).
     grunt.registerTask("default", [ "build", "tests" ]);
     grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build", "typescript:benchmarks" ]);
-    grunt.registerTask("lib", [ "clean:lib",  "copy:lib" ]);
+    grunt.registerTask("lib", [ "clean:lib", "copy:lib", "ts_clean:lib", "dts_bundle:lib", "copy:dts" ]);
     grunt.registerTask("tests", [ "typescript:tests", "tsreflect:fixtures", "mochaTest:tests" ]);
     grunt.registerTask("benchmarks", [ "typescript:benchmarks", "baseline:benchmarks" ]);
 

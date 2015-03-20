@@ -1,5 +1,3 @@
-/// <reference path="./common/types.d.ts" />
-
 import HttpError = require("./httpError");
 import HttpStatusCode = require("./httpStatusCode");
 

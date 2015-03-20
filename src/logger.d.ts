@@ -1,5 +1,8 @@
 import LoggerOptions = require("./loggerOptions");
 
+/**
+ * A logger.
+ */
 interface Logger {
     /**
      * Creates a child logger with the given options.
