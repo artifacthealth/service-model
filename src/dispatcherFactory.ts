@@ -22,11 +22,13 @@ import RpcOperationSelector = require("./dispatcher/rpcOperationSelector");
 import RpcMessageFormatter = require("./dispatcher/rpcMessageFormatter");
 import RpcFaultFormatter = require("./dispatcher/rpcFaultFormatter");
 import Url = require("./url");
+import Lookup = require("./common/lookup");
 
 class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
     private _loadedSymbols: boolean;
+    private _behaviors: Lookup<ServiceBehavior | ContractBehavior | OperationBehavior> = {};
 
     addService(ctr: Constructor, name?: string): ServiceDescription {
 
@@ -47,6 +49,23 @@ class DispatcherFactory {
         var service = new ServiceDescription(symbol, name || symbol.getName());
         this._services.push(service);
         return service;
+    }
+
+    registerBehavior(annotationName: string, behavior: ServiceBehavior | ContractBehavior | OperationBehavior): void {
+
+        if(!annotationName) {
+            throw new Error("Missing required argument 'ctr'.");
+        }
+
+        if(!behavior) {
+            throw new Error("Missing required argument 'behavior'.");
+        }
+
+        if(this._behaviors[annotationName]) {
+            throw new Error("A behavior has already been register for annotation name '" + annotationName + "'.");
+        }
+
+        this._behaviors[annotationName] = behavior;
     }
 
     createDispatcher(): RequestDispatcher {

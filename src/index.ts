@@ -6,6 +6,7 @@ export import Message = require("./message");
 export import OperationContext = require("./operationContext");
 export import RequestContext = require("./requestContext");
 export import Url = require("./url");
+export import HttpStatusCode = require("./httpStatusCode");
 
 export import ContractBehavior = require("./description/contractBehavior");
 export import ContractDescription = require("./description/contractDescription");

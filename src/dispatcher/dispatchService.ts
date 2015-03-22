@@ -18,7 +18,7 @@ class DispatchService {
     /**
      * Specifies whether to create an OperationContext for operations in this service. The default value is 'true'.
      */
-    createOperationContext = true;
+    operationContextRequired = true;
 
     constructor(public dispatcher: RequestDispatcher, name: string) {
 

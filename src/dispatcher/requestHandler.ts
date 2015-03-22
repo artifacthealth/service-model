@@ -9,6 +9,7 @@ import Message = require("../message");
 import HttpStatusCode = require("../httpStatusCode");
 import FaultError = require("../faultError");
 import Callback = require("../common/callback");
+import CallbackUtil = require("../common/callbackUtil");
 import OperationContext = require("../operationContext");
 
 class RequestHandler implements RequestContext {
@@ -46,7 +47,7 @@ class RequestHandler implements RequestContext {
         }
         this._callback = callback;
 
-        if(!this._endpoint.service.createOperationContext) {
+        if(!this._endpoint.service.operationContextRequired) {
             this._handleRequest();
         }
         else {
@@ -177,7 +178,7 @@ class RequestHandler implements RequestContext {
         var next = (e: Error) => {
             var handler = this._endpoint.errorHandlers[++step];
             if(handler) {
-                handler.handleError(e, this, Callback.onlyOnce(next));
+                handler.handleError(e, this, CallbackUtil.onlyOnce(next));
             }
             else {
                 // We've reached the end of the error handler chain. Send a reply.
