@@ -30,13 +30,13 @@ class RequestDispatcher extends events.EventEmitter {
      */
     dispatch(request: RequestContext): void {
         if(this._closing) {
-            request.reply(Message.createReply(HttpStatusCode.ServiceUnavailable));
+            request.reply(Message.createReply(HttpStatusCode.ServiceUnavailable, "Service is currently unavailable."));
             return;
         }
 
         var endpoint = this._chooseEndpoint(request.message);
         if(!endpoint) {
-            request.reply(Message.createReply(HttpStatusCode.NotFound));
+            request.reply(Message.createReply(HttpStatusCode.NotFound, "Endpoint not found."));
         }
         else {
             var handler = new RequestHandler(endpoint, request);

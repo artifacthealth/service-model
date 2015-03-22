@@ -67,7 +67,7 @@ class RequestHandler implements RequestContext {
 
         var operation = this._endpoint.chooseOperation(this.message);
         if (!operation) {
-            this._handleError(new Error("Unable to choose operation"));
+            this._handleError(new Error("Unable to choose operation."));
             return;
         }
 
