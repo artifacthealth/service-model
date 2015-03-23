@@ -340,6 +340,8 @@ module.exports = function(grunt) {
                 }
             }
 
+            // TODO: Need to make sure that relative import uses the same name as the export assignment
+
             // check relative imports
             for(var i = 0; i < parsedFile.relativeImports.length; i++) {
                 var relativeImport = parsedFile.relativeImports[i];

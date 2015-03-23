@@ -28,7 +28,7 @@ class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
     private _loadedSymbols: boolean;
-    private _behaviors: Lookup<ServiceBehavior | ContractBehavior | OperationBehavior> = {};
+    private _behaviors: Lookup<Constructor> = {};
 
     addService(ctr: Constructor, name?: string): ServiceDescription {
 
@@ -51,7 +51,7 @@ class DispatcherFactory {
         return service;
     }
 
-    registerBehavior(annotationName: string, behavior: ServiceBehavior | ContractBehavior | OperationBehavior): void {
+    registerBehavior(annotationName: string, behavior: Constructor): void {
 
         if(!annotationName) {
             throw new Error("Missing required argument 'ctr'.");
