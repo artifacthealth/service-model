@@ -1,13 +1,10 @@
 {
   "name": "@artifacthealth/service-model",
   "description": "A web services framework for node servers built with Typescript.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Artifact Health, LLC",
     "url": "http://www.artifacthealth.com"
-  },
-  "publishConfig": {
-    "registry": "http://localhost:4873/"
   },
   "repository": {
     "type": "git",
