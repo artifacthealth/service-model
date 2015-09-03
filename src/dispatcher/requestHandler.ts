@@ -63,17 +63,24 @@ class RequestHandler implements RequestContext {
     }
 
     private _handleRequest(): void {
-        this._afterReceiveRequest();
 
-        var operation = this._endpoint.chooseOperation(this.message);
-        if (!operation) {
-            this._handleError(new Error("Unable to choose operation."));
-            return;
-        }
+        // Process outside current execution path. This ensures that we have full control over errors. For example,
+        // Express includes a try/catch in it's request handler which would catch any sync errors and bypass our
+        // error handling.
+        process.nextTick(() => {
 
-        operation.formatter.deserializeRequest(this.message, (err, args) => {
-            if (err) return this._handleError(err);
-            this._invoke(operation, args);
+            this._afterReceiveRequest();
+
+            var operation = this._endpoint.chooseOperation(this.message);
+            if (!operation) {
+                this._handleError(new Error("Unable to choose operation."));
+                return;
+            }
+
+            operation.formatter.deserializeRequest(this.message, (err, args) => {
+                if (err) return this._handleError(err);
+                this._invoke(operation, args);
+            });
         });
     }
 
