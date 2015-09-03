@@ -42,12 +42,7 @@ suite("RequestDispatcher", () => {
 
     test("dispatch", (done) => {
 
-        var completed = 0;
-        for(var i = 0; i < 1000; i++) {
-            dispatcher.dispatch(new DummyRequestContext(message, (err, result) => {
-                if(++completed == 1000) process.nextTick(() => done(err));
-            }));
-        }
+        dispatcher.dispatch(new DummyRequestContext(message, done));
     });
 });
 

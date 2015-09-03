@@ -55,7 +55,7 @@ class RequestHandler implements RequestContext {
             d.on('error', (err: Error) => this._handleUncaughtException(err));
             d.run(() => {
                 var context = new OperationContext();
-                context.requestContext = this;
+                context.requestContext = this._request;
                 OperationContext.current = context;
                 this._handleRequest();
             });

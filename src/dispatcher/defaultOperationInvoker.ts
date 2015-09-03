@@ -12,7 +12,7 @@ class DefaultOperationInvoker implements OperationInvoker {
     /**
      * Timeout for operation. Defaults to 60,000ms (1 minute).
      */
-    timeout: number;
+    timeout = 60000;
 
     private _parameterCount: number;
     private _method: reflect.Symbol;
@@ -76,7 +76,7 @@ class DefaultOperationInvoker implements OperationInvoker {
             if(finished) return;
             timeout = true;
             callback(new Error("Timeout of " + this.timeout + "ms exceeded while invoking operation."));
-        }, this.timeout || 10000);
+        }, this.timeout);
 
         var done = (err: Error, result: any) => {
 

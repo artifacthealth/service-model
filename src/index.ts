@@ -1,5 +1,6 @@
 export import DispatcherFactory = require("./dispatcherFactory");
 
+export import HttpError = require("./httpError");
 export import FaultError = require("./faultError");
 export import Logger = require("./logger");
 export import Message = require("./message");
@@ -32,3 +33,4 @@ export import RegExpAddressMessageFilter = require("./dispatcher/regExpAddressMe
 
 export import RpcBehavior = require("./behaviors/rpcBehavior");
 export import VersioningBehavior = require("./behaviors/versioningBehavior");
+export import DebugBehavior = require("./behaviors/debugBehavior");
