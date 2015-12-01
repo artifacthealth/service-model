@@ -1,7 +1,6 @@
 import MessageFormatter = require("./messageFormatter");
 import OperationInvoker = require("./operationInvoker");
 import DispatchEndpoint = require("./dispatchEndpoint");
-import RequestContext = require("../requestContext");
 import OperationDescription = require("../description/operationDescription");
 import DefaultOperationInvoker = require("./defaultOperationInvoker");
 
@@ -11,6 +10,7 @@ class DispatchOperation {
     formatter: MessageFormatter;
     invoker: OperationInvoker;
     isOneWay: boolean;
+    timeout: number;
 
     constructor(public endpoint: DispatchEndpoint, name: string) {
 

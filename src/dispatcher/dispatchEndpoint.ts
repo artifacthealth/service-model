@@ -1,7 +1,6 @@
 import OperationSelector = require("./operationSelector");
 import DispatchOperation = require("./dispatchOperation");
 import DispatchService = require("./dispatchService");
-import RequestContext = require("../requestContext");
 import MessageFilter = require("./messageFilter");
 import EndpointDescription = require("../description/endpointDescription");
 import DefaultInstanceProvider = require("./defaultInstanceProvider")

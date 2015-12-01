@@ -208,7 +208,9 @@ class RequestHandler implements RequestContext {
                 fault = new FaultError(null, "The server was unable to process the request due to an internal error.", "InternalError");
             }
             else {
-                fault = new FaultError((<any>err).stack, err.message, "InternalError");
+                // If we get an object for err that not a real Error, then at least call toString() to try to get a
+                // message to display.
+                fault = new FaultError((<any>err).stack, err.message || err.toString(), "InternalError");
             }
         }
 

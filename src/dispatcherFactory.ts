@@ -114,7 +114,11 @@ class DispatcherFactory {
 
         var ret = new DispatchOperation(endpoint, operation.name);
         ret.isOneWay = operation.isOneWay;
-        ret.invoker = new DefaultOperationInvoker(operation);
+        var invoker = new DefaultOperationInvoker(operation);;
+        if(operation.timeout != undefined) {
+            invoker.timeout = operation.timeout;
+        }
+        ret.invoker = invoker;
         return ret;
     }
 

@@ -1,6 +1,5 @@
 import InstanceProvider = require("./instanceProvider");
 import DispatchEndpoint = require("./dispatchEndpoint");
-import RequestContext = require("../requestContext");
 import MessageFilter = require("./messageFilter");
 import ErrorHandler = require("./errorHandler");
 import RequestDispatcher = require("./requestDispatcher");

@@ -13,6 +13,7 @@ class OperationDescription {
     returnType: reflect.Type;
     isOneWay: boolean;
     isAsync: boolean;
+    timeout: number;
 
     constructor(contract: ContractDescription, method: reflect.Symbol, name?: string) {
 
@@ -83,6 +84,13 @@ class OperationDescription {
                 this._throwAnnotationError("Expected string for property 'name'.");
             }
             this.name = annotation.value.name;
+        }
+
+        if(annotation.value.timeout !== undefined) {
+            if(typeof annotation.value.timeout != "number") {
+                this._throwAnnotationError("Expected number for property 'timeout'.");
+            }
+            this.timeout = annotation.value.timeout;
         }
     }
 
