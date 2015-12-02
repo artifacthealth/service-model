@@ -61,4 +61,12 @@ class DummyRequestContext implements RequestContext {
     reply(message?: Message): void {
         this._callback(null, message);
     }
+
+    addListener(event: string, listener: Function): RequestContext {
+        return this;
+    }
+
+    removeListener(event: string, listener: Function): RequestContext {
+        return this;
+    }
 }

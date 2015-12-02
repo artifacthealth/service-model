@@ -62,6 +62,19 @@ class RequestHandler implements RequestContext {
         }
     }
 
+    addListener(event: string, listener: Function): RequestContext {
+
+        this._request.addListener(event, listener);
+        return this;
+    }
+
+    removeListener(event: string, listener: Function): RequestContext {
+
+        this._request.removeListener(event, listener);
+        return this;
+    }
+
+
     private _handleRequest(): void {
 
         // Process outside current execution path. This ensures that we have full control over errors. For example,
@@ -217,10 +230,9 @@ class RequestHandler implements RequestContext {
         this._endpoint.faultFormatter.serializeFault(fault, (err, message) => {
             // If we get an error while trying to serialize the fault then we can't reply with the error so abort request and log the error.
             if(err) {
-                if(err) {
-                    this._endpoint.service.dispatcher.logger.error({ err: err, endpoint: this._endpoint }, "Error serializing fault. Aborting request.");
-                }
-                return this.abort();
+                this._endpoint.service.dispatcher.logger.error({ err: err, endpoint: this._endpoint }, "Error serializing fault. Aborting request.");
+                this.abort();
+                return;
             }
             this.reply(message);
         });
