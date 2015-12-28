@@ -13,16 +13,19 @@ class VersioningBehavior implements ContractBehavior, EndpointBehavior {
 
     /**
      * Constructs a VersioningBehavior object.
-     * @param version Optional. The current contract version. If not specified the version from the ContractDescription
-     * is used.
+     * @param version The current contract version.
      */
-    constructor(version?: string) {
+    constructor(version: string) {
+
+        if(!version) {
+            throw new Error("Missing required argument 'version'.");
+        }
         this._version = version;
     }
 
     applyContractBehavior (description: ContractDescription, endpoint: DispatchEndpoint): void {
 
-        var version = this._version || description.version;
+        var version = this._version;
         if(version) {
             endpoint.filter = new VersionMessageFilter(version).and(endpoint.filter);
             endpoint.messageInspectors.push(new VersionMessageInspector());

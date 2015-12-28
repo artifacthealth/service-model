@@ -1,46 +1,45 @@
-/// <reference path="../../typings/tsreflect.d.ts" />
-
-import reflect = require("tsreflect");
-
 import EndpointDescription = require("./endpointDescription");
 import EndpointBehavior = require("./endpointBehavior");
 import ContractDescription = require("./contractDescription");
 import ServiceBehavior = require("./serviceBehavior");
 import Url = require("../url");
+import Constructor = require("../common/constructor");
+import ReflectHelper = require("./reflectHelper");
 
 class ServiceDescription {
 
     name: string;
     behaviors: ServiceBehavior[] = [];
     endpoints: EndpointDescription[] = [];
-    serviceSymbol: reflect.Symbol;
+    serviceConstructor: Constructor;
 
-    constructor(serviceSymbol: reflect.Symbol, name?: string) {
+    constructor(serviceConstructor: Constructor, name?: string) {
 
-        if(!serviceSymbol) {
-            throw new Error("Missing required argument 'serviceSymbol'.");
+        if(!serviceConstructor) {
+            throw new Error("Missing required argument 'serviceConstructor'.");
         }
 
-        this.serviceSymbol = serviceSymbol;
-        this.name = name || serviceSymbol.getName();
+        this.serviceConstructor = serviceConstructor;
+        this.name = name || serviceConstructor.name;
     }
 
-    addEndpoint(implementedContract: string, address: Url | string, behaviors?: EndpointBehavior | EndpointBehavior[]): EndpointDescription {
+    addEndpoint(contractName: string, address: Url | string, behaviors?: EndpointBehavior | EndpointBehavior[]): EndpointDescription {
 
-        if(!implementedContract) {
-            throw new Error("Missing required argument 'implementedContract'.");
+        if(!contractName) {
+            throw new Error("Missing required argument 'contractName'.");
         }
 
         if(!address) {
             throw new Error("Missing required argument 'address'.");
         }
 
-        var contractType = this.serviceSymbol.getDeclaredType().getInterface(implementedContract);
-        if (!contractType) {
-            throw new Error("Service '" + this.name + "' does not implemented contract '" + implementedContract + "'.");
+
+        var contract = ReflectHelper.retrieveContract(this.serviceConstructor, contractName);
+        if (!contract) {
+            throw new Error("Contract '" + contractName + "' not found on service '" + this.name + "'.");
         }
 
-        var endpoint = new EndpointDescription(new ContractDescription(contractType), address);
+        var endpoint = new EndpointDescription(contract, address);
         this.endpoints.push(endpoint);
 
         if(behaviors) {

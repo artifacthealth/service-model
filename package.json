@@ -1,7 +1,7 @@
 {
   "name": "@artifacthealth/service-model",
   "description": "A web services framework for node servers built with Typescript.",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "author": {
     "name": "Artifact Health, LLC",
     "url": "http://www.artifacthealth.com"
@@ -23,8 +23,8 @@
     "definition": "lib/service-model.d.ts"
   },
   "dependencies": {
-    "semver": "^4.3.1",
-    "tsreflect": "^0.1.11"
+    "reflect-metadata": "^0.1.2",
+    "semver": "^4.3.1"
   },
   "devDependencies": {
     "chai": "^1.9.2",
@@ -37,10 +37,8 @@
     "grunt-dts-concat": "^0.1.5",
     "grunt-mocha-test": "^0.12.2",
     "grunt-ts-clean": "^0.2.0",
-    "grunt-tsreflect": "^0.1.2",
-    "grunt-typescript": "0.6.1",
-    "mocha": "^2.0.1",
-    "typescript": "1.4.1"
+    "grunt-typescript": "0.8.0",
+    "mocha": "^2.0.1"
   },
   "keywords": [
     "service",

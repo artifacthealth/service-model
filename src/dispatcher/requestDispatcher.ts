@@ -68,6 +68,11 @@ class RequestDispatcher extends events.EventEmitter {
 
         this.emit('closing');
 
+        if(this._requestCount == 0 && this._closing) {
+            this.emit('closed');
+            return;
+        }
+
         this._closeTimer = setTimeout(() => {
             this.logger.warn("Timeout of %dms exceeded while closing dispatcher.", this.closeTimeout);
             var handler = this._head;

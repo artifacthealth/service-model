@@ -18,7 +18,7 @@ class RpcMessageFormatter implements MessageFormatter {
 
         this._operationName = operation.name;
 
-        var parameters = operation.method.getType().getCallSignatures()[0].getParameters();
+        var parameters = operation.method.parameters || [];
         var count = parameters.length;
         if(operation.isAsync) {
             // do not include callback in parameter count if async
@@ -27,7 +27,7 @@ class RpcMessageFormatter implements MessageFormatter {
 
         this._parameterNames = new Array(count);
         for(var i = 0; i < count; i++) {
-            this._parameterNames[i] = parameters[i].getName();
+            this._parameterNames[i] = parameters[i].name;
         }
     }
 
@@ -35,12 +35,14 @@ class RpcMessageFormatter implements MessageFormatter {
 
         var args = message.body[this._operationName];
         if(args == null) {
-            return callback(new Error("Missing root element '" + this._operationName + "'."));
+            callback(new Error("Missing root element '" + this._operationName + "'."));
+            return;
         }
 
         if(Array.isArray(args)) {
             if(args.length != this._parameterNames.length) {
-                return callback(new Error("Wrong number of arguments."));
+                callback(new Error("Wrong number of arguments."));
+                return;
             }
         }
         else {

@@ -1,11 +1,8 @@
-/// <reference path="../../typings/tsreflect.d.ts" />
-
-import reflect = require("tsreflect");
-
 import ResultCallback = require("../common/resultCallback");
 import OperationInvoker = require("./operationInvoker");
 import OperationDescription = require("../description/operationDescription");
 import FaultError = require("../faultError");
+import Method = require("../description/method");
 
 class DefaultOperationInvoker implements OperationInvoker {
 
@@ -15,7 +12,7 @@ class DefaultOperationInvoker implements OperationInvoker {
     timeout = 60000;
 
     private _parameterCount: number;
-    private _method: reflect.Symbol;
+    private _method: Method;
     private _isAsync: boolean;
 
     constructor(description: OperationDescription) {
@@ -25,7 +22,8 @@ class DefaultOperationInvoker implements OperationInvoker {
         }
 
         this._method = description.method;
-        this._parameterCount = description.method.getType().getCallSignatures()[0].getParameters().length;
+        var parameters = description.method.parameters || [];
+        this._parameterCount = parameters.length;
         if(description.isAsync) {
             // do not include callback in parameter count if async
             this._parameterCount--;

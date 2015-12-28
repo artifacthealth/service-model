@@ -1,6 +1,3 @@
-var path = require("path");
-var fs = require("fs");
-
 module.exports = function(grunt) {
 
     grunt.option('stack', true);
@@ -12,7 +9,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-mocha-test");
-    grunt.loadNpmTasks("grunt-tsreflect");
     grunt.loadNpmTasks('grunt-ts-clean');
     grunt.loadNpmTasks('grunt-dts-concat');
 
@@ -34,67 +30,30 @@ module.exports = function(grunt) {
         },
 
         typescript: {
+            options: {
+                target: "es5",
+                module: "commonjs",
+                sourceMap: true,
+                declaration: true,
+                noImplicitAny: true,
+                emitDecoratorMetadata: true,
+                experimentalDecorators: true
+            },
             build: {
-                options: {
-                    references: [
-                        "core",
-                        "webworker"
-                    ],
-                    target: "es5",
-                    module: "commonjs",
-                    sourceMap: true,
-                    declaration: true,
-                    noImplicitAny: true
-                },
                 src: ['src/**/*.ts'],
-                dest: 'build/'
+                dest: 'build/src/'
             },
             tests: {
-                options: {
-                    references: [
-                        "core",
-                        "webworker"
-                    ],
-                    target: "es5",
-                    module: "commonjs",
-                    sourceMap: true,
-                    noImplicitAny: true
-                },
                 src: [
                     'tests/**/*.ts'
                 ],
                 dest: 'build/'
             },
             benchmarks: {
-                options: {
-                    references: [
-                        "core",
-                        "webworker"
-                    ],
-                    target: "es5",
-                    module: "commonjs",
-                    sourceMap: true,
-                    noImplicitAny: true
-                },
                 src: [
                     'benchmarks/**/*.ts'
                 ],
                 dest: 'build/'
-            }
-        },
-
-        tsreflect: {
-            build: {
-                src: [
-                    "src/**/*.ts"
-                ],
-                dest: "build/src/"
-            },
-            fixtures: {
-                src: [
-                    "tests/fixtures/**/*.ts"
-                ],
-                dest: "build/tests/fixtures/"
             }
         },
 
@@ -185,7 +144,7 @@ module.exports = function(grunt) {
     grunt.registerTask("default", [ "build", "lib", "tests" ]);
     grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build", "typescript:benchmarks" ]);
     grunt.registerTask("lib", [ "clean:lib", "copy:lib", "ts_clean:lib", "dts_concat:lib" ]);
-    grunt.registerTask("tests", [ "typescript:tests", "tsreflect:fixtures", "mochaTest:tests" ]);
+    grunt.registerTask("tests", [ "typescript:tests", "mochaTest:tests" ]);
     grunt.registerTask("benchmarks", [ "typescript:benchmarks", "baseline:benchmarks" ]);
 
 };

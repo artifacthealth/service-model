@@ -1,34 +1,36 @@
-/// <reference path="../../typings/tsreflect.d.ts" />
-
-import reflect = require("tsreflect");
-
 import InstanceProvider = require("./instanceProvider");
 import ServiceDescription = require("../description/serviceDescription");
 import Message = require("../message");
+import Constructor = require("../common/constructor");
 
 class DefaultInstanceProvider implements InstanceProvider {
 
-    private _serviceType: reflect.Type;
+    private _serviceConstructor: Constructor;
 
     constructor(description: ServiceDescription) {
 
-        this._assertParameterlessConstructor(description.serviceSymbol);
-        this._serviceType = description.serviceSymbol.getDeclaredType();
+        this._assertParameterlessConstructor(description.serviceConstructor);
+        this._serviceConstructor = description.serviceConstructor;
     }
 
     getInstance(message: Message): Object {
 
-        return this._serviceType.createInstance([]);
-    }
+        var constructor = this._serviceConstructor;
 
-    private _assertParameterlessConstructor(serviceSymbol: reflect.Symbol): void {
-
-        if(!serviceSymbol.isClass()) {
-            this._throwInvalidServiceType(serviceSymbol.getName(), "Type must be a Class.");
+        if(!constructor.prototype) {
+            throw new Error("Constructor '" + constructor.name + "' does not have a prototype.");
         }
 
+        var instance = Object.create(constructor.prototype);
+        constructor.apply(instance, []);
+        return instance;
+    }
+
+    private _assertParameterlessConstructor(serviceConstructor: Constructor): void {
+
+        /*
         // Get the constructor signatures from the static side of the type
-        var constructors = serviceSymbol.getType().getConstructSignatures(),
+        var constructors = serviceConstructor.getType().getConstructSignatures(),
             found = constructors.length == 0;
 
         for(var i = 0; i < constructors.length; i++) {
@@ -39,8 +41,9 @@ class DefaultInstanceProvider implements InstanceProvider {
         }
 
         if(!found) {
-            this._throwInvalidServiceType(serviceSymbol.getName(), "Class must have a parameterless constructor.");
+            this._throwInvalidServiceType(serviceConstructor.getName(), "Class must have a parameterless constructor.");
         }
+        */
     }
 
     private _throwInvalidServiceType(name: string, message: string): void {

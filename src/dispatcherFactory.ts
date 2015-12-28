@@ -1,7 +1,6 @@
 /// <reference path="../typings/node.d.ts" />
 
 import util = require("util");
-import reflect = require("tsreflect");
 
 import Constructor = require("./common/constructor");
 import RequestDispatcher = require("./dispatcher/requestDispatcher");
@@ -27,7 +26,6 @@ import Lookup = require("./common/lookup");
 class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
-    private _loadedSymbols: boolean;
     private _behaviors: Lookup<Constructor> = {};
 
     addService(ctr: Constructor, name?: string): ServiceDescription {
@@ -36,17 +34,7 @@ class DispatcherFactory {
             throw new Error("Missing required argument 'ctr'.");
         }
 
-        if(!this._loadedSymbols) {
-            reflect.loadSync();
-            this._loadedSymbols = true;
-        }
-
-        var symbol = reflect.getSymbol(ctr);
-        if(!symbol) {
-            throw new Error("Unable to find symbol information for '" + ctr.name + "'. Make sure you have a .d.json file in the same directory as as the module containing this constructor. See tsreflect-compiler on npm for more information.");
-        }
-
-        var service = new ServiceDescription(symbol, name || symbol.getName());
+        var service = new ServiceDescription(ctr, name || ctr.name);
         this._services.push(service);
         return service;
     }

@@ -1,6 +1,4 @@
 /// <reference path="../typings/baseline.d.ts" />
-/// <reference path="../typings/tsreflect.d.ts" />
-import reflect = require("tsreflect");
 import domain = require("domain");
 
 import DispatcherFactory = require("../src/dispatcherFactory");
@@ -14,6 +12,7 @@ import HttpStatusCode = require("../src/httpStatusCode");
 import OperationContext = require('../src/operationContext');
 import VersioningBehavior = require("../src/behaviors/versioningBehavior");
 import RpcBehavior = require("../src/behaviors/rpcBehavior");
+import DebugBehavior = require("../src/behaviors/debugBehavior");
 import ResultCallback = require("../src/common/resultCallback");
 
 suite("RequestDispatcher", () => {
@@ -21,9 +20,7 @@ suite("RequestDispatcher", () => {
     var factory = new DispatcherFactory();
 
     var service = factory.addService(CalculatorService);
-    service.addEndpoint("Calculator", "/services/calculator-service/", new RpcBehavior());
-
-    //endpoint.contract.behaviors.push(new VersioningBehavior());
+    service.addEndpoint("Calculator", "/services/calculator-service/", [new RpcBehavior()]);
 
     var dispatcher = factory.createDispatcher();
     dispatcher.on('closing', () => console.log("Closing..."));
@@ -41,9 +38,12 @@ suite("RequestDispatcher", () => {
     message.url = new Url("/services/calculator-service/");
 
     test("dispatch", (done) => {
-
         dispatcher.dispatch(new DummyRequestContext(message, done));
     });
+
+    after((done) => {
+        dispatcher.close(done);
+    })
 });
 
 class DummyRequestContext implements RequestContext {
