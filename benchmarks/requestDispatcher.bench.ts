@@ -1,5 +1,6 @@
 /// <reference path="../typings/baseline.d.ts" />
 import domain = require("domain");
+import util = require("util");
 
 import DispatcherFactory = require("../src/dispatcherFactory");
 import CalculatorService = require("../tests/fixtures/calculatorService");

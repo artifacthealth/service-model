@@ -6,8 +6,11 @@ import VersionMessageInspector = require("../dispatcher/versionMessageInspector"
 import MessageFilter = require("../dispatcher/messageFilter");
 import EndpointDescription = require("../description/endpointDescription");
 import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
+import BehaviorAttribute = require("../description/behaviorAttribute");
 
-class VersioningBehavior implements ContractBehavior, EndpointBehavior {
+class VersioningBehavior implements ContractBehavior, EndpointBehavior, BehaviorAttribute {
+
+    contract: string;
 
     private _version: string;
 
@@ -15,12 +18,18 @@ class VersioningBehavior implements ContractBehavior, EndpointBehavior {
      * Constructs a VersioningBehavior object.
      * @param version The current contract version.
      */
-    constructor(version: string) {
+    constructor(args: { version: string, contract?: string }) {
 
-        if(!version) {
-            throw new Error("Missing required argument 'version'.");
+        if(!args) {
+            throw new Error("Missing required argument 'args'.");
         }
-        this._version = version;
+
+        if(!args.version) {
+            throw new Error("Missing requird argument 'args.version'.");
+        }
+
+        this._version = args.version;
+        this.contract = args.contract;
     }
 
     applyContractBehavior (description: ContractDescription, endpoint: DispatchEndpoint): void {

@@ -26,9 +26,9 @@ import Lookup = require("./common/lookup");
 class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
-    private _behaviors: Lookup<Constructor> = {};
+    private _behaviors: Lookup<Constructor<any>> = {};
 
-    addService(ctr: Constructor, name?: string): ServiceDescription {
+    addService(ctr: Constructor<any>, name?: string): ServiceDescription {
 
         if(!ctr) {
             throw new Error("Missing required argument 'ctr'.");
@@ -39,7 +39,7 @@ class DispatcherFactory {
         return service;
     }
 
-    registerBehavior(annotationName: string, behavior: Constructor): void {
+    registerBehavior(annotationName: string, behavior: Constructor<any>): void {
 
         if(!annotationName) {
             throw new Error("Missing required argument 'ctr'.");

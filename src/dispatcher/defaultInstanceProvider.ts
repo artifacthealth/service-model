@@ -5,7 +5,7 @@ import Constructor = require("../common/constructor");
 
 class DefaultInstanceProvider implements InstanceProvider {
 
-    private _serviceConstructor: Constructor;
+    private _serviceConstructor: Constructor<any>;
 
     constructor(description: ServiceDescription) {
 
@@ -26,7 +26,7 @@ class DefaultInstanceProvider implements InstanceProvider {
         return instance;
     }
 
-    private _assertParameterlessConstructor(serviceConstructor: Constructor): void {
+    private _assertParameterlessConstructor(serviceConstructor: Constructor<any>): void {
 
         /*
         // Get the constructor signatures from the static side of the type

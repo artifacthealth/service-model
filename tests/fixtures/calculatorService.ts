@@ -1,25 +1,22 @@
-import Calculator = require("./calculator");
-import OperationContract = require("../../src/decorators/operationContract");
-import ServiceContract = require("../../src/decorators/serviceContract");
-import Version = require("../../src/decorators/version");
+import { Operation, Contract } from "../../src/decorators";
 
 declare var process: any;
 
-@ServiceContract("Calculator")
-class CalculatorService implements Calculator {
+@Contract("Calculator")
+class CalculatorService {
 
-    @OperationContract({ name: "add2" })
+    @Operation({ name: "add2" })
     add(x: number, y: number): number {
         return x + y;
     }
 
-    @OperationContract()
+    @Operation()
     subtract(x: number | string, y: number): number {
 
         return <number>x - y;
     }
 
-    @OperationContract()
+    @Operation()
     divide(x: number, y: number, callback: (err: Error, result: number) => void): void {
         process.nextTick(() => callback(null, x / y));
     }

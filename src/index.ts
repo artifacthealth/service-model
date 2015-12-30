@@ -35,6 +35,8 @@ export import RpcBehavior = require("./behaviors/rpcBehavior");
 export import VersioningBehavior = require("./behaviors/versioningBehavior");
 export import DebugBehavior = require("./behaviors/debugBehavior");
 
-export import OperationContract = require("./decorators/operationContract");
-export import ServiceContract = require("./decorators/serviceContract");
-export import Version = require("./decorators/version");
+import decorator = require("./decorators");
+
+export var Contract = decorator.Contract;
+export var Operation = decorator.Operation;
+export var Versioning = decorator.Versioning;

@@ -1,10 +1,10 @@
 /**
  * Interface for a constructor.
  */
-interface Constructor {
+interface Constructor<T> {
 
     name?: string;
-    new(...args: any[]): any;
+    new(...args: any[]): T;
 }
 
 export = Constructor;
