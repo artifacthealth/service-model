@@ -38,6 +38,9 @@ class HttpError implements Error {
                 message = statusCodeOrMessage;
             }
         }
+        else {
+            statusCode = statusCodeOrMessage;
+        }
 
         if(!statusCode) {
             statusCode = HttpStatusCode.InternalServerError;

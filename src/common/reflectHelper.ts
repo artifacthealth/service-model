@@ -3,8 +3,6 @@
 import "reflect-metadata";
 
 import Constructor = require("./constructor");
-import ContractDescription = require("../description/contractDescription");
-import OperationDescription = require("../description/operationDescription");
 import Parameter = require("../description/parameter");
 
 export function getReturnType(ctr: Constructor<any>, method: string): Object {
