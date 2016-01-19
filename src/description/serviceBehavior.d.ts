@@ -1,9 +1,7 @@
-import ServiceDescription = require("./serviceDescription");
-import DispatchService = require("../dispatcher/dispatchService");
+import { ServiceDescription } from "./serviceDescription";
+import { DispatchService } from "../dispatcher/dispatchService";
 
-interface ServiceBehavior {
+export interface ServiceBehavior {
 
     applyServiceBehavior (description: ServiceDescription, service: DispatchService): void;
 }
-
-export = ServiceBehavior;

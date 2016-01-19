@@ -1,4 +1,4 @@
-enum HttpStatusCode {
+export enum HttpStatusCode {
 
     Continue = 100,
     SwitchingProtocols = 101,
@@ -42,5 +42,3 @@ enum HttpStatusCode {
     GatewayTimeout = 504,
     HttpVersionNotSupported = 505
 }
-
-export = HttpStatusCode;

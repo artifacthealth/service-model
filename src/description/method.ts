@@ -1,6 +1,6 @@
-import Parameter = require ("./parameter");
+import { Parameter } from "./parameter";
 
-class Method {
+export class Method {
 
     name: string;
     parameters: Parameter[];
@@ -24,5 +24,3 @@ class Method {
         return method.apply(obj, args);
     }
 }
-
-export = Method;

@@ -1,7 +1,5 @@
-interface Parameter {
+export interface Parameter {
 
     name: string;
     type: Object;
 }
-
-export = Parameter;

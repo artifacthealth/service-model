@@ -1,18 +1,18 @@
 /// <reference path="../../typings/node.d.ts" />
 
-import domain = require("domain");
+import { create as createDomain } from "domain";
 
-import DispatchEndpoint = require("./dispatchEndpoint");
-import DispatchOperation = require("./dispatchOperation");
-import RequestContext = require("../requestContext");
-import Message = require("../message");
-import HttpStatusCode = require("../httpStatusCode");
-import FaultError = require("../faultError");
-import Callback = require("../common/callback");
-import CallbackUtil = require("../common/callbackUtil");
-import OperationContext = require("../operationContext");
+import { DispatchEndpoint } from "./dispatchEndpoint";
+import { DispatchOperation } from "./dispatchOperation";
+import { RequestContext } from "../requestContext";
+import { Message } from "../message";
+import { HttpStatusCode } from "../httpStatusCode";
+import { FaultError } from "../faultError";
+import { Callback } from "../common/callback";
+import { onlyOnce } from "../common/callbackUtil";
+import { OperationContext } from "../operationContext";
 
-class RequestHandler implements RequestContext {
+export class RequestHandler implements RequestContext {
 
     private _endpoint: DispatchEndpoint;
     private _request: RequestContext;
@@ -51,7 +51,7 @@ class RequestHandler implements RequestContext {
             this._handleRequest();
         }
         else {
-            var d = domain.create();
+            var d = createDomain();
             d.on('error', (err: Error) => this._handleUncaughtException(err));
             d.run(() => {
                 var context = new OperationContext();
@@ -198,7 +198,7 @@ class RequestHandler implements RequestContext {
         var next = (e: Error) => {
             var handler = this._endpoint.errorHandlers[++step];
             if(handler) {
-                handler.handleError(e, this, CallbackUtil.onlyOnce(next));
+                handler.handleError(e, this, onlyOnce(next));
             }
             else {
                 // We've reached the end of the error handler chain. Send a reply.
@@ -238,5 +238,3 @@ class RequestHandler implements RequestContext {
         });
     }
 }
-
-export = RequestHandler;

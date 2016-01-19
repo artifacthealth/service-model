@@ -1,8 +1,8 @@
-import OperationBehavior = require("./operationBehavior")
-import ContractDescription = require("./contractDescription");
-import Method = require("./method");
+import { OperationBehavior } from "./operationBehavior"
+import { ContractDescription } from "./contractDescription";
+import { Method } from "./method";
 
-class OperationDescription {
+export class OperationDescription {
 
     name: string;
     contract: ContractDescription;
@@ -27,5 +27,3 @@ class OperationDescription {
         this.name = name || method.name;
     }
 }
-
-export = OperationDescription;

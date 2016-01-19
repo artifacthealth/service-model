@@ -2,8 +2,8 @@
 
 import "reflect-metadata";
 
-import Constructor = require("./constructor");
-import Parameter = require("../description/parameter");
+import { Constructor } from "./constructor";
+import { Parameter } from "../description/parameter";
 
 export function getReturnType(ctr: Constructor<any>, method: string): Object {
 

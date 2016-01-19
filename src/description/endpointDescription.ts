@@ -1,8 +1,8 @@
-import ContractDescription = require("./contractDescription");
-import EndpointBehavior = require("./endpointBehavior");
-import Url = require("../url");
+import { ContractDescription } from "./contractDescription";
+import { EndpointBehavior } from "./endpointBehavior";
+import { Url } from "../url";
 
-class EndpointDescription {
+export class EndpointDescription {
 
     behaviors: EndpointBehavior[] = [];
     contract: ContractDescription;
@@ -22,5 +22,3 @@ class EndpointDescription {
         this.contract = contract;
     }
 }
-
-export = EndpointDescription;

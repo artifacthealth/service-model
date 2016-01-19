@@ -1,11 +1,9 @@
-import ResultCallback = require("../common/resultCallback");
-import Message = require("../message");
-import FaultError = require("../faultError");
+import { ResultCallback } from "../common/resultCallback";
+import { Message } from "../message";
+import { FaultError } from "../faultError";
 
-interface MessageFormatter {
+export interface MessageFormatter {
 
     deserializeRequest(message: Message, callback: ResultCallback<any[]>): void;
     serializeReply(result: any, callback: ResultCallback<Message>): void;
 }
-
-export = MessageFormatter;

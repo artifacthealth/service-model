@@ -1,18 +1,18 @@
 /// <reference path="../../typings/node.d.ts" />
 
-import events = require("events");
+import { EventEmitter } from "events";
 
-import Callback = require("../common/callback");
-import DispatchService = require("./dispatchService");
-import DispatchEndpoint = require("./dispatchEndpoint");
-import RequestContext = require("../requestContext");
-import Message = require("../message");
-import RequestHandler = require("./requestHandler");
-import HttpStatusCode = require("../httpStatusCode");
-import Logger = require("../logger");
-import NullLogger = require("../nullLogger");
+import { Callback } from "../common/callback";
+import { DispatchService } from "./dispatchService";
+import { DispatchEndpoint } from "./dispatchEndpoint";
+import { RequestContext } from "../requestContext";
+import { Message } from "../message";
+import { RequestHandler } from "./requestHandler";
+import { HttpStatusCode } from "../httpStatusCode";
+import { Logger } from "../logger";
+import { NullLogger } from "../nullLogger";
 
-class RequestDispatcher extends events.EventEmitter {
+export class RequestDispatcher extends EventEmitter {
 
     closeTimeout = 30000;
     services: DispatchService[] = [];
@@ -143,5 +143,3 @@ class RequestDispatcher extends events.EventEmitter {
         }
     }
 }
-
-export = RequestDispatcher;

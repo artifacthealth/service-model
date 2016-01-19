@@ -1,15 +1,15 @@
 /// <reference path="../../typings/semver.d.ts" />
+/// <reference path="../../typings/node-es6.d.ts" />
 
-import semver = require("semver");
+import { satisfies as satisfiesSemver } from "semver";
 
-import Lookup = require("../common/lookup");
-import MessageFilter = require("./messageFilter");
-import Message = require("../message");
+import { MessageFilter } from "./messageFilter";
+import { Message } from "../message";
 
-class VersionMessageFilter extends MessageFilter {
+export class VersionMessageFilter extends MessageFilter {
 
     private _version: string;
-    private _cache: Lookup<boolean> = {};
+    private _cache = new Map<string, boolean>();
 
     constructor(version: string) {
         super();
@@ -22,16 +22,15 @@ class VersionMessageFilter extends MessageFilter {
     }
 
     match(message: Message): boolean {
-        var acceptVersion = message.headers["Accept-Version"];
+        var acceptVersion = message.headers.get("Accept-Version");
         if(!acceptVersion) return true;
 
-        var satisfies = this._cache[acceptVersion];
+        var satisfies = this._cache.get(acceptVersion);
         if(satisfies === undefined) {
-            satisfies = this._cache[acceptVersion] = semver.satisfies(this._version, acceptVersion);
+            satisfies = satisfiesSemver(this._version, acceptVersion);
+            this._cache.set(acceptVersion, satisfies);
         }
 
         return satisfies;
     }
 }
-
-export = VersionMessageFilter;

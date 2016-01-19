@@ -1,11 +1,11 @@
-import ResultCallback = require("../common/resultCallback");
-import MessageFormatter = require("./messageFormatter");
-import Message = require("../message");
-import FaultError = require("../faultError");
-import OperationDescription = require("../description/operationDescription");
-import HttpStatusCode = require("../httpStatusCode");
+import { ResultCallback } from "../common/resultCallback";
+import { MessageFormatter } from "./messageFormatter";
+import { Message } from "../message";
+import { FaultError } from "../faultError";
+import { OperationDescription } from "../description/operationDescription";
+import { HttpStatusCode } from "../httpStatusCode";
 
-class RpcMessageFormatter implements MessageFormatter {
+export class RpcMessageFormatter implements MessageFormatter {
 
     private _operationName: string;
     private _parameterNames: string[];
@@ -62,5 +62,3 @@ class RpcMessageFormatter implements MessageFormatter {
     }
 
 }
-
-export = RpcMessageFormatter;

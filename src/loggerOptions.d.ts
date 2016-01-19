@@ -1,7 +1,7 @@
 /**
  * Logger options.
  */
-interface LoggerOptions {
+export interface LoggerOptions {
 
     /**
      * Dictionary of custom serializers. The key is the name of the property that is serialized and the the value
@@ -11,5 +11,3 @@ interface LoggerOptions {
         [key: string]: (input: any) => any;
     }
 }
-
-export = LoggerOptions;

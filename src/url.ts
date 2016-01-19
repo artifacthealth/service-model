@@ -1,8 +1,8 @@
 /// <reference path="../typings/node.d.ts" />
 
-import url = require("url");
+import * as url from "url";
 
-class Url {
+export class Url {
 
     protocol: string;
     hostname: string;
@@ -87,6 +87,3 @@ class Url {
         return path;
     }
 }
-
-export = Url;
-

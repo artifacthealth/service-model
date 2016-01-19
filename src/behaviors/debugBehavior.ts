@@ -1,14 +1,14 @@
-import EndpointBehavior = require("../description/endpointBehavior");
-import ServiceBehavior = require("../description/serviceBehavior");
-import EndpointDescription = require("../description/endpointDescription");
-import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
-import ServiceDescription = require("../description/serviceDescription");
-import DispatchService = require("../dispatcher/dispatchService");
+import { EndpointBehavior } from "../description/endpointBehavior";
+import { ServiceBehavior } from "../description/serviceBehavior";
+import { EndpointDescription } from "../description/endpointDescription";
+import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
+import { ServiceDescription } from "../description/serviceDescription";
+import { DispatchService } from "../dispatcher/dispatchService";
 
 /**
  * Service and Endpoint Behavior that enabled debugging information to be sent to the client.
  */
-class DebugBehavior implements EndpointBehavior, ServiceBehavior {
+export class DebugBehavior implements EndpointBehavior, ServiceBehavior {
 
     applyEndpointBehavior(description: EndpointDescription, endpoint: DispatchEndpoint): void {
 
@@ -27,5 +27,3 @@ class DebugBehavior implements EndpointBehavior, ServiceBehavior {
         endpoint.includeErrorDetailInFault = true;
     }
 }
-
-export = DebugBehavior;

@@ -1,7 +1,7 @@
-import OperationDescription = require("./operationDescription");
-import ContractBehavior = require("./contractBehavior");
+import { OperationDescription } from "./operationDescription";
+import { ContractBehavior } from "./contractBehavior";
 
-class ContractDescription {
+export class ContractDescription {
 
     name: string;
     behaviors: ContractBehavior[] = [];
@@ -13,5 +13,3 @@ class ContractDescription {
         this.name = name;
     }
 }
-
-export = ContractDescription;

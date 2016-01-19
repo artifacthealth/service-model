@@ -1,4 +1,4 @@
-interface BehaviorAttribute {
+export interface BehaviorAttribute {
 
     /**
      * The name of the contract that is the target of the behavior attribute. This is needed for OperationBehavior and
@@ -7,5 +7,3 @@ interface BehaviorAttribute {
      */
     contract: string;
 }
-
-export = BehaviorAttribute;

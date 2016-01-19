@@ -1,13 +1,14 @@
-import Url = require("./url");
-import HttpStatusCode = require("./httpStatusCode");
-import Lookup = require("./common/lookup");
+/// <reference path="../typings/node-es6.d.ts" />
 
-class Message {
+import { Url } from "./url";
+import { HttpStatusCode } from "./httpStatusCode";
+
+export class Message {
 
     url: Url;
     statusCode: HttpStatusCode;
     method: string;
-    headers: Lookup<string> = {};
+    headers = new Map<string, string>();
 
     body: any;
 
@@ -23,5 +24,3 @@ class Message {
         return ret;
     }
 }
-
-export = Message;

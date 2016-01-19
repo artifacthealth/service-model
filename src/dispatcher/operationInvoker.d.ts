@@ -1,8 +1,6 @@
-import ResultCallback = require("../common/resultCallback");
+import { ResultCallback } from "../common/resultCallback";
 
-interface OperationInvoker {
+export interface OperationInvoker {
 
     invoke(instance: Object, args: any[], callback: ResultCallback<any>):  void;
 }
-
-export = OperationInvoker;

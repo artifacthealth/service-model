@@ -1,10 +1,10 @@
-import ResultCallback = require("../common/resultCallback");
-import OperationInvoker = require("./operationInvoker");
-import OperationDescription = require("../description/operationDescription");
-import FaultError = require("../faultError");
-import Method = require("../description/method");
+import { ResultCallback } from "../common/resultCallback";
+import { OperationInvoker } from "./operationInvoker";
+import { OperationDescription } from "../description/operationDescription";
+import { FaultError } from "../faultError";
+import { Method } from "../description/method";
 
-class DefaultOperationInvoker implements OperationInvoker {
+export class DefaultOperationInvoker implements OperationInvoker {
 
     /**
      * Timeout for operation. Defaults to 60,000ms (1 minute).
@@ -96,5 +96,3 @@ class DefaultOperationInvoker implements OperationInvoker {
         this._method.invoke(instance, args.concat(done));
     }
 }
-
-export = DefaultOperationInvoker;

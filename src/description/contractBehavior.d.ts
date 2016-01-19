@@ -1,9 +1,7 @@
-import ContractDescription = require("./contractDescription");
-import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
+import { ContractDescription } from "./contractDescription";
+import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
 
-interface ContractBehavior {
+export interface ContractBehavior {
 
     applyContractBehavior (description: ContractDescription, endpoint: DispatchEndpoint): void;
 }
-
-export = ContractBehavior;

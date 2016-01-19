@@ -1,14 +1,14 @@
-import EndpointBehavior = require("../description/endpointBehavior");
-import EndpointDescription = require("../description/endpointDescription");
-import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
-import RpcFaultFormatter = require("../dispatcher/rpcFaultFormatter");
-import RpcMessageFormatter = require("../dispatcher/rpcMessageFormatter");
-import RpcOperationSelector = require("../dispatcher/rpcOperationSelector");
-import VersionMessageFilter = require("../dispatcher/versionMessageFilter");
-import MessageFilter = require("../dispatcher/messageFilter");
-import AddressMessageFilter = require("../dispatcher/addressMessageFilter");
+import { EndpointBehavior } from "../description/endpointBehavior";
+import { EndpointDescription } from "../description/endpointDescription";
+import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
+import { RpcFaultFormatter } from "../dispatcher/rpcFaultFormatter";
+import { RpcMessageFormatter } from "../dispatcher/rpcMessageFormatter";
+import { RpcOperationSelector } from "../dispatcher/rpcOperationSelector";
+import { VersionMessageFilter } from "../dispatcher/versionMessageFilter";
+import { MessageFilter } from "../dispatcher/messageFilter";
+import { AddressMessageFilter } from "../dispatcher/addressMessageFilter";
 
-class RpcBehavior implements EndpointBehavior {
+export class RpcBehavior implements EndpointBehavior {
 
     applyEndpointBehavior(description: EndpointDescription, endpoint: DispatchEndpoint): void {
 
@@ -28,5 +28,3 @@ class RpcBehavior implements EndpointBehavior {
         }
     }
 }
-
-export = RpcBehavior;

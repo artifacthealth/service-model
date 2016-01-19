@@ -1,9 +1,9 @@
-import Message = require("./message");
+import { Message } from "./message";
 
 /**
  * Represents a request.
  */
-interface RequestContext {
+export interface RequestContext {
 
     /**
      * The message for the request.
@@ -36,5 +36,3 @@ interface RequestContext {
      */
     removeListener(event: string, listener: Function): RequestContext;
 }
-
-export = RequestContext;

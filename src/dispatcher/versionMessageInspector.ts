@@ -1,10 +1,10 @@
-import MessageInspector = require("./messageInspector");
-import Message = require("../message");
+import { MessageInspector } from "./messageInspector";
+import { Message } from "../message";
 
 /**
  * Message inspector adds Vary header to response for endpoints that use versioning.
  */
-class VersionMessageInspector implements MessageInspector {
+export class VersionMessageInspector implements MessageInspector {
 
     afterReceiveRequest(request: Message): any {
         return undefined;
@@ -14,7 +14,7 @@ class VersionMessageInspector implements MessageInspector {
 
         if(!reply) return;
 
-        var value = reply.headers["Vary"];
+        var value = reply.headers.get("Vary");
         if(value) {
             if(value != '*') {
                 value += ", Accept-Version";
@@ -23,8 +23,6 @@ class VersionMessageInspector implements MessageInspector {
         else {
             value = "Accept-Version";
         }
-        reply.headers["Vary"] = value;
+        reply.headers.set("Vary", value);
     }
 }
-
-export = VersionMessageInspector;

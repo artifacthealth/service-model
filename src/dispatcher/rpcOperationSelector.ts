@@ -1,23 +1,24 @@
-import Lookup = require("../common/lookup");
-import OperationSelector = require("./operationSelector");
-import Message = require("../message");
-import DispatchOperation = require("./dispatchOperation");
-import DispatchEndpoint = require("./dispatchEndpoint");
+/// <reference path="../../typings/node-es6.d.ts" />
 
-class RpcOperationSelector implements OperationSelector {
+import { OperationSelector } from "./operationSelector";
+import { Message } from "../message";
+import { DispatchOperation } from "./dispatchOperation";
+import { DispatchEndpoint } from "./dispatchEndpoint";
 
-    private _operations: Lookup<DispatchOperation> = {};
+export class RpcOperationSelector implements OperationSelector {
+
+    private _operations = new Map<string, DispatchOperation>();
 
     constructor(endpoint: DispatchEndpoint) {
 
         for(var i = 0; i < endpoint.operations.length; i++) {
             var operation = endpoint.operations[i];
 
-            if(this._operations[operation.name]) {
+            if(this._operations.has(operation.name)) {
                 throw new Error("There is already an operation with name '" + operation.name + "'.");
             }
 
-            this._operations[operation.name] = operation;
+            this._operations.set(operation.name, operation);
         }
     }
 
@@ -28,8 +29,6 @@ class RpcOperationSelector implements OperationSelector {
             return null;
         }
 
-        return this._operations[keys[0]];
+        return this._operations.get(keys[0]);
     }
 }
-
-export = RpcOperationSelector;

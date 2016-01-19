@@ -1,20 +1,18 @@
 /// <reference path="../typings/baseline.d.ts" />
-import domain = require("domain");
-import util = require("util");
 
-import DispatcherFactory = require("../src/dispatcherFactory");
-import CalculatorService = require("../tests/fixtures/calculatorService");
-import RequestContext = require("../src/requestContext");
-import Message = require("../src/message");
-import Url = require("../src/url");
-import FaultError = require("../src/faultError");
-import HttpError = require("../src/httpError");
-import HttpStatusCode = require("../src/httpStatusCode");
-import OperationContext = require('../src/operationContext');
-import VersioningBehavior = require("../src/behaviors/versioningBehavior");
-import RpcBehavior = require("../src/behaviors/rpcBehavior");
-import DebugBehavior = require("../src/behaviors/debugBehavior");
-import ResultCallback = require("../src/common/resultCallback");
+import { DispatcherFactory } from "../src/dispatcherFactory";
+import { CalculatorService } from "../tests/fixtures/calculatorService";
+import { RequestContext } from "../src/requestContext";
+import { Message } from "../src/message";
+import { Url } from "../src/url";
+import { FaultError } from "../src/faultError";
+import { HttpError } from "../src/httpError";
+import { HttpStatusCode } from "../src/httpStatusCode";
+import { OperationContext } from '../src/operationContext';
+import { VersioningBehavior } from "../src/behaviors/versioningBehavior";
+import { RpcBehavior } from "../src/behaviors/rpcBehavior";
+import { DebugBehavior } from "../src/behaviors/debugBehavior";
+import { ResultCallback } from "../src/common/resultCallback";
 
 suite("RequestDispatcher", () => {
 
@@ -35,7 +33,7 @@ suite("RequestDispatcher", () => {
     });
 
     var message = new Message({"add2": [ 1, 2 ]});
-    message.headers["Accept-Version"] = "^1.0.0";
+    message.headers.set("Accept-Version", "^1.0.0");
     message.url = new Url("/services/calculator-service/");
 
     test("dispatch", (done) => {

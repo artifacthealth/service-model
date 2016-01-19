@@ -1,9 +1,9 @@
-import LoggerOptions = require("./loggerOptions");
+import { LoggerOptions } from "./loggerOptions";
 
 /**
  * A logger.
  */
-interface Logger {
+export interface Logger {
     /**
      * Creates a child logger with the given options.
      * @param options Logger options.
@@ -118,5 +118,3 @@ interface Logger {
      */
     fatal(msg: string, ...args: any[]): void;
 }
-
-export = Logger;

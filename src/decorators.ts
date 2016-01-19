@@ -2,10 +2,10 @@
 
 import "reflect-metadata";
 
-import Constructor = require("./common/constructor");
-import ReflectHelper = require("./common/reflectHelper");
-import VersioningBehavior = require("./behaviors/versioningBehavior");
-import { ContractAttribute, OperationAttribute } from "./attributes"
+import { Constructor } from "./common/constructor";
+import * as ReflectHelper from "./common/reflectHelper";
+import { VersioningBehavior } from "./behaviors/versioningBehavior";
+import { ContractAttribute, OperationAttribute } from "./attributes";
 
 export var Contract = <ContractFactory>makeDecorator(ContractAttribute);
 

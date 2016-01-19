@@ -1,9 +1,9 @@
-import InstanceProvider = require("./instanceProvider");
-import ServiceDescription = require("../description/serviceDescription");
-import Message = require("../message");
-import Constructor = require("../common/constructor");
+import { InstanceProvider } from "./instanceProvider";
+import { ServiceDescription } from "../description/serviceDescription";
+import { Message } from "../message";
+import { Constructor } from "../common/constructor";
 
-class DefaultInstanceProvider implements InstanceProvider {
+export class DefaultInstanceProvider implements InstanceProvider {
 
     private _serviceConstructor: Constructor<any>;
 
@@ -50,5 +50,3 @@ class DefaultInstanceProvider implements InstanceProvider {
         throw new Error("Invalid service type '" + name + "'. " + message);
     }
 }
-
-export = DefaultInstanceProvider;

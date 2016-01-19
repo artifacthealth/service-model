@@ -1,7 +1,7 @@
-import MessageFilter = require("./messageFilter");
-import Message = require("../message");
+import { MessageFilter } from "./messageFilter";
+import { Message } from "../message";
 
-class RegExpAddressMessageFilter extends MessageFilter {
+export class RegExpAddressMessageFilter extends MessageFilter {
 
     private _pattern: RegExp;
 
@@ -20,5 +20,3 @@ class RegExpAddressMessageFilter extends MessageFilter {
         return this._pattern.test(message.url.pathname);
     }
 }
-
-export = RegExpAddressMessageFilter;

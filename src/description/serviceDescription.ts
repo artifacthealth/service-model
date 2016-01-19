@@ -1,16 +1,15 @@
-import util = require("util");
-import EndpointDescription = require("./endpointDescription");
-import EndpointBehavior = require("./endpointBehavior");
-import ContractDescription = require("./contractDescription");
-import OperationDescription = require("./operationDescription");
-import ServiceBehavior = require("./serviceBehavior");
-import Url = require("../url");
-import Constructor = require("../common/constructor");
-import ReflectHelper = require("../common/reflectHelper");
+import { EndpointDescription } from "./endpointDescription";
+import { EndpointBehavior } from "./endpointBehavior";
+import { ContractDescription } from "./contractDescription";
+import { OperationDescription } from "./operationDescription";
+import { ServiceBehavior } from "./serviceBehavior";
+import { Url } from "../url";
+import { Constructor } from "../common/constructor";
+import * as ReflectHelper from "../common/reflectHelper";
 import { ContractAttribute, OperationAttribute } from "../attributes";
-import Method = require("./method");
+import { Method } from "./method";
 
-class ServiceDescription {
+export class ServiceDescription {
 
     name: string;
     behaviors: ServiceBehavior[] = [];
@@ -216,5 +215,3 @@ class ServiceDescription {
         }
     }
 }
-
-export = ServiceDescription;

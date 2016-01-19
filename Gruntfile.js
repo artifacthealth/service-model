@@ -10,7 +10,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadNpmTasks('grunt-ts-clean');
-    grunt.loadNpmTasks('grunt-dts-concat');
 
     // Project configuration.
     grunt.initConfig({
@@ -33,7 +32,7 @@ module.exports = function(grunt) {
             options: {
                 target: "es5",
                 module: "commonjs",
-                sourceMap: true,
+                sourceMap: false,
                 declaration: true,
                 noImplicitAny: true,
                 emitDecoratorMetadata: true,
@@ -90,7 +89,7 @@ module.exports = function(grunt) {
                         cwd: 'build/src/',
                         src: [
                             '**/*.js',
-                            'service-model.d.ts'
+                            '**/*.d.ts'
                         ],
                         dest: 'lib/'
                     }
@@ -119,16 +118,6 @@ module.exports = function(grunt) {
             }
         },
 
-        dts_concat: {
-            lib: {
-                options: {
-                    name: 'service-model',
-                    main: 'build/src/index.d.ts',
-                    outDir: 'lib/'
-                }
-            }
-        },
-
         ts_clean: {
             lib: {
                 options: {
@@ -143,7 +132,7 @@ module.exports = function(grunt) {
     // Default task(s).
     grunt.registerTask("default", [ "build", "lib", "tests" ]);
     grunt.registerTask("build", [ "clean:build", "typescript:build", "copy:build", "typescript:benchmarks" ]);
-    grunt.registerTask("lib", [ "clean:lib", "copy:lib", "ts_clean:lib", "dts_concat:lib" ]);
+    grunt.registerTask("lib", [ "clean:lib", "copy:lib", "ts_clean:lib" ]);
     grunt.registerTask("tests", [ "typescript:tests", "mochaTest:tests" ]);
     grunt.registerTask("benchmarks", [ "typescript:benchmarks", "baseline:benchmarks" ]);
 

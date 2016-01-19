@@ -1,10 +1,10 @@
-import Logger = require("./logger");
-import LoggerOptions = require('./loggerOptions');
+import { Logger } from "./logger";
+import { LoggerOptions } from './loggerOptions';
 
 /**
  * Logger that does nothing.
  */
-class NullLogger implements Logger {
+export class NullLogger implements Logger {
 
     static instance: Logger = new NullLogger();
 
@@ -30,5 +30,3 @@ class NullLogger implements Logger {
     fatal(...args: any[]): void {
     }
 }
-
-export = NullLogger;

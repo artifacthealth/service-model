@@ -1,9 +1,9 @@
-import Message = require("../message");
+import { Message } from "../message";
 
 /**
  * Base class for classes used to filter messages. Not intended to be instantiated directly.
  */
-class MessageFilter {
+export class MessageFilter {
 
     /**
      * When overridden in a derived class, tests whether or not the message satisfies the criteria of the filter.
@@ -87,5 +87,3 @@ class NotMessageFilter extends MessageFilter {
         return !this._filter.match(message);
     }
 }
-
-export = MessageFilter

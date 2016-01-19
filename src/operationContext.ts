@@ -1,14 +1,14 @@
 /// <reference path="../typings/node.d.ts" />
+/// <reference path="../typings/node-es6.d.ts" />
 
-import domain = require("domain");
+import * as domain from "domain";
 
-import Lookup = require("./common/lookup");
-import RequestContext = require("./requestContext");
+import { RequestContext } from "./requestContext";
 
 /**
  * The operation context.
  */
-class OperationContext {
+export class OperationContext {
 
     /**
      * Gets the RequestContext associated with the operation.
@@ -19,7 +19,7 @@ class OperationContext {
      * Dictionary of values associated with the OperationContext. Can be used to share data between functions within
      * the context of the execution of an operation.
      */
-    items: Lookup<any> = {};
+    items = new Map<string, any>();
 
     /**
      * Gets the OperationContext associated with the active domain. Throws an error if there is not an active domain.
@@ -47,5 +47,3 @@ class OperationContext {
         return active;
     }
 }
-
-export = OperationContext;

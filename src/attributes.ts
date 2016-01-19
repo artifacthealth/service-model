@@ -1,7 +1,7 @@
-import OperationBehavior = require("./description/operationBehavior");
-import OperationDescription = require("./description/operationDescription");
-import DispatchOperation = require("./dispatcher/dispatchOperation");
-import BehaviorAttribute = require("./description/behaviorAttribute")
+import { OperationBehavior } from "./description/operationBehavior";
+import { OperationDescription } from "./description/operationDescription";
+import { DispatchOperation } from "./dispatcher/dispatchOperation";
+import { BehaviorAttribute } from "./description/behaviorAttribute";
 
 export class ContractAttribute {
 

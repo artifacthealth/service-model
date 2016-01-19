@@ -1,6 +1,6 @@
-import HttpStatusCode = require("./httpStatusCode");
+import { HttpStatusCode } from "./httpStatusCode";
 
-class HttpError implements Error {
+export class HttpError implements Error {
 
     /**
      * The name of the error.
@@ -67,5 +67,3 @@ class HttpError implements Error {
 // TypeScript declares Error as an Interface instead of a class so use prototypical inheritance
 HttpError.prototype = Object.create(Error.prototype);
 HttpError.prototype.constructor = HttpError;
-
-export = HttpError;

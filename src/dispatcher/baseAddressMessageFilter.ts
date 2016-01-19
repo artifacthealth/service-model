@@ -1,12 +1,12 @@
-import MessageFilter = require("./messageFilter");
-import Message = require("../message");
-import Url = require("../url");
+import { MessageFilter } from "./messageFilter";
+import { Message } from "../message";
+import { Url } from "../url";
 
 /**
  * A message filter that filters messages based on the message url path. The message is considered a match
  * if path in the url of the message begins with the path in the url of the filter.
  */
-class BaseAddressMessageFilter extends MessageFilter {
+export class BaseAddressMessageFilter extends MessageFilter {
 
     private _url: Url;
 
@@ -33,5 +33,3 @@ class BaseAddressMessageFilter extends MessageFilter {
         return message.url.pathname.indexOf(this._url.pathname) == 0;
     }
 }
-
-export = BaseAddressMessageFilter;

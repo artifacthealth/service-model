@@ -1,13 +1,13 @@
-import InstanceProvider = require("./instanceProvider");
-import DispatchEndpoint = require("./dispatchEndpoint");
-import MessageFilter = require("./messageFilter");
-import ErrorHandler = require("./errorHandler");
-import RequestDispatcher = require("./requestDispatcher");
-import Message = require("../message");
-import BaseAddressMessageFilter = require("./baseAddressMessageFilter");
-import Url = require("../url");
+import { InstanceProvider } from "./instanceProvider";
+import { DispatchEndpoint } from "./dispatchEndpoint";
+import { MessageFilter } from "./messageFilter";
+import { ErrorHandler } from "./errorHandler";
+import { RequestDispatcher } from "./requestDispatcher";
+import { Message } from "../message";
+import { BaseAddressMessageFilter } from "./baseAddressMessageFilter";
+import { Url } from "../url";
 
-class DispatchService {
+export class DispatchService {
 
     name: string;
     endpoints: DispatchEndpoint[] = [];
@@ -49,5 +49,3 @@ class DispatchService {
         throw new Error("Service '" + this.name + "' incorrectly configured." + message);
     }
 }
-
-export = DispatchService;

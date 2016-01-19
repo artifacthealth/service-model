@@ -1,6 +1,6 @@
-import Message = require("../message");
+import { Message } from "../message";
 
-interface MessageInspector {
+export interface MessageInspector {
 
     /**
      * Called after a message has been received but before it has been dispatched. Returns a value that is passed
@@ -16,5 +16,3 @@ interface MessageInspector {
      */
     beforeSendReply(reply: Message, state: any): void;
 }
-
-export = MessageInspector;

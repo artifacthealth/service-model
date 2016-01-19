@@ -1,9 +1,7 @@
-import DispatchOperation = require("./dispatchOperation");
-import Message = require("../message");
+import { DispatchOperation } from "./dispatchOperation";
+import { Message } from "../message";
 
-interface OperationSelector {
+export interface OperationSelector {
 
     selectOperation(message: Message): DispatchOperation;
 }
-
-export = OperationSelector;

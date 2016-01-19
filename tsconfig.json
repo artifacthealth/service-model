@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "build/",
+        "target": "es5",
+        "noImplicitAny": true,
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    }
+}

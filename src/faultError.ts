@@ -1,7 +1,7 @@
-import HttpError = require("./httpError");
-import HttpStatusCode = require("./httpStatusCode");
+import { HttpError } from "./httpError";
+import { HttpStatusCode } from "./httpStatusCode";
 
-class FaultError extends HttpError {
+export class FaultError extends HttpError {
 
     /**
      * The name of the error.
@@ -35,5 +35,3 @@ class FaultError extends HttpError {
         return HttpError.isHttpError(err) && err.hasOwnProperty("code") && err.hasOwnProperty("detail");
     }
 }
-
-export = FaultError;

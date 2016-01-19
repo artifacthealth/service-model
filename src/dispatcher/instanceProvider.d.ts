@@ -1,9 +1,7 @@
-import ServiceDescription = require("../description/serviceDescription");
-import Message = require("../message");
+import { ServiceDescription } from "../description/serviceDescription";
+import { Message } from "../message";
 
-interface InstanceProvider {
+export interface InstanceProvider {
 
     getInstance(message: Message): Object;
 }
-
-export = InstanceProvider;

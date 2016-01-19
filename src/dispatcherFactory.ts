@@ -1,32 +1,29 @@
+/// <reference path="../typings/node-es6.d.ts" />
 /// <reference path="../typings/node.d.ts" />
 
-import util = require("util");
+import { Constructor } from "./common/constructor";
+import { RequestDispatcher } from "./dispatcher/requestDispatcher";
+import { ServiceDescription } from "./description/serviceDescription";
+import { DispatchService } from "./dispatcher/dispatchService";
+import { EndpointDescription } from "./description/endpointDescription";
+import { DispatchEndpoint } from "./dispatcher/dispatchEndpoint";
+import { OperationDescription } from "./description/operationDescription";
+import { DispatchOperation } from "./dispatcher/dispatchOperation";
+import { DefaultOperationInvoker } from "./dispatcher/defaultOperationInvoker";
+import { DefaultInstanceProvider } from "./dispatcher/defaultInstanceProvider";
+import { ServiceBehavior } from "./description/serviceBehavior";
+import { EndpointBehavior } from "./description/endpointBehavior";
+import { ContractBehavior } from "./description/contractBehavior";
+import { OperationBehavior } from "./description/operationBehavior";
+import { ContractDescription } from "./description/contractDescription";
+import { RpcOperationSelector } from "./dispatcher/rpcOperationSelector";
+import { RpcMessageFormatter } from "./dispatcher/rpcMessageFormatter";
+import { RpcFaultFormatter } from "./dispatcher/rpcFaultFormatter";
+import { Url } from "./url";
 
-import Constructor = require("./common/constructor");
-import RequestDispatcher = require("./dispatcher/requestDispatcher");
-import ServiceDescription = require("./description/serviceDescription");
-import DispatchService = require("./dispatcher/dispatchService");
-import EndpointDescription = require("./description/endpointDescription");
-import DispatchEndpoint = require("./dispatcher/dispatchEndpoint");
-import OperationDescription = require("./description/operationDescription");
-import DispatchOperation = require("./dispatcher/dispatchOperation");
-import DefaultOperationInvoker = require("./dispatcher/defaultOperationInvoker");
-import DefaultInstanceProvider = require("./dispatcher/defaultInstanceProvider");
-import ServiceBehavior = require("./description/serviceBehavior");
-import EndpointBehavior = require("./description/endpointBehavior");
-import ContractBehavior = require("./description/contractBehavior");
-import OperationBehavior = require("./description/operationBehavior");
-import ContractDescription = require("./description/contractDescription");
-import RpcOperationSelector = require("./dispatcher/rpcOperationSelector");
-import RpcMessageFormatter = require("./dispatcher/rpcMessageFormatter");
-import RpcFaultFormatter = require("./dispatcher/rpcFaultFormatter");
-import Url = require("./url");
-import Lookup = require("./common/lookup");
-
-class DispatcherFactory {
+export class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
-    private _behaviors: Lookup<Constructor<any>> = {};
 
     addService(ctr: Constructor<any>, name?: string): ServiceDescription {
 
@@ -37,23 +34,6 @@ class DispatcherFactory {
         var service = new ServiceDescription(ctr, name || ctr.name);
         this._services.push(service);
         return service;
-    }
-
-    registerBehavior(annotationName: string, behavior: Constructor<any>): void {
-
-        if(!annotationName) {
-            throw new Error("Missing required argument 'ctr'.");
-        }
-
-        if(!behavior) {
-            throw new Error("Missing required argument 'behavior'.");
-        }
-
-        if(this._behaviors[annotationName]) {
-            throw new Error("A behavior has already been register for annotation name '" + annotationName + "'.");
-        }
-
-        this._behaviors[annotationName] = behavior;
     }
 
     createDispatcher(): RequestDispatcher {
@@ -149,5 +129,3 @@ class DispatcherFactory {
         description.behaviors.forEach(behavior => behavior.applyOperationBehavior(description, operation));
     }
 }
-
-export = DispatcherFactory;

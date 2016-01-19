@@ -1,7 +1,7 @@
-import Callback = require("../common/callback");
-import RequestContext = require("../requestContext");
+import { Callback } from "../common/callback";
+import { RequestContext } from "../requestContext";
 
-interface ErrorHandler {
+export interface ErrorHandler {
 
     /**
      * Handles an error. Note that next must be called with the error that is being handled.
@@ -11,5 +11,3 @@ interface ErrorHandler {
      */
     handleError(err: Error, request: RequestContext, next: Callback): void;
 }
-
-export = ErrorHandler;

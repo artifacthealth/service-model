@@ -1,10 +1,10 @@
-import MessageFormatter = require("./messageFormatter");
-import OperationInvoker = require("./operationInvoker");
-import DispatchEndpoint = require("./dispatchEndpoint");
-import OperationDescription = require("../description/operationDescription");
-import DefaultOperationInvoker = require("./defaultOperationInvoker");
+import { MessageFormatter } from "./messageFormatter";
+import { OperationInvoker } from "./operationInvoker";
+import { DispatchEndpoint } from "./dispatchEndpoint";
+import { OperationDescription } from "../description/operationDescription";
+import { DefaultOperationInvoker } from "./defaultOperationInvoker";
 
-class DispatchOperation {
+export class DispatchOperation {
 
     name: string;
     formatter: MessageFormatter;
@@ -44,5 +44,3 @@ class DispatchOperation {
         throw new Error("Operation '" + this.name + "' on service '" + this.endpoint.service + "' incorrectly configured. " + message);
     }
 }
-
-export = DispatchOperation;

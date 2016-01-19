@@ -1,16 +1,16 @@
-import OperationSelector = require("./operationSelector");
-import DispatchOperation = require("./dispatchOperation");
-import DispatchService = require("./dispatchService");
-import MessageFilter = require("./messageFilter");
-import EndpointDescription = require("../description/endpointDescription");
-import DefaultInstanceProvider = require("./defaultInstanceProvider")
-import MessageInspector = require("./messageInspector");
-import Message = require("../message");
-import Url = require("../url");
-import ErrorHandler = require("./errorHandler");
-import FaultFormatter = require("./faultFormatter");
+import { OperationSelector } from "./operationSelector";
+import { DispatchOperation } from "./dispatchOperation";
+import { DispatchService } from "./dispatchService";
+import { MessageFilter } from "./messageFilter";
+import { EndpointDescription } from "../description/endpointDescription";
+import { DefaultInstanceProvider } from "./defaultInstanceProvider";
+import { MessageInspector } from "./messageInspector";
+import { Message } from "../message";
+import { Url } from "../url";
+import { ErrorHandler } from "./errorHandler";
+import { FaultFormatter } from "./faultFormatter";
 
-class DispatchEndpoint {
+export class DispatchEndpoint {
 
     /**
      * The endpoint address.
@@ -87,5 +87,3 @@ class DispatchEndpoint {
         return operation;
     }
 }
-
-export = DispatchEndpoint;

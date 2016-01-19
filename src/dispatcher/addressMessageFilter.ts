@@ -1,12 +1,12 @@
-import MessageFilter = require("./messageFilter");
-import Message = require("../message");
-import Url = require("../url");
+import { MessageFilter } from "./messageFilter";
+import { Message } from "../message";
+import { Url } from "../url";
 
 /**
  * A message filter that filters messages based on the message url path. The message is considered a match
  * if the path in the url of the message is exactly the same as the path in the url of the filter.
  */
-class AddressMessageFilter extends MessageFilter {
+export class AddressMessageFilter extends MessageFilter {
 
     private _url: Url;
 
@@ -33,5 +33,3 @@ class AddressMessageFilter extends MessageFilter {
         return message.url.pathname === this._url.pathname;
     }
 }
-
-export = AddressMessageFilter;

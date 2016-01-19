@@ -1,14 +1,14 @@
-import ContractBehavior = require("../description/contractBehavior");
-import EndpointBehavior = require("../description/endpointBehavior");
-import ContractDescription = require("../description/contractDescription");
-import VersionMessageFilter = require("../dispatcher/versionMessageFilter");
-import VersionMessageInspector = require("../dispatcher/versionMessageInspector");
-import MessageFilter = require("../dispatcher/messageFilter");
-import EndpointDescription = require("../description/endpointDescription");
-import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
-import BehaviorAttribute = require("../description/behaviorAttribute");
+import { ContractBehavior } from "../description/contractBehavior";
+import { EndpointBehavior } from "../description/endpointBehavior";
+import { ContractDescription } from "../description/contractDescription";
+import { VersionMessageFilter } from "../dispatcher/versionMessageFilter";
+import { VersionMessageInspector } from "../dispatcher/versionMessageInspector";
+import { MessageFilter } from "../dispatcher/messageFilter";
+import { EndpointDescription } from "../description/endpointDescription";
+import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
+import { BehaviorAttribute } from "../description/behaviorAttribute";
 
-class VersioningBehavior implements ContractBehavior, EndpointBehavior, BehaviorAttribute {
+export class VersioningBehavior implements ContractBehavior, EndpointBehavior, BehaviorAttribute {
 
     contract: string;
 
@@ -47,5 +47,3 @@ class VersioningBehavior implements ContractBehavior, EndpointBehavior, Behavior
     }
 
 }
-
-export = VersioningBehavior;

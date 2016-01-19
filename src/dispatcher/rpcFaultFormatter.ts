@@ -1,9 +1,9 @@
-import ResultCallback = require("../common/resultCallback");
-import FaultFormatter = require("./faultFormatter");
-import Message = require("../message");
-import FaultError = require("../faultError");
+import { ResultCallback } from "../common/resultCallback";
+import { FaultFormatter } from "./faultFormatter";
+import { Message } from "../message";
+import { FaultError } from "../faultError";
 
-class RpcFaultFormatter implements FaultFormatter {
+export class RpcFaultFormatter implements FaultFormatter {
 
     serializeFault(fault: FaultError, callback: ResultCallback<Message>): void {
 
@@ -25,5 +25,3 @@ class RpcFaultFormatter implements FaultFormatter {
         callback(null, message);
     }
 }
-
-export = RpcFaultFormatter;

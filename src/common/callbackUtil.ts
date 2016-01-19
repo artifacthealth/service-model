@@ -1,4 +1,4 @@
-import Callback = require("./callback");
+import { Callback } from "./callback";
 
 /**
  * Returns a new callback that will raise an error if called more than once.

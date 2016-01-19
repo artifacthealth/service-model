@@ -1,9 +1,7 @@
-import EndpointDescription = require("./endpointDescription");
-import DispatchEndpoint = require("../dispatcher/dispatchEndpoint");
+import { EndpointDescription } from "./endpointDescription";
+import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
 
-interface EndpointBehavior {
+export interface EndpointBehavior {
 
     applyEndpointBehavior (description: EndpointDescription, endpoint: DispatchEndpoint): void;
 }
-
-export = EndpointBehavior;

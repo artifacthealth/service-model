@@ -1,9 +1,9 @@
+/// <reference path="../../typings/node.d.ts" />
+
 import { Operation, Contract } from "../../src/decorators";
 
-declare var process: any;
-
 @Contract("Calculator")
-class CalculatorService {
+export class CalculatorService {
 
     @Operation({ name: "add2" })
     add(x: number, y: number): number {
@@ -21,5 +21,3 @@ class CalculatorService {
         process.nextTick(() => callback(null, x / y));
     }
 }
-
-export = CalculatorService;
