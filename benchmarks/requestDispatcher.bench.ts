@@ -1,5 +1,3 @@
-/// <reference path="../typings/baseline.d.ts" />
-
 import { DispatcherFactory } from "../src/dispatcherFactory";
 import { CalculatorService } from "../tests/fixtures/calculatorService";
 import { RequestContext } from "../src/requestContext";

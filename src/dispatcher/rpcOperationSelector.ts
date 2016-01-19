@@ -1,5 +1,3 @@
-/// <reference path="../../typings/node-es6.d.ts" />
-
 import { OperationSelector } from "./operationSelector";
 import { Message } from "../message";
 import { DispatchOperation } from "./dispatchOperation";

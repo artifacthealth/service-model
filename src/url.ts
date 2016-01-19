@@ -1,5 +1,3 @@
-/// <reference path="../typings/node.d.ts" />
-
 import * as url from "url";
 
 export class Url {

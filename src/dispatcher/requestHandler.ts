@@ -1,7 +1,4 @@
-/// <reference path="../../typings/node.d.ts" />
-
 import { create as createDomain } from "domain";
-
 import { DispatchEndpoint } from "./dispatchEndpoint";
 import { DispatchOperation } from "./dispatchOperation";
 import { RequestContext } from "../requestContext";

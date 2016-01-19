@@ -1,5 +1,3 @@
-/// <reference path="../../typings/node.d.ts" />
-
 import { Operation, Contract } from "../../src/decorators";
 
 @Contract("Calculator")

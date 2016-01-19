@@ -1,5 +1,3 @@
-/// <reference path="../typings/node-es6.d.ts" />
-
 import { Url } from "./url";
 import { HttpStatusCode } from "./httpStatusCode";
 

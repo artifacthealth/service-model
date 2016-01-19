@@ -1,7 +1,4 @@
-/// <reference path="../../typings/node.d.ts" />
-
 import { EventEmitter } from "events";
-
 import { Callback } from "../common/callback";
 import { DispatchService } from "./dispatchService";
 import { DispatchEndpoint } from "./dispatchEndpoint";

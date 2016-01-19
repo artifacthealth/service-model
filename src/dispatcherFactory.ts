@@ -1,6 +1,3 @@
-/// <reference path="../typings/node-es6.d.ts" />
-/// <reference path="../typings/node.d.ts" />
-
 import { Constructor } from "./common/constructor";
 import { RequestDispatcher } from "./dispatcher/requestDispatcher";
 import { ServiceDescription } from "./description/serviceDescription";

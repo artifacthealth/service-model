@@ -1,8 +1,4 @@
-/// <reference path="../typings/node.d.ts" />
-/// <reference path="../typings/node-es6.d.ts" />
-
 import * as domain from "domain";
-
 import { RequestContext } from "./requestContext";
 
 /**

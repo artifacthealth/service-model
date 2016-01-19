@@ -1,8 +1,4 @@
-/// <reference path="../../typings/semver.d.ts" />
-/// <reference path="../../typings/node-es6.d.ts" />
-
 import { satisfies as satisfiesSemver } from "semver";
-
 import { MessageFilter } from "./messageFilter";
 import { Message } from "../message";
 
