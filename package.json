@@ -27,6 +27,7 @@
     "semver": "^4.3.1"
   },
   "devDependencies": {
+    "baseline": "^0.3.0",
     "chai": "^1.9.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
