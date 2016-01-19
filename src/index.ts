@@ -26,6 +26,9 @@ export { MessageFormatter } from "./dispatcher/messageFormatter";
 export { MessageInspector } from "./dispatcher/messageInspector";
 export { OperationInvoker } from "./dispatcher/operationInvoker";
 export { OperationSelector } from "./dispatcher/operationSelector";
+export { DispatchOperation } from "./dispatcher/dispatchOperation";
+export { DispatchService } from "./dispatcher/dispatchService";
+export { DispatchEndpoint } from "./dispatcher/dispatchEndpoint";
 
 export { AddressMessageFilter } from "./dispatcher/addressMessageFilter";
 export { BaseAddressMessageFilter } from "./dispatcher/baseAddressMessageFilter";

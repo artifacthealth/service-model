@@ -1,7 +1,4 @@
-///<reference path="../../typings/reflect-metadata.d.ts"/>
-
 import "reflect-metadata";
-
 import { Constructor } from "./constructor";
 import { Parameter } from "../description/parameter";
 

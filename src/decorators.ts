@@ -1,7 +1,4 @@
-///<reference path="../typings/reflect-metadata.d.ts"/>
-
 import "reflect-metadata";
-
 import { Constructor } from "./common/constructor";
 import * as ReflectHelper from "./common/reflectHelper";
 import { VersioningBehavior } from "./behaviors/versioningBehavior";
