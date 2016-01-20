@@ -38,4 +38,4 @@ export { RpcBehavior } from "./behaviors/rpcBehavior";
 export { VersioningBehavior } from "./behaviors/versioningBehavior";
 export { DebugBehavior } from "./behaviors/debugBehavior";
 
-export { Contract, Operation, Versioning } from "./decorators";
+export { Contract, Operation, Versioning, Debug } from "./decorators";

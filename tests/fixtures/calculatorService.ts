@@ -1,21 +1,24 @@
-import { Operation, Contract } from "../../src/decorators";
+import { Operation, Contract, Versioning } from "../../src/decorators";
+import { ResultCallback } from "../../src/common/resultCallback";
 
 @Contract("Calculator")
 export class CalculatorService {
 
     @Operation({ name: "add2" })
-    add(x: number, y: number): number {
-        return x + y;
+    add(x: number, y: number, callback: ResultCallback<number>): void {
+
+        callback(null, x + y);
     }
 
     @Operation()
-    subtract(x: number | string, y: number): number {
+    subtract(x: number | string, y: number, callback: ResultCallback<number>): void {
 
-        return <number>x - y;
+        callback(null, <number>x - y);
     }
 
     @Operation()
-    divide(x: number, y: number, callback: (err: Error, result: number) => void): void {
-        process.nextTick(() => callback(null, x / y));
+    divide(x: number, y: number, callback: ResultCallback<number>): void {
+
+        callback(null, x / y);
     }
 }

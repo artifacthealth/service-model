@@ -52,11 +52,13 @@ class DummyRequestContext implements RequestContext {
     }
 
     abort(): void {
-        this._callback(new Error("Aborted"));
+
+        this._handleCallback(new Error("Aborted"));
     }
 
     reply(message?: Message): void {
-        this._callback(null, message);
+
+        this._handleCallback(null, message);
     }
 
     addListener(event: string, listener: Function): RequestContext {
@@ -65,5 +67,12 @@ class DummyRequestContext implements RequestContext {
 
     removeListener(event: string, listener: Function): RequestContext {
         return this;
+    }
+
+    private _handleCallback(err?: Error, message?: Message): void {
+
+        var callback = this._callback;
+        process.nextTick(() => callback(null, message));
+        this._callback = function() {};
     }
 }
