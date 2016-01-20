@@ -1,6 +1,6 @@
 import { OperationBehavior } from "./operationBehavior"
 import { ContractDescription } from "./contractDescription";
-import { Method } from "./method";
+import { Method } from "reflect-helper";
 
 export class OperationDescription {
 
@@ -9,7 +9,6 @@ export class OperationDescription {
     behaviors: OperationBehavior[] = [];
     method: Method;
     isOneWay: boolean;
-    isAsync: boolean;
     timeout: number;
 
     constructor(contract: ContractDescription, method: Method, name?: string) {

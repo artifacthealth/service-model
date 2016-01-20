@@ -5,27 +5,26 @@ import { OperationDescription } from "./operationDescription";
 import { ServiceBehavior } from "./serviceBehavior";
 import { Url } from "../url";
 import { Constructor } from "../common/constructor";
-import * as ReflectHelper from "../common/reflectHelper";
 import { ContractAttribute, OperationAttribute } from "../attributes";
-import { Method } from "./method";
+import { Type, Method } from "reflect-helper";
 
 export class ServiceDescription {
 
     name: string;
     behaviors: ServiceBehavior[] = [];
     endpoints: EndpointDescription[] = [];
-    serviceConstructor: Constructor<any>;
+    serviceType: Type;
 
     private _contracts: ContractDescription[];
 
-    constructor(serviceConstructor: Constructor<any>, name?: string) {
+    constructor(serviceType: Type, name?: string) {
 
-        if(!serviceConstructor) {
-            throw new Error("Missing required argument 'serviceConstructor'.");
+        if(!serviceType) {
+            throw new Error("Missing required argument 'serviceType'.");
         }
 
-        this.serviceConstructor = serviceConstructor;
-        this.name = name || serviceConstructor.name;
+        this.serviceType = serviceType;
+        this.name = name || serviceType.name;
     }
 
     addEndpoint(contractName: string, address: Url | string, behaviors?: EndpointBehavior | EndpointBehavior[]): EndpointDescription {
@@ -87,11 +86,11 @@ export class ServiceDescription {
         this._contracts = [];
 
         // Go through list of contract attributes stubbing out contracts and looking for duplicates
-        var contactAttributes = ReflectHelper.getOwnAttributes(ContractAttribute, this.serviceConstructor);
+        var contactAttributes = this.serviceType.getAnnotations(ContractAttribute);
         for(var i = 0; i < contactAttributes.length; i++) {
             var contactAttribute = contactAttributes[i];
             if(this._hasContract(contactAttribute.name)) {
-                throw new Error("Duplicate contract with name '" + contactAttribute.name + "' on service '" + this.serviceConstructor.name + "'.");
+                throw new Error("Duplicate contract with name '" + contactAttribute.name + "' on service '" + this.serviceType.name + "'.");
             }
 
             var contact = new ContractDescription(contactAttribute.name);
@@ -103,7 +102,7 @@ export class ServiceDescription {
         }
 
         // Now go through list of all type attributes looking for any contract behaviors
-        var attributes = ReflectHelper.getOwnAttributes(this.serviceConstructor);
+        var attributes = this.serviceType.getAnnotations();
         for(var i = 0; i < attributes.length; i++) {
             var attribute = attributes[i];
 
@@ -118,18 +117,17 @@ export class ServiceDescription {
         }
 
         // Go through all operations and add to appropriate contract
-        for(var propertyName in this.serviceConstructor.prototype) {
+        for(var i = 0; i < this.serviceType.methods.length; i++) {
+            var method = this.serviceType.methods[i];
 
-            if(this.serviceConstructor.prototype.hasOwnProperty(propertyName)) {
-                var operationAttribute = ReflectHelper.getOwnAttributes(OperationAttribute, this.serviceConstructor.prototype, propertyName)[0];
-                if(operationAttribute) {
-                    var targetContract = this._getTargetContract(operationAttribute);
-                    if(!targetContract) {
-                        throw new Error("Target contract must be specified on operation attribute when service has multiple contracts.");
-                    }
-
-                    this._createOperation(targetContract, operationAttribute, propertyName);
+            var operationAttribute = method.getAnnotations(OperationAttribute)[0];
+            if(operationAttribute) {
+                var targetContract = this._getTargetContract(operationAttribute);
+                if(!targetContract) {
+                    throw new Error("Target contract must be specified on operation attribute when service has multiple contracts.");
                 }
+
+                this._createOperation(targetContract, operationAttribute, method);
             }
         }
     }
@@ -164,16 +162,7 @@ export class ServiceDescription {
         return null;
     }
 
-    private _createOperation(contact: ContractDescription, operationAttribute: OperationAttribute, methodName: string): void {
-
-        // create a method descriptor with the type information
-        var method = new Method(methodName);
-        method.parameters = ReflectHelper.getParameters(this.serviceConstructor.prototype, methodName);
-        method.returnType = ReflectHelper.getReturnType(this.serviceConstructor.prototype, methodName);
-
-        if(!method.parameters) {
-            throw new Error("Missing type metadata. Please make sure the --emitDecoratorMetadata option is enabled on the TypeScript compiler.");
-        }
+    private _createOperation(contact: ContractDescription, operationAttribute: OperationAttribute, method: Method): void {
 
         // create the operation contract and add to the service contract
         var operationDescription = new OperationDescription(contact, method, operationAttribute ? operationAttribute.name : undefined);
@@ -188,18 +177,23 @@ export class ServiceDescription {
             }
         }
 
-        if(method.parameters.length > 0 && method.parameters[method.parameters.length-1].type === Function) {
-            operationDescription.isAsync = true;
+        var finalParameter = method.parameters.length > 0 && method.parameters[method.parameters.length-1];
+        if(!finalParameter || (finalParameter.type && !finalParameter.type.isFunction)) {
+            throw new Error("Final parameter on operation must be a callback function.");
         }
 
-        this._addOperationBehaviors(operationDescription, methodName);
+        if(finalParameter && !finalParameter.type) {
+            throw new Error("Missing parameter type metadata. Please make sure the --emitDecoratorMetadata option is enabled on the TypeScript compiler.");
+        }
+
+        this._addOperationBehaviors(operationDescription, method);
 
         contact.operations.push(operationDescription);
     }
 
-    private _addOperationBehaviors(description: OperationDescription, methodName: string): void {
+    private _addOperationBehaviors(description: OperationDescription, method: Method): void {
 
-        var attributes = ReflectHelper.getOwnAttributes(this.serviceConstructor.prototype, methodName);
+        var attributes = method.getAnnotations();
         for(var i = 0; i < attributes.length; i++) {
             var attribute = attributes[i];
             if(this._isOperationBehavior(attribute)) {

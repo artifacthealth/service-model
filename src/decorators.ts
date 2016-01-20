@@ -1,13 +1,10 @@
-import "reflect-metadata";
+import { makeDecorator } from "reflect-helper";
 import { Constructor } from "./common/constructor";
-import * as ReflectHelper from "./common/reflectHelper";
 import { VersioningBehavior } from "./behaviors/versioningBehavior";
 import { ContractAttribute, OperationAttribute } from "./attributes";
 
 export var Contract = <ContractFactory>makeDecorator(ContractAttribute);
-
 export var Operation = <OperationFactory>makeDecorator(OperationAttribute);
-
 export var Versioning = <VersioningBehaviorFactory>makeDecorator(VersioningBehavior);
 
 
@@ -34,18 +31,4 @@ export interface TypeDecorator {
 export interface PropertyDecorator {
 
     (target: Object, propertyName: string): void;
-}
-
-function makeDecorator(attributeCtr: Constructor<any>) {
-
-    return function DecoratorFactory(...args: any[]) {
-
-        var attributeInstance = Object.create(attributeCtr.prototype);
-        attributeCtr.apply(attributeInstance, args);
-
-        return function Decorator(target: Object, propertyName?: string): void {
-
-            ReflectHelper.addAttribute(attributeInstance, target, propertyName);
-        }
-    }
 }

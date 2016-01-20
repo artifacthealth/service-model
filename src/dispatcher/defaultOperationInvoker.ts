@@ -2,7 +2,7 @@ import { ResultCallback } from "../common/resultCallback";
 import { OperationInvoker } from "./operationInvoker";
 import { OperationDescription } from "../description/operationDescription";
 import { FaultError } from "../faultError";
-import { Method } from "../description/method";
+import { Method } from "reflect-helper";
 
 export class DefaultOperationInvoker implements OperationInvoker {
 
@@ -13,7 +13,6 @@ export class DefaultOperationInvoker implements OperationInvoker {
 
     private _parameterCount: number;
     private _method: Method;
-    private _isAsync: boolean;
 
     constructor(description: OperationDescription) {
 
@@ -23,12 +22,8 @@ export class DefaultOperationInvoker implements OperationInvoker {
 
         this._method = description.method;
         var parameters = description.method.parameters || [];
-        this._parameterCount = parameters.length;
-        if(description.isAsync) {
-            // do not include callback in parameter count if async
-            this._parameterCount--;
-        }
-        this._isAsync = description.isAsync;
+        // do not include callback in parameter count
+        this._parameterCount = parameters.length - 1;
     }
 
     invoke(instance: any, args: any[], callback: ResultCallback<any>): void {
@@ -43,26 +38,6 @@ export class DefaultOperationInvoker implements OperationInvoker {
 
         if(args.length != this._parameterCount) {
             process.nextTick(() => callback(new Error("Wrong number of arguments for operation.")));
-            return;
-        }
-
-        // TODO: get rid of support of sync functions?
-        // synchronous invoke
-        if(!this._isAsync) {
-            try {
-                var result = this._method.invoke(instance, args);
-                process.nextTick(() => callback(null, result));
-            }
-            catch(err) {
-                // If it's a FaultError then pass the error to the callback for further processing; otherwise, rethrow
-                // the  error.
-                if(FaultError.isFaultError(err)) {
-                    process.nextTick(() => callback(err));
-                }
-                else {
-                    throw err;
-                }
-            }
             return;
         }
 

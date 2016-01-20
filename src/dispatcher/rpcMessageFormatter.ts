@@ -19,11 +19,8 @@ export class RpcMessageFormatter implements MessageFormatter {
         this._operationName = operation.name;
 
         var parameters = operation.method.parameters || [];
-        var count = parameters.length;
-        if(operation.isAsync) {
-            // do not include callback in parameter count if async
-            count--;
-        }
+        // do not include callback in parameter count
+        var count = parameters.length - 1;
 
         this._parameterNames = new Array(count);
         for(var i = 0; i < count; i++) {

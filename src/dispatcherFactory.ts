@@ -17,10 +17,12 @@ import { RpcOperationSelector } from "./dispatcher/rpcOperationSelector";
 import { RpcMessageFormatter } from "./dispatcher/rpcMessageFormatter";
 import { RpcFaultFormatter } from "./dispatcher/rpcFaultFormatter";
 import { Url } from "./url";
+import { ReflectContext } from "reflect-helper";
 
 export class DispatcherFactory {
 
     private _services: ServiceDescription[] = [];
+    private _context = new ReflectContext();
 
     addService(ctr: Constructor<any>, name?: string): ServiceDescription {
 
@@ -28,7 +30,7 @@ export class DispatcherFactory {
             throw new Error("Missing required argument 'ctr'.");
         }
 
-        var service = new ServiceDescription(ctr, name || ctr.name);
+        var service = new ServiceDescription(this._context.getType(ctr), name);
         this._services.push(service);
         return service;
     }
