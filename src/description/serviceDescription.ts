@@ -25,6 +25,13 @@ export class ServiceDescription {
 
         this.serviceType = serviceType;
         this.name = name || serviceType.name;
+
+        // Now go through list of all type attributes looking for any service behaviors
+        this.serviceType.getAnnotations().forEach(annotation => {
+            if(this._isServiceBehavior(annotation)) {
+                this.behaviors.push(annotation);
+            }
+        });
     }
 
     addEndpoint(contractName: string, address: Url | string, behaviors?: EndpointBehavior | EndpointBehavior[]): EndpointDescription {
@@ -102,19 +109,16 @@ export class ServiceDescription {
         }
 
         // Now go through list of all type attributes looking for any contract behaviors
-        var attributes = this.serviceType.getAnnotations();
-        for(var i = 0; i < attributes.length; i++) {
-            var attribute = attributes[i];
-
-            if(this._isContractBehavior(attribute)) {
-                var targetContract = this._getTargetContract(attribute);
+        this.serviceType.getAnnotations().forEach(annotation => {
+            if(this._isContractBehavior(annotation)) {
+                var targetContract = this._getTargetContract(annotation);
                 if(!targetContract) {
                     throw new Error("Target contract must be specified on contract behavior attribute when service has multiple contracts.");
                 }
 
-                targetContract.behaviors.push(attribute);
+                targetContract.behaviors.push(annotation);
             }
-        }
+        });
 
         // Go through all operations and add to appropriate contract
         for(var i = 0; i < this.serviceType.methods.length; i++) {
@@ -140,6 +144,11 @@ export class ServiceDescription {
     private _isOperationBehavior(obj: any): boolean {
 
         return typeof obj["applyOperationBehavior"] === "function";
+    }
+
+    private _isServiceBehavior(obj: any): boolean {
+
+        return typeof obj["applyServiceBehavior"] === "function";
     }
 
     private _getTargetContract(obj: any): ContractDescription {
