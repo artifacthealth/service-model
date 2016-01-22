@@ -11,11 +11,11 @@ import { VersioningBehavior } from "../src/behaviors/versioningBehavior";
 import { RpcBehavior } from "../src/behaviors/rpcBehavior";
 import { DebugBehavior } from "../src/behaviors/debugBehavior";
 import { ResultCallback } from "../src/common/resultCallback";
+import { DummyRequestContext } from "../tests/dummRequestContext";
 
 suite("RequestDispatcher", () => {
 
     var factory = new DispatcherFactory();
-
     var service = factory.addService(CalculatorService);
     service.addEndpoint("Calculator", "/services/calculator-service/", [new RpcBehavior()]);
 
@@ -43,36 +43,3 @@ suite("RequestDispatcher", () => {
     })
 });
 
-class DummyRequestContext implements RequestContext {
-
-    private _callback: ResultCallback<Message>;
-
-    constructor(public message: Message, callback: ResultCallback<Message>) {
-        this._callback = callback;
-    }
-
-    abort(): void {
-
-        this._handleCallback(new Error("Aborted"));
-    }
-
-    reply(message?: Message): void {
-
-        this._handleCallback(null, message);
-    }
-
-    addListener(event: string, listener: Function): RequestContext {
-        return this;
-    }
-
-    removeListener(event: string, listener: Function): RequestContext {
-        return this;
-    }
-
-    private _handleCallback(err?: Error, message?: Message): void {
-
-        var callback = this._callback;
-        process.nextTick(() => callback(null, message));
-        this._callback = function() {};
-    }
-}

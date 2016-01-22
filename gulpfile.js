@@ -1,9 +1,16 @@
+// enable source map support in node stack traces
+require("source-map-support").install();
+
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var del = require('del')
 var Baseline = require("baseline");
 var merge = require("merge2");
 var runSequence = require("run-sequence");
+var mocha = require("gulp-mocha");
+var sourcemaps = require('gulp-sourcemaps');
+var typedoc = require("gulp-typedoc");
+var istanbul = require("gulp-istanbul");
 
 var tsProject = ts.createProject('./tsconfig.json');
 
@@ -22,6 +29,16 @@ gulp.task('build', ['clean'], function(done) {
         tsResult.dts.pipe(gulp.dest('build')),
         tsResult.js.pipe(gulp.dest('build'))
     ]);
+});
+
+// Performs build with sourcemaps
+gulp.task('debug', ['clean'], function() {
+
+    return gulp.src(['typings/**/*.ts', 'src/**/*.ts', 'tests/**/*.ts', 'benchmarks/**/*.ts'])
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsProject))
+        .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: process.cwd() }))
+        .pipe(gulp.dest('build'));
 });
 
 gulp.task('clean', function() {
@@ -45,4 +62,46 @@ gulp.task('bench', function(done) {
         done(err);
         process.exit(slower);
     });
+});
+
+gulp.task('test', function() {
+    return gulp.src('build/tests/**/*.tests.js', {read: false})
+        .pipe(mocha());
+});
+
+gulp.task('test-debug', function(done) {
+
+    runSequence('debug', 'test', done);
+});
+
+gulp.task('docs', function() {
+    return gulp.src(['typings/**/*.ts', 'src/**/*.ts']).pipe(typedoc({
+        target: 'es5',
+        module: "commonjs",
+        out: 'docs',
+        mode: "file",
+        name: "service-model",
+        entryPoint: "index",
+        includeDeclarations: false,
+        excludeExternals: true,
+        excludeNotExported: true,
+        plugin: ['comment']
+    }));
+});
+
+gulp.task('pre-coverage', function () {
+    return gulp.src(['build/src/**/*.js'])
+        // Covering files
+        .pipe(istanbul())
+        // Force `require` to return covered files
+        .pipe(istanbul.hookRequire());
+});
+
+gulp.task('coverage', ['pre-coverage'], function () {
+    return gulp.src(['build/tests/**/*.tests.js'])
+        .pipe(mocha())
+        // Creating the reports after tests ran
+        .pipe(istanbul.writeReports("build/coverage"))
+        // Enforce a coverage of at least 90%
+        .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }));
 });

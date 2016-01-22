@@ -11,14 +11,39 @@ export class CalculatorService {
     }
 
     @Operation()
+    slowAdd(x: number, y: number, callback: ResultCallback<number>): void {
+
+        setTimeout(() => callback(null, x + y), 50);
+    }
+
+    @Operation()
+    multipleCallsToCallback(x: number, y: number, callback: ResultCallback<number>): void {
+
+        callback(null, x + y);
+        callback(null, x + y);
+    }
+
+    @Operation()
     subtract(x: number | string, y: number, callback: ResultCallback<number>): void {
 
         callback(null, <number>x - y);
     }
 
-    @Operation()
+    @Operation({ timeout: 10 })
     divide(x: number, y: number, callback: ResultCallback<number>): void {
 
         callback(null, x / y);
+
+    }
+
+    mod(x: number, y: number, callback: ResultCallback<number>): void {
+
+        callback(null, x % y);
+    }
+
+    @Operation({ isOneWay: true })
+    notify(x: number, y: number, callback: Callback): void {
+
+        callback();
     }
 }

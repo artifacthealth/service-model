@@ -19,6 +19,7 @@ export class RequestDispatcher extends EventEmitter {
     private _tail: RequestHandler;
     private _requestCount = 0;
     private _closing: boolean;
+    private _closed: boolean;
     private _closeTimer: NodeJS.Timer;
 
     /**
@@ -57,6 +58,11 @@ export class RequestDispatcher extends EventEmitter {
     close(callback?: Callback): void {
 
         if(callback) {
+            if(this._closed) {
+                callback();
+                return;
+            }
+
             this.on('closed', callback);
         }
 
@@ -66,6 +72,7 @@ export class RequestDispatcher extends EventEmitter {
         this.emit('closing');
 
         if(this._requestCount == 0 && this._closing) {
+            this._closed = true;
             this.emit('closed');
             return;
         }

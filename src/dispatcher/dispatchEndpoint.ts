@@ -75,7 +75,7 @@ export class DispatchEndpoint {
 
     private _throwConfigError(message: string): void {
 
-        throw new Error("Endpoint at address '" + this.address + "' incorrectly configured." + message);
+        throw new Error("Endpoint at address '" + this.address + "' incorrectly configured: " + message);
     }
 
     chooseOperation(message: Message): DispatchOperation {

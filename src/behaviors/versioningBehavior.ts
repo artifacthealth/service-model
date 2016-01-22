@@ -25,7 +25,7 @@ export class VersioningBehavior implements ContractBehavior, EndpointBehavior, B
         }
 
         if(!args.version) {
-            throw new Error("Missing requird argument 'args.version'.");
+            throw new Error("Missing required argument 'args.version'.");
         }
 
         this._version = args.version;
@@ -34,11 +34,8 @@ export class VersioningBehavior implements ContractBehavior, EndpointBehavior, B
 
     applyContractBehavior (description: ContractDescription, endpoint: DispatchEndpoint): void {
 
-        var version = this._version;
-        if(version) {
-            endpoint.filter = new VersionMessageFilter(version).and(endpoint.filter);
-            endpoint.messageInspectors.push(new VersionMessageInspector());
-        }
+        endpoint.filter = new VersionMessageFilter(this._version).and(endpoint.filter);
+        endpoint.messageInspectors.push(new VersionMessageInspector());
     }
 
     applyEndpointBehavior(description: EndpointDescription, endpoint: DispatchEndpoint): void {

@@ -23,7 +23,7 @@
     "definition": "index.d.ts"
   },
   "dependencies": {
-    "reflect-helper": "^0.1.5",
+    "reflect-helper": "^0.1.7",
     "semver": "^4.3.1"
   },
   "devDependencies": {
@@ -31,10 +31,15 @@
     "chai": "^1.9.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typedoc": "^1.2.1",
     "gulp-typescript": "^2.10.0",
     "merge2": "^1.0.0",
     "mocha": "^2.0.1",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "source-map-support": "^0.4.0"
   },
   "keywords": [
     "service",

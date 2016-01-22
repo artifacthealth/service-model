@@ -7,6 +7,7 @@ import { Url } from "../url";
 import { Constructor } from "../common/constructor";
 import { ContractAttribute, OperationAttribute } from "../attributes";
 import { Type, Method } from "reflect-helper";
+import { RpcBehavior } from "../behaviors/rpcBehavior";
 
 export class ServiceDescription {
 
@@ -53,13 +54,11 @@ export class ServiceDescription {
         var endpoint = new EndpointDescription(contract, address);
         this.endpoints.push(endpoint);
 
-        if(behaviors) {
-            if(Array.isArray(behaviors)) {
-                endpoint.behaviors = endpoint.behaviors.concat(<EndpointBehavior[]>behaviors);
-            }
-            else {
-                endpoint.behaviors.push(<EndpointBehavior>behaviors);
-            }
+        if(Array.isArray(behaviors)) {
+            endpoint.behaviors = endpoint.behaviors.concat(<EndpointBehavior[]>behaviors);
+        }
+        else {
+            endpoint.behaviors.push(<EndpointBehavior>behaviors);
         }
 
         return endpoint;
