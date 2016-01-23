@@ -8,6 +8,10 @@ import { Url } from "../url";
  */
 export class AddressMessageFilter extends MessageFilter {
 
+    /**
+     * The [[Url]] to match.
+     * @hidden
+     */
     private _url: Url;
 
     /**

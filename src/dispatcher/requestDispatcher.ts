@@ -9,17 +9,50 @@ import { HttpStatusCode } from "../httpStatusCode";
 import { Logger } from "../logger";
 import { NullLogger } from "../nullLogger";
 
+/**
+ * Responsible for dispatching service requests.
+ */
 export class RequestDispatcher extends EventEmitter {
 
+    /**
+     * Timeout in milliseconds for close operation to complete after requested. Any requests that have completed before
+     * the timeout are aborted.
+     */
     closeTimeout = 30000;
+
+    /**
+     * List of services in the dispatcher.
+     */
     services: DispatchService[] = [];
+
+    /**
+     * Logger to use that conforms to [bunyan](https://www.npmjs.com/package/bunyan)'s logger interface.
+     */
     logger: Logger = NullLogger.instance;
 
+    /**
+     * @hidden
+     */
     private _head: RequestHandler;
+    /**
+     * @hidden
+     */
     private _tail: RequestHandler;
+    /**
+     * @hidden
+     */
     private _requestCount = 0;
+    /**
+     * @hidden
+     */
     private _closing: boolean;
+    /**
+     * @hidden
+     */
     private _closed: boolean;
+    /**
+     * @hidden
+     */
     private _closeTimer: NodeJS.Timer;
 
     /**
@@ -88,6 +121,11 @@ export class RequestDispatcher extends EventEmitter {
         this._closeTimer.unref();
     }
 
+    /**
+     * Chooses the appropriate endpoint for the request.
+     * @param message The request message.
+     * @hidden
+     */
     private _chooseEndpoint(message: Message): DispatchEndpoint {
 
         var max = -Infinity,
@@ -111,7 +149,11 @@ export class RequestDispatcher extends EventEmitter {
         return match;
     }
 
-
+    /**
+     * Adds a request to the list of pending requests.
+     * @param handler The request handler.
+     * @hidden
+     */
     private _addRequest(handler: RequestHandler): void {
 
         if(this._head) {
@@ -124,6 +166,11 @@ export class RequestDispatcher extends EventEmitter {
         this._requestCount++;
     }
 
+    /**
+     * Removes a request from the list of pending requests.
+     * @param handler The request handler.
+     * @hidden
+     */
     private _removeRequest(handler: RequestHandler): void {
 
         if(handler.prev) {

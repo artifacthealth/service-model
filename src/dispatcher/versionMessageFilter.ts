@@ -2,6 +2,9 @@ import { satisfies as satisfiesSemver } from "semver";
 import { MessageFilter } from "./messageFilter";
 import { Message } from "../message";
 
+/**
+ * @hidden
+ */
 export class VersionMessageFilter extends MessageFilter {
 
     private _version: string;

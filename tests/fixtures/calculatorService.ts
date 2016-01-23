@@ -41,9 +41,29 @@ export class CalculatorService {
         callback(null, x % y);
     }
 
+    @Operation()
+    makeError(callback: Callback): void {
+
+        callback(new Error("Some error"));
+    }
+
+    @Operation()
+    throwError(callback: Callback): void {
+
+        throw new Error("Some error");
+    }
+
+    notifyCalled = 0;
+    notifyFinished = 0;
+
     @Operation({ isOneWay: true })
     notify(x: number, y: number, callback: Callback): void {
 
-        callback();
+        this.notifyCalled++;
+
+        setTimeout(() => {
+            this.notifyFinished++;
+            callback(), 10
+        });
     }
 }

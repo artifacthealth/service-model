@@ -3,6 +3,7 @@ import { LoggerOptions } from './loggerOptions';
 
 /**
  * Logger that does nothing.
+ * @hidden
  */
 export class NullLogger implements Logger {
 

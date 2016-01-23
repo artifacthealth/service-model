@@ -4,6 +4,9 @@ import { OperationDescription } from "../description/operationDescription";
 import { FaultError } from "../faultError";
 import { Method } from "reflect-helper";
 
+/**
+ * @hidden
+ */
 export class DefaultOperationInvoker implements OperationInvoker {
 
     /**

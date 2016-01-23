@@ -3,6 +3,7 @@ import { Message } from "../message";
 
 /**
  * Message inspector adds Vary header to response for endpoints that use versioning.
+ * @hidden
  */
 export class VersionMessageInspector implements MessageInspector {
 

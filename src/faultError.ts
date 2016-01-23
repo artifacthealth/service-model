@@ -1,6 +1,11 @@
 import { HttpError } from "./httpError";
 import { HttpStatusCode } from "./httpStatusCode";
 
+/**
+ * An error that is returned to the client. When an operation passes a FaultError to it's callback, the specifics of the
+ * error are passed to the client including the code, details, and message. Additionally, the HttpStatusCode is used
+ * to set the status on the HTTP response.
+ */
 export class FaultError extends HttpError {
 
     /**

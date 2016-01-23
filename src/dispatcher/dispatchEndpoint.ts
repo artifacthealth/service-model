@@ -10,25 +10,59 @@ import { Url } from "../url";
 import { ErrorHandler } from "./errorHandler";
 import { FaultFormatter } from "./faultFormatter";
 
+/**
+ * Represents an endpoint for a service in the dispatcher. Exposes configuration options for the endpoint.
+ */
 export class DispatchEndpoint {
 
     /**
-     * The endpoint address.
+     * The base address for the endpoint.
      */
     address: Url;
 
+    /**
+     * Filter used to identify a [[Message]] as available to be processed by the endpoint.
+     */
     filter: MessageFilter;
+
+    /**
+     * Indicates the priority of the endpoint if more than one endpoint can process the message.
+     */
     filterPriority: number = 0;
 
+    /**
+     * The name of the service contract handled by the endpoint.
+     */
     contractName: string;
 
+    /**
+     * A list of operations available for the endpoint.
+     */
     operations: DispatchOperation[] = [];
+
+    /**
+     * An object that chooses which [[DispatchOperation]] will be invoked for the [[Message]].
+     */
     operationSelector: OperationSelector;
+
+    /**
+     * A [[DispatchOperation]] which is invoked for the [[OperationSelector]] is unable to choose the appropriate [[DispatchOperation]].
+     */
     unhandledOperation: DispatchOperation;
 
+    /**
+     * A list of message inspectors for this endpoint.
+     */
     messageInspectors: MessageInspector[] = [];
 
+    /**
+     * A list of error handlers for this endpoint.
+     */
     errorHandlers: ErrorHandler[] = [];
+
+    /**
+     * The object responsible for formatting errors.
+     */
     faultFormatter: FaultFormatter;
 
     /**
@@ -73,11 +107,18 @@ export class DispatchEndpoint {
         }
     }
 
+    /**
+     * @hidden
+     */
     private _throwConfigError(message: string): void {
 
         throw new Error("Endpoint at address '" + this.address + "' incorrectly configured: " + message);
     }
 
+    /**
+     * Returns the [[DispatchOperation]] that will be invoked for the [[Message]].
+     * @param message The message.
+     */
     chooseOperation(message: Message): DispatchOperation {
 
         var operation = this.operationSelector.selectOperation(message);

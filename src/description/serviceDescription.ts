@@ -5,19 +5,46 @@ import { OperationDescription } from "./operationDescription";
 import { ServiceBehavior } from "./serviceBehavior";
 import { Url } from "../url";
 import { Constructor } from "../common/constructor";
-import { ContractAttribute, OperationAttribute } from "../attributes";
+import { ContractAnnotation, OperationAnnotation } from "../annotations";
 import { Type, Method } from "reflect-helper";
 import { RpcBehavior } from "../behaviors/rpcBehavior";
 
+/**
+ * A description of a service.
+ */
 export class ServiceDescription {
 
+    /**
+     * The name of the service.
+     */
     name: string;
+
+    /**
+     * A list of behaviors that can extend the service.
+     */
     behaviors: ServiceBehavior[] = [];
+
+    /**
+     * A list of endpoints for the service.
+     */
     endpoints: EndpointDescription[] = [];
+
+    /**
+     * Metadata information for the concrete type that implements the service.
+     */
     serviceType: Type;
 
+    /**
+     * A list of contracts implemented by the service.
+     * @hidden
+     */
     private _contracts: ContractDescription[];
 
+    /**
+     * Constructs a [[ServiceDescription]].
+     * @param serviceType Metadata information for the concrete type that implements the service.
+     * @param name The name of the service. If not specified, defaults to the name of the service constructor.
+     */
     constructor(serviceType: Type, name?: string) {
 
         if(!serviceType) {
@@ -35,6 +62,12 @@ export class ServiceDescription {
         });
     }
 
+    /**
+     * Adds an endpoint to the service.
+     * @param contractName The name of the service contract handled by the endpoint.
+     * @param address The base address of the endpoint.
+     * @param behaviors A list of behaviors to add to the endpoint.
+     */
     addEndpoint(contractName: string, address: Url | string, behaviors?: EndpointBehavior | EndpointBehavior[]): EndpointDescription {
 
         if(!contractName) {
@@ -64,6 +97,11 @@ export class ServiceDescription {
         return endpoint;
     }
 
+    /**
+     * Gets a contract implemented on the service, creating it if it has not yet been created.
+     * @param name The name of the contract.
+     * @hidden
+     */
     private _ensureContract(name: string): ContractDescription {
 
         if(!this._contracts) {
@@ -73,11 +111,21 @@ export class ServiceDescription {
         return this._getContract(name);
     }
 
+    /**
+     * Returns true if the service implements the contract; otherwise, returns false.
+     * @param name The name of the contract.
+     * @hidden
+     */
     private _hasContract(name: string): boolean {
 
         return !!this._getContract(name);
     }
 
+    /**
+     * Gets a contract implemented on the service.
+     * @param name The name of the contract.
+     * @hidden
+     */
     private _getContract(name: string): ContractDescription {
 
         for(var i = 0; i < this._contracts.length; i++) {
@@ -87,12 +135,16 @@ export class ServiceDescription {
         }
     }
 
+    /**
+     * Builds out all contracts implemented on the service.
+     * @hidden
+     */
     private _buildContracts(): void {
 
         this._contracts = [];
 
         // Go through list of contract attributes stubbing out contracts and looking for duplicates
-        var contactAttributes = this.serviceType.getAnnotations(ContractAttribute);
+        var contactAttributes = this.serviceType.getAnnotations(ContractAnnotation);
         for(var i = 0; i < contactAttributes.length; i++) {
             var contactAttribute = contactAttributes[i];
             if(this._hasContract(contactAttribute.name)) {
@@ -123,7 +175,7 @@ export class ServiceDescription {
         for(var i = 0; i < this.serviceType.methods.length; i++) {
             var method = this.serviceType.methods[i];
 
-            var operationAttribute = method.getAnnotations(OperationAttribute)[0];
+            var operationAttribute = method.getAnnotations(OperationAnnotation)[0];
             if(operationAttribute) {
                 var targetContract = this._getTargetContract(operationAttribute);
                 if(!targetContract) {
@@ -135,21 +187,37 @@ export class ServiceDescription {
         }
     }
 
+    /**
+     * Returns true if the object is a [[ContractBehavior]].
+     * @hidden
+     */
     private _isContractBehavior(obj: any): boolean {
 
         return typeof obj["applyContractBehavior"] === "function";
     }
 
+    /**
+     * Returns true if the object is an [[OperationBehavior]].
+     * @hidden
+     */
     private _isOperationBehavior(obj: any): boolean {
 
         return typeof obj["applyOperationBehavior"] === "function";
     }
 
+    /**
+     * Returns true if the object is a [[ServiceBehavior]].
+     * @hidden
+     */
     private _isServiceBehavior(obj: any): boolean {
 
         return typeof obj["applyServiceBehavior"] === "function";
     }
 
+    /**
+     * Gets the target contract for a behavior annotation.
+     * @hidden
+     */
     private _getTargetContract(obj: any): ContractDescription {
 
         // If target contract is specified, look it up.
@@ -170,7 +238,11 @@ export class ServiceDescription {
         return null;
     }
 
-    private _createOperation(contact: ContractDescription, operationAttribute: OperationAttribute, method: Method): void {
+    /**
+     * Creates the operation description for a method on the service.
+     * @hidden
+     */
+    private _createOperation(contact: ContractDescription, operationAttribute: OperationAnnotation, method: Method): void {
 
         // create the operation contract and add to the service contract
         var operationDescription = new OperationDescription(contact, method, operationAttribute ? operationAttribute.name : undefined);
@@ -199,6 +271,10 @@ export class ServiceDescription {
         contact.operations.push(operationDescription);
     }
 
+    /**
+     * Adds any [[OperationBehaviors]] that exist as annotations on the method.
+     * @hidden
+     */
     private _addOperationBehaviors(description: OperationDescription, method: Method): void {
 
         var attributes = method.getAnnotations();

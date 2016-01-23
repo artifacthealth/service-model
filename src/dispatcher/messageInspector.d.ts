@@ -1,5 +1,8 @@
 import { Message } from "../message";
 
+/**
+ * Describes an extension point that can inspect and modify messages.
+ */
 export interface MessageInspector {
 
     /**

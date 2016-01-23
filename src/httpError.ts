@@ -1,5 +1,9 @@
 import { HttpStatusCode } from "./httpStatusCode";
 
+/**
+ * An error message that sets the HTTP status code. When an operation passes a HttpError to it's callback, the
+ * HttpStatusCode is used to set the status of the HTTP response. The details of the error are not passed to the client.
+ */
 export class HttpError implements Error {
 
     /**

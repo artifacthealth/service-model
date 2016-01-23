@@ -1,16 +1,28 @@
 import { OperationBehavior } from "./description/operationBehavior";
 import { OperationDescription } from "./description/operationDescription";
 import { DispatchOperation } from "./dispatcher/dispatchOperation";
-import { BehaviorAttribute } from "./description/behaviorAttribute";
+import { BehaviorAnnotation } from "./description/behaviorAnnotation";
 
-export class ContractAttribute {
+/**
+ * Metadata that indicates a contract implemented by a service.
+ * @hidden
+ */
+export class ContractAnnotation {
 
+    /**
+     * Constructs a contract annotation.
+     * @param name The name of the contract.
+     */
     constructor(public name?: string) {
 
     }
 }
 
-export class OperationAttribute {
+/**
+ * Metadata that describes a method on a service as part of a service contract.
+ * @hidden
+ */
+export class OperationAnnotation {
 
     /**
      * The name of the operation. If not specified, defaults to the name of the method.
@@ -45,8 +57,16 @@ export class OperationAttribute {
     }
 }
 
-export class WebGetAttribute implements OperationBehavior, BehaviorAttribute {
+/**
+ * Metadata that describes a method method on a service as callable through a REST service.
+ * @hidden
+ */
+export class WebGetAnnotation implements OperationBehavior, BehaviorAnnotation {
 
+    /**
+     * Indicates the name of the target contract for this operation. This is required when the service has more than
+     * one contract.
+     */
     contract: string;
 
     constructor(args: { contract?: string; }) {

@@ -1,3 +1,6 @@
+/**
+ * HTTP status codes. For descriptions, see [RFC 2616 Fielding, et al.](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+ */
 export enum HttpStatusCode {
 
     Continue = 100,

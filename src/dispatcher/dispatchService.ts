@@ -7,6 +7,9 @@ import { Message } from "../message";
 import { BaseAddressMessageFilter } from "./baseAddressMessageFilter";
 import { Url } from "../url";
 
+/**
+ * Represents a service in the dispatcher. Exposes the configuration options for the service.
+ */
 export class DispatchService {
 
     name: string;

@@ -2,7 +2,16 @@ import * as domain from "domain";
 import { RequestContext } from "./requestContext";
 
 /**
- * The operation context.
+ * The operation context is used to find out information about request that trigger the current operation. The operation
+ * context can also be used to store information associated with a particular operation across async gaps.
+ *
+ * In order to store data associated with the current operation across async gaps, a domain is created during
+ * operation invocation. This has the added benefit of being able to capture exceptions and route them through the error
+ * handling pipeline. Note that if unhandled errors are caught, the [[RequestDispatcher]] should be closed and the process
+ * should exit once all pending operations have returned (or timed out).
+ *
+ * Creation of the operation context can be disabled for a service by setting [[operationContextRequired]] to false on
+ * the [[DispatchService]]. See the [node documentation](https://nodejs.org/api/domain.html) for more information.
  */
 export class OperationContext {
 
@@ -34,6 +43,10 @@ export class OperationContext {
         OperationContext._activeDomain().__operation_context__ = context;
     }
 
+    /**
+     * Returns the active domain.
+     * @hidden
+     */
     private static _activeDomain(): any {
 
         var active = (<any>domain).active;

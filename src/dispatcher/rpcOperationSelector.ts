@@ -3,6 +3,9 @@ import { Message } from "../message";
 import { DispatchOperation } from "./dispatchOperation";
 import { DispatchEndpoint } from "./dispatchEndpoint";
 
+/**
+ * @hidden
+ */
 export class RpcOperationSelector implements OperationSelector {
 
     private _operations = new Map<string, DispatchOperation>();

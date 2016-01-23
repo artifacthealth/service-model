@@ -4,6 +4,9 @@ import { Message } from "../message";
 import { Constructor } from "../common/constructor";
 import { Type } from "reflect-helper";
 
+/**
+ * @hidden
+ */
 export class DefaultInstanceProvider implements InstanceProvider {
 
     private _serviceType: Type;

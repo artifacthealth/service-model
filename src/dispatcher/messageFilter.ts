@@ -1,17 +1,15 @@
 import { Message } from "../message";
 
 /**
- * Base class for classes used to filter messages. Not intended to be instantiated directly.
+ * Abstract base class for classes used to filter messages. Not intended to be instantiated directly.
  */
-export class MessageFilter {
+export abstract class MessageFilter {
 
     /**
      * When overridden in a derived class, tests whether or not the message satisfies the criteria of the filter.
      * @param message The message to match.
      */
-    match(message: Message): boolean {
-        throw new Error("Not implemeneted.");
-    }
+    abstract match(message: Message): boolean;
 
     /**
      * Returns a new filter that is the logical AND of the current filter and the 'other' filter.

@@ -8,7 +8,7 @@ import { HttpStatusCode } from "../httpStatusCode";
 /**
  * @hidden
  */
-export class RpcMessageFormatter implements MessageFormatter {
+export class RestMessageFormatter implements MessageFormatter {
 
     private _operationName: string;
     private _parameterNames: string[];
@@ -32,6 +32,8 @@ export class RpcMessageFormatter implements MessageFormatter {
     }
 
     deserializeRequest(message: Message, callback: ResultCallback<any[]>): void {
+
+        //TODO: Use argument decorator to indicate which argument gets the POST/PUT body
 
         var args = message.body[this._operationName];
         if(args == null) {
@@ -58,7 +60,7 @@ export class RpcMessageFormatter implements MessageFormatter {
 
     serializeReply(result: any, callback: ResultCallback<Message>): void {
 
-        callback(null, Message.createReply(HttpStatusCode.Ok, { response: result }));
+        callback(null, Message.createReply(HttpStatusCode.Ok, result));
     }
 
 }

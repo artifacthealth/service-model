@@ -1,9 +1,9 @@
 import {OperationBehavior} from "../description/operationBehavior";
 import {OperationDescription} from "../description/operationDescription";
 import {DispatchOperation} from "../dispatcher/dispatchOperation";
-import {BehaviorAttribute} from "../description/behaviorAttribute";
+import {BehaviorAnnotation} from "../description/behaviorAnnotation";
 
-export class WebGetBehavior implements OperationBehavior, BehaviorAttribute {
+export class WebGetBehavior implements OperationBehavior, BehaviorAnnotation {
 
     contract: string;
 

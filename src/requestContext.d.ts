@@ -1,7 +1,7 @@
 import { Message } from "./message";
 
 /**
- * Represents a request.
+ * Represents a service request.
  */
 export interface RequestContext {
 

@@ -3,6 +3,9 @@ import { FaultFormatter } from "./faultFormatter";
 import { Message } from "../message";
 import { FaultError } from "../faultError";
 
+/**
+ * @hidden
+ */
 export class RpcFaultFormatter implements FaultFormatter {
 
     serializeFault(fault: FaultError, callback: ResultCallback<Message>): void {

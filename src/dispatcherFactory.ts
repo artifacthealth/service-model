@@ -19,11 +19,26 @@ import { RpcFaultFormatter } from "./dispatcher/rpcFaultFormatter";
 import { Url } from "./url";
 import { ReflectContext } from "reflect-helper";
 
+/**
+ * Creates a [[RequestDispatcher]] based on the service descriptions.
+ */
 export class DispatcherFactory {
 
+    /**
+     * @hidden
+     */
     private _services: ServiceDescription[] = [];
+
+    /**
+     * @hidden
+     */
     private _context = new ReflectContext();
 
+    /**
+     * Adds a service.
+     * @param ctr The constructor for the service.
+     * @param name The name of the service. If not specified the name of the constructor is used.
+     */
     addService(ctr: Constructor<any>, name?: string): ServiceDescription {
 
         if(!ctr) {
@@ -35,6 +50,9 @@ export class DispatcherFactory {
         return service;
     }
 
+    /**
+     * Creates a request dispatcher used for dispatching service requests.
+     */
     createDispatcher(): RequestDispatcher {
 
         // Build the request dispatcher
@@ -53,6 +71,12 @@ export class DispatcherFactory {
         return dispatcher;
     }
 
+    /**
+     * Creates a dispatch service based on the service description.
+     * @param dispatcher The dispatcher.
+     * @param service The service description.
+     * @hidden
+     */
     private _createDispatchService(dispatcher: RequestDispatcher, service: ServiceDescription): DispatchService {
 
         var ret = new DispatchService(dispatcher, service.name);
@@ -66,6 +90,12 @@ export class DispatcherFactory {
         return ret;
     }
 
+    /**
+     * Creates a dispatch endpoint based on an endpoint description.
+     * @param service The dispatch service.
+     * @param endpoint The endpoint description.
+     * @hidden
+     */
     private _createDispatchEndpoint(service: DispatchService, endpoint: EndpointDescription): DispatchEndpoint {
 
         var ret = new DispatchEndpoint(service, endpoint.address, endpoint.contract.name);
@@ -77,6 +107,12 @@ export class DispatcherFactory {
         return ret;
     }
 
+    /**
+     * Creates a dispatch operation based on an operation description.
+     * @param endpoint The dispatch endpoint.
+     * @param operation The operation description
+     * @hidden
+     */
     private _createDispatchOperation(endpoint: DispatchEndpoint, operation: OperationDescription): DispatchOperation {
 
         var ret = new DispatchOperation(endpoint, operation.name);
@@ -89,6 +125,12 @@ export class DispatcherFactory {
         return ret;
     }
 
+    /**
+     * Applies all behaviors from the description objects to the dispatch objects.
+     * @param service The dispatch service.
+     * @param description The service description.
+     * @hidden
+     */
     private _applyServiceBehaviors(service: DispatchService, description: ServiceDescription): void {
 
         // apply service behaviors
@@ -113,16 +155,34 @@ export class DispatcherFactory {
         }
     }
 
+    /**
+     * Applies endpoint behaviors to the dispatch endpoint.
+     * @param endpoint The dispatch endpoint.
+     * @param description The endpoint description.
+     * @hidden
+     */
     private _applyEndpointBehaviors(endpoint: DispatchEndpoint, description: EndpointDescription): void {
 
         description.behaviors.forEach(behavior => behavior.applyEndpointBehavior(description, endpoint));
     }
 
+    /**
+     * Applies contract behaviors to the dispatch endpoint.
+     * @param endpoint The dispatch endpoint.
+     * @param description The contract description.
+     * @hidden
+     */
     private _applyContractBehaviors(endpoint: DispatchEndpoint, description: ContractDescription): void {
 
         description.behaviors.forEach(behavior => behavior.applyContractBehavior(description, endpoint));
     }
 
+    /**
+     * Applies operation behaviors to the dispatch operation.
+     * @param operation The dispatch operation.
+     * @param description The operation description.
+     * @hidden
+     */
     private _applyOperationBehaviors(operation: DispatchOperation, description: OperationDescription): void {
 
         description.behaviors.forEach(behavior => behavior.applyOperationBehavior(description, operation));

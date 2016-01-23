@@ -6,9 +6,9 @@ import { VersionMessageInspector } from "../dispatcher/versionMessageInspector";
 import { MessageFilter } from "../dispatcher/messageFilter";
 import { EndpointDescription } from "../description/endpointDescription";
 import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
-import { BehaviorAttribute } from "../description/behaviorAttribute";
+import { BehaviorAnnotation } from "../description/behaviorAnnotation";
 
-export class VersioningBehavior implements ContractBehavior, EndpointBehavior, BehaviorAttribute {
+export class VersioningBehavior implements ContractBehavior, EndpointBehavior, BehaviorAnnotation {
 
     contract: string;
 

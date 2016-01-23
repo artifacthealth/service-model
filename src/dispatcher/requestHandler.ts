@@ -9,6 +9,9 @@ import { Callback } from "../common/callback";
 import { onlyOnce } from "../common/callbackUtil";
 import { OperationContext } from "../operationContext";
 
+/**
+ * @hidden
+ */
 export class RequestHandler implements RequestContext {
 
     private _endpoint: DispatchEndpoint;
@@ -83,7 +86,7 @@ export class RequestHandler implements RequestContext {
 
             var operation = this._endpoint.chooseOperation(this.message);
             if (!operation) {
-                this._handleError(new Error("Unable to choose operation."));
+                this._handleError(new FaultError(undefined, "Unable to choose operation.", "UnknownOperation", HttpStatusCode.NotFound));
                 return;
             }
 
