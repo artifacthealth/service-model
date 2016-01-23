@@ -23,6 +23,7 @@
     "definition": "index.d.ts"
   },
   "dependencies": {
+    "path-to-regexp": "^1.2.1",
     "reflect-helper": "^0.1.7",
     "semver": "^4.3.1"
   },
