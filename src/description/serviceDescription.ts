@@ -5,9 +5,10 @@ import { OperationDescription } from "./operationDescription";
 import { ServiceBehavior } from "./serviceBehavior";
 import { Url } from "../url";
 import { Constructor } from "../common/constructor";
-import { ContractAnnotation, OperationAnnotation } from "../annotations";
 import { Type, Method } from "reflect-helper";
 import { RpcBehavior } from "../behaviors/rpcBehavior";
+import { ContractAnnotation } from "./contractAnnotation";
+import { OperationAnnotation } from "./operationAnnotation";
 
 /**
  * A description of a service.
