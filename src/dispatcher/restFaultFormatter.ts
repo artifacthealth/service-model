@@ -22,7 +22,7 @@ export class RestFaultFormatter implements FaultFormatter {
             body.detail = fault.detail;
         }
 
-        var message = new Message({ fault: body });
+        var message = new Message(body);
         message.statusCode = fault.statusCode;
 
         callback(null, message);

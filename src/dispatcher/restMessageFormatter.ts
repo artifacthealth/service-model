@@ -5,8 +5,10 @@ import { FaultError } from "../faultError";
 import { OperationDescription } from "../description/operationDescription";
 import { HttpStatusCode } from "../httpStatusCode";
 import { UrlTemplate } from "../urlTemplate";
-import { WebInvokeAnnotation, BodyAnnotation } from "../annotations";
+import { WebInvokeAnnotation, InjectBodyAnnotation } from "../annotations";
 import { Parameter } from "reflect-helper";
+import { Url } from "../url";
+import { DispatchEndpoint } from "./dispatchEndpoint";
 
 /**
  * @hidden
@@ -14,51 +16,85 @@ import { Parameter } from "reflect-helper";
 export class RestMessageFormatter implements MessageFormatter {
 
     private _bodyParameter: number;
-    private _parameterNames: string[];
+    private _parameters: Parameter[];
+    private _cast: ((text: string) => any)[];
     private _template: UrlTemplate;
 
-    constructor(operation: OperationDescription) {
+    constructor(endpoint: DispatchEndpoint, operation: OperationDescription) {
+
+        if(!endpoint) {
+            throw new Error("Missing required argument 'endpoint'.");
+        }
 
         if(!operation) {
             throw new Error("Missing required argument 'operation'.");
         }
 
-        var parameters = operation.method.parameters || [];
-        // do not include callback in parameter count
-        var count = parameters.length - 1;
+        // do not include callback in list of parameters
+        this._parameters = operation.method.parameters.slice(0, operation.method.parameters.length - 1);
 
-        this._parameterNames = new Array(count);
-        for(var i = 0; i < count; i++) {
+        this._cast = new Array(this._parameters.length);
 
-            this._parameterNames[i] = parameters[i].name;
-            this._checkForInjectBody(parameters[i]);
+        // check parameters
+        for(var i = 0; i < this._parameters.length; i++) {
+            var parameter = this._parameters[i];
+
+            if(!this._checkForInjectBody(parameter)) {
+
+                // setup cast functions if we have a type for the parameter
+                if(parameter.type) {
+                    if(parameter.type.isString) {
+                        this._cast[i] = castString;
+                    }
+                    else if(parameter.type.isNumber) {
+                        this._cast[i] = castNumber;
+                    }
+                    else if(parameter.type.isBoolean) {
+                        this._cast[i] = castBoolean;
+                    }
+                    else {
+                        // TODO: Handle date cast?
+                        throw new Error(`Invalid parameter '${parameter.name}'. Parameters on REST enabled operations must by of type String, Number, or Boolean unless annotated with @Body.`);
+                    }
+                }
+            }
         }
 
+        // then retrieve the url template
         var annotation = operation.method.getAnnotations(WebInvokeAnnotation)[0];
         if(annotation) {
-            this._template = annotation.template;
+            this._template = annotation.template.prefix(endpoint.address);
         }
     }
 
-    private _checkForInjectBody(parameter: Parameter): void {
+    /**
+     * Checks to see if parameter is annotated with @Body
+     * @param parameter Parameter to check.
+     * @hidden
+     */
+    private _checkForInjectBody(parameter: Parameter): boolean {
 
-        var annotation = parameter.getAnnotations(BodyAnnotation)[0];
-        if(annotation) {
+        if(parameter.hasAnnotation(InjectBodyAnnotation)) {
             if(this._bodyParameter !== undefined) {
                 throw new Error("Only one operation parameter can be decorated with @Body");
             }
             this._bodyParameter = parameter.index;
+            return true;
         }
+        return false;
     }
 
     deserializeRequest(message: Message, callback: ResultCallback<any[]>): void {
 
-        var args = new Array(this._parameterNames.length);
+        var args = new Array(this._parameters.length);
 
         if(this._template) {
             var parsed = this._template.parse(message.url);
             for(var i = 0; i < args.length; i++) {
-                args[i] = parsed.get(this._parameterNames[i]);
+
+                if(i !== this._bodyParameter) {
+                    args[i] = this._cast[i](parsed.get(this._parameters[i].name));
+                }
             }
         }
 
@@ -73,5 +109,24 @@ export class RestMessageFormatter implements MessageFormatter {
 
         callback(null, Message.createReply(HttpStatusCode.Ok, result));
     }
+}
 
+function castNumber(text: string): number {
+
+    if(text == null) return <any>text;
+
+    if(text.indexOf(".") != -1) {
+        return parseFloat(text);
+    }
+    else {
+        return parseInt(text);
+    }
+}
+
+function castString(text: string): string {
+    return text;
+}
+
+function castBoolean(text: string): boolean {
+    return text === "true";
 }

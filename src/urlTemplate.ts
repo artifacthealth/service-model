@@ -115,7 +115,7 @@ export class UrlTemplate {
         for (i = 0, l = tokens.length; i < l; i++) {
             var token = tokens[i];
             if(token.parameter) {
-                expression += "(.+)";
+                expression += "([^/]+)";
                 if(!this._pathParams) {
                     this._pathParams = [];
                 }
@@ -129,7 +129,7 @@ export class UrlTemplate {
             }
         }
 
-        this._pattern = new RegExp(expression, "i");
+        this._pattern = new RegExp(expression + "$", "i");
     }
 
     /**
@@ -175,11 +175,14 @@ export class UrlTemplate {
 
     /**
      * Returns true if the url matches the template.
-     * @param url The url to check.
+     * @param baseAddress The base url.
+     * @param candidate The url to check.
      */
-    match(url: Url): boolean {
+    match(candidate: Url): boolean {
 
-        return this._pattern.test(url.pathname);
+        if(!candidate || candidate.pathname === null) return false;
+
+        return this._pattern.test(candidate.pathname);
     }
 
     /**
@@ -188,31 +191,34 @@ export class UrlTemplate {
      */
     parse(url: Url): Map<string, string> {
 
-        var m = this._pattern.exec(url.pathname);
-        if(!m) return null;
+        var args = new Map<string, string>();
 
-        var args: Map<string, string>;
+        if(url) {
+            var m = this._pattern.exec(url.pathname);
+            if (m) {
 
-        // Pull any parameters out of the path
-        if(this._pathParams) {
-            for (var i = 1; i < m.length; i++) {
+                // Pull any parameters out of the path
+                if (this._pathParams) {
+                    for (var i = 1; i < m.length; i++) {
 
-                var key = this._pathParams[i - 1];
-                var value = this._decodeParam(m[i]);
-                if (value !== undefined) {
-                    (args || (args = new Map())).set(key, value);
+                        var key = this._pathParams[i - 1];
+                        var value = this._decodeParam(m[i]);
+                        if (value !== undefined) {
+                            args.set(key, value);
+                        }
+                    }
                 }
-            }
-        }
 
-        // Look for optional query parameters
-        if(this._queryParams && url.query) {
-            var queryParams = parseQueryString(url.query);
-            for (var p in queryParams) {
-                if (queryParams.hasOwnProperty(p)) {
-                    var key = this._queryParams.get(p);
-                    if(key) {
-                        (args || (args = new Map())).set(key, queryParams[p]);
+                // Look for optional query parameters
+                if (this._queryParams && url.query) {
+                    var queryParams = parseQueryString(url.query);
+                    for (var p in queryParams) {
+                        if (queryParams.hasOwnProperty(p)) {
+                            var key = this._queryParams.get(p);
+                            if (key) {
+                                args.set(key, queryParams[p]);
+                            }
+                        }
                     }
                 }
             }
@@ -222,8 +228,29 @@ export class UrlTemplate {
     }
 
     /**
+     * Returns a new UrlTemplate prefixed with the specified base address.
+     * @param address The base address.
+     */
+    prefix(address: Url): UrlTemplate {
+
+        if(!address || !address.pathname) return this;
+
+        // create a new instance of UrlTemplate without calling constructor
+        var template = Object.create(UrlTemplate.prototype);
+
+        // make sure to trim the ^ from the existing RegExp
+        template._pattern = new RegExp("^" + escape(address.pathname) + this._pattern.source.substring(1), "i");
+
+        // copy over other fields (UrlTemplate is immutable so this is OK)
+        template._pathParams = this._pathParams;
+        template._queryParams = this._queryParams;
+
+        return template;
+    }
+
+    /**
      * Decodes a parameter value from the pathname.
-     * @param val
+     * @param val The value to decode.
      * @hidden
      */
     private _decodeParam(val: string): string {

@@ -12,7 +12,7 @@ import {
     WebDeleteAnnotation,
     WebHeadAnnotation,
     WebInvokeAnnotation,
-    BodyAnnotation
+    InjectBodyAnnotation
 } from "./annotations";
 import { OperationOptions } from "./description/operationOptions";
 import { VersioningOptions } from "./behaviors/versioningOptions";
@@ -81,7 +81,7 @@ export declare function WebHead(template: string): MethodDecorator;
 /**
  *
  */
-export declare function Body(): ParameterDecorator;
+export declare function InjectBody(): ParameterDecorator;
 
 /**
  * We declare the decorator in this roundabout way to make it easier to document the decorators using TypeDoc.
@@ -96,4 +96,4 @@ exports.WebPost = makeDecorator(WebPostAnnotation);
 exports.WebPut = makeDecorator(WebPutAnnotation);
 exports.WebDelete = makeDecorator(WebDeleteAnnotation);
 exports.WebHead = makeDecorator(WebHeadAnnotation);
-exports.Body = makeDecorator(BodyAnnotation);
+exports.InjectBody = makeDecorator(InjectBodyAnnotation);

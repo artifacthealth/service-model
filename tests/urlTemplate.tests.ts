@@ -72,18 +72,30 @@ describe('UrlTemplate', () => {
             var template = new UrlTemplate("/path/{id}");
             assert.isTrue(template.match(new Url("/path/1")));
             assert.isTrue(template.match(new Url("/path/1/")));
-            assert.isTrue(template.match(new Url("path/1/")));
+            assert.isTrue(template.match(new Url("/path/1/")));
         });
 
-        it('ignore protocol, host, port, query, and hash', () => {
+        it('ignores protocol, host, port, query, and hash', () => {
 
             var template = new UrlTemplate("/path/{id}");
-            assert.isTrue(template.match(new Url("/path/1")));
-            assert.isTrue(template.match(new Url("http://someserver.com/path/1?a=b#somehash")));
+            assert.isTrue(template.match(new Url("https://someotherserver.com:8080/path/1?a=1")));
+        });
+
+        it('should not match if url has more segments than expected', () => {
+
+            var template = new UrlTemplate("/{id}");
+            assert.isFalse(template.match(new Url("/path/get/1")));
         });
     });
 
     describe('parses', () => {
+
+        it('ignores protocol, host, port, query, and hash', () => {
+
+            var template = new UrlTemplate("/path/{id}");
+            var args = template.parse(new Url("https://someotherserver.com:8080/path/1?a=1"));
+            assert.equal(args.get("id"), "1");
+        });
 
         it('returns value of parameters in template path', () => {
 

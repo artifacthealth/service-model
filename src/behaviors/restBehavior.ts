@@ -27,7 +27,7 @@ export class RestBehavior implements EndpointBehavior {
                 throw new Error("Mismatch between operations in DispatchEndpoint and EndpointDescription");
             }
 
-            endpoint.operations[i].formatter = new RestMessageFormatter(operations[i]);
+            endpoint.operations[i].formatter = new RestMessageFormatter(endpoint, operations[i]);
         }
     }
 }

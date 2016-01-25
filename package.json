@@ -23,7 +23,7 @@
     "definition": "index.d.ts"
   },
   "dependencies": {
-    "reflect-helper": "^0.1.7",
+    "reflect-helper": "^0.1.10",
     "semver": "^4.3.1"
   },
   "devDependencies": {

@@ -5,6 +5,7 @@ import { DispatchEndpoint } from "./dispatchEndpoint";
 import { EndpointDescription } from "../description/endpointDescription";
 import {UrlTemplate} from "../urlTemplate";
 import {WebInvokeAnnotation} from "../annotations";
+import {Url} from "../url";
 
 /**
  * @hidden
@@ -27,7 +28,7 @@ export class RestOperationSelector implements OperationSelector {
                     list = [];
                     this._operations.set(annotation.method, list);
                 }
-                list.push({ template: annotation.template, operation: endpoint.operations[i] });
+                list.push({ template: annotation.template.prefix(endpoint.address), operation: endpoint.operations[i] });
             }
         }
     }

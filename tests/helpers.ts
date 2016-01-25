@@ -9,6 +9,8 @@ import {DebugBehavior} from "../src/behaviors/debugBehavior";
 import {DispatchService} from "../src/dispatcher/dispatchService";
 import {ServiceDescription} from "../src/description/serviceDescription";
 import {RequestDispatcher} from "../src/dispatcher/requestDispatcher";
+import {RestBehavior} from "../src/behaviors/restBehavior";
+import {TodoService} from "./fixtures/todoService";
 
 export function hasOperation(endpoint: EndpointDescription, operation: string): boolean {
 
@@ -63,5 +65,57 @@ export function createServiceDescription(): ServiceDescription {
     var factory = new DispatcherFactory();
     var service = factory.addService(CalculatorService);
     service.addEndpoint("Calculator", "/services/calculator-service/", [new RpcBehavior(), new DebugBehavior()]);
+    return service;
+}
+
+export function createRestOperation(): DispatchOperation {
+
+    return createRestEndpoint().operations[1]; // getTask
+}
+
+export function createRestOperationWithBody(): DispatchOperation {
+
+    return createRestEndpoint().operations[4]; // updateTask
+}
+
+export function createRestEndpoint(): DispatchEndpoint {
+
+    return createRestService().endpoints[0];
+}
+
+export function createRestService(): DispatchService {
+
+    return createRestDispatcher().services[0];
+}
+
+export function createRestDispatcher(): RequestDispatcher {
+
+    var factory = new DispatcherFactory();
+    var service = factory.addService(TodoService);
+    service.addEndpoint("Todo", "/services/todo/", [new RestBehavior(), new DebugBehavior()]);
+
+    return factory.createDispatcher();
+}
+
+export function createRestOperationDescription(): OperationDescription {
+
+    return createRestEndpointDescription().contract.operations[1];
+}
+
+export function createRestOperationDescriptionWithBody(): OperationDescription {
+
+    return createRestEndpointDescription().contract.operations[4]; // updateTask
+}
+
+export function createRestEndpointDescription(): EndpointDescription {
+
+    return createRestServiceDescription().endpoints[0];
+}
+
+export function createRestServiceDescription(): ServiceDescription {
+
+    var factory = new DispatcherFactory();
+    var service = factory.addService(TodoService);
+    service.addEndpoint("Todo", "/services/todo/", [new RestBehavior(), new DebugBehavior()]);
     return service;
 }

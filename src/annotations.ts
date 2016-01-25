@@ -185,6 +185,6 @@ export class WebHeadAnnotation extends WebInvokeAnnotation {
  * Metadata indicates that the body of the message should be mapped to the operation parameter.
  * @hidden
  */
-export class BodyAnnotation {
+export class InjectBodyAnnotation {
 
 }
