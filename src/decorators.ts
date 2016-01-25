@@ -43,43 +43,115 @@ export declare function Versioning(options: VersioningOptions): ClassDecorator;
 export declare function Debug(): ClassDecorator;
 
 /**
- * Specifies that the operation is callable via a REST api.
+ * Specifies that the operation is callable via a REST api. This is useful for supporting HTTP methods that do not have
+ * shortcut decorators.
  * @param options Describes how the operation should be called.
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebInvoke({ method: "OPTIONS", template: "/{id}" })
+ *  getOptions(id: number, callback: ResultCallback<AvailableOptions>): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function WebInvoke(options: WebInvokeOptions): MethodDecorator;
 
 /**
  * Specifies that the operation is callable via a HTTP GET request. This is a shortcut for WebInvoke with a method of "GET".
  * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebGet("/")
+ *  getTasks(callback: ResultCallback<Tasks[]>): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function WebGet(template: string): MethodDecorator;
 
 /**
  * Specifies that the operation is callable via a HTTP POST request. This is a shortcut for WebInvoke with a method of "POST".
  * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebPost("/")
+ *  createTask(@InjectBody() task: Task, callback: Callback): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function WebPost(template: string): MethodDecorator;
 
 /**
  * Specifies that the operation is callable via a HTTP PUT request. This is a shortcut for WebInvoke with a method of "PUT".
  * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebPut("/{id}")
+ *  updateTask(id: number, @InjectBody() task: Task, callback: Callback): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function WebPut(template: string): MethodDecorator;
 
 /**
  * Specifies that the operation is callable via a HTTP DELETE request. This is a shortcut for WebInvoke with a method of "DELETE".
  * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebDelete("/{id}")
+ *  deleteTask(id: number, callback: Callback): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function WebDelete(template: string): MethodDecorator;
 
 /**
  * Specifies that the operation is callable via a HTTP HEAD request. This is a shortcut for WebInvoke with a method of "HEAD".
  * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebHead("/{id}")
+ *  taskExists(id: number, callback: ResultCallback<boolean>): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function WebHead(template: string): MethodDecorator;
 
 /**
+ * Specifies that the body of a REST message should be passed to the decorated parameter of a service operation.
  *
+ * ### Example
+ *
+ * In this example the body of the message, a json object containing the task to create, is passed to the `task`
+ * parameter on the `createTask` service method.
+ *
+ * ```typescript
+ *  @Operation()
+ *  @WebPost("/")
+ *  createTask(@InjectBody() task: Task, callback: Callback): void {
+ *      ...
+ *  }
+ * ```
  */
 export declare function InjectBody(): ParameterDecorator;
 

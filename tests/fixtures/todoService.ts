@@ -1,4 +1,4 @@
-import { Operation, Contract, WebGet, WebPost, WebDelete, InjectBody } from "../../src/decorators";
+import { Operation, Contract, WebGet, WebPost, WebPut, WebDelete, WebHead, InjectBody } from "../../src/decorators";
 import { ResultCallback } from "../../src/common/resultCallback";
 
 @Contract("Todo")
@@ -17,7 +17,7 @@ export class TodoService {
     }
 
     @Operation()
-    @WebGet("/{id}/exists")
+    @WebHead("/{id}")
     taskExists(id: number, callback: ResultCallback<boolean>): void {
 
     }
@@ -29,7 +29,7 @@ export class TodoService {
     }
 
     @Operation()
-    @WebPost("/{id}")
+    @WebPut("/{id}")
     updateTask(id: number, @InjectBody() task: Task, callback: Callback): void {
 
     }
@@ -37,6 +37,11 @@ export class TodoService {
     @Operation()
     @WebDelete("/{id}")
     deleteTask(id: number, callback: Callback): void {
+
+    }
+
+    @Operation()
+    nonRestOperation(id: number, callback: Callback): void {
 
     }
 }
