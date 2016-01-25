@@ -7,8 +7,7 @@ import { Url } from "../url";
 import { Constructor } from "../common/constructor";
 import { Type, Method } from "reflect-helper";
 import { RpcBehavior } from "../behaviors/rpcBehavior";
-import { ContractAnnotation } from "./contractAnnotation";
-import { OperationAnnotation } from "./operationAnnotation";
+import { ContractAnnotation, OperationAnnotation } from "../annotations";
 
 /**
  * A description of a service.

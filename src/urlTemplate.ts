@@ -6,7 +6,38 @@ import {Url} from "./url";
 import {escape} from "./common/regExpUtil";
 
 /**
- * A template for matching urls for routing. A template describes a relative URL and uses the same format as
+ * A class that represents a template for matching and parsing urls. The template describes a relative URL and can only
+ * include path and query components. The path can include parameters. Only the path is used for matching (the query is
+ * ignored for matching.) The query can describe optional parameters. Duplicate parameter names are not allowed.
+ *
+ * ### Examples
+ * The following are examples of valid templates:
+ *
+ * ```
+ * "/blog"
+ * ```
+ * Matches "/blog". No parameters are assigned.
+ *
+ * ```
+ * "/blog/{blogId}"
+ * ```
+ * Matches "/blog/1". Assigns parameter `blogId` the value "1".
+ *
+ * ```
+ * "/blog/{blogId}/article/{articleId}"
+ * ```
+ * Matches "/blog/1/article/2". Assigns parameter `blogId` the value "1" and `articleId` the value "2".
+ *
+ * ```
+ * "/blog/{blogId}/article/{articleId}?page={pageNum}"
+ * ```
+ * Matches "/blog/1/article/2" and "/blog/1/article/2?page=3". Assigns parameter `blogId` the value "1" and
+ * `articleId` the value "2". If "page" is include in the query then assigns parameter `pageNum` the value "3".
+ *
+ * ```
+ * "/download/{file}.{ext}"
+ * ```
+ * Matches "/download/some-file.jpg". Assigns parameter `file` the value "some-file" and `ext` the value "jpg".
  */
 export class UrlTemplate {
 
@@ -152,7 +183,7 @@ export class UrlTemplate {
     }
 
     /**
-     * Parses parameter values from the given url.
+     * Parses parameter values from the given url and returns a map of parameter name to value.
      * @param url The url to parse.
      */
     parse(url: Url): Map<string, string> {
