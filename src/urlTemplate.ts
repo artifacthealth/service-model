@@ -3,9 +3,11 @@
 
 import {parse as parseQueryString} from "querystring";
 import {Url} from "./url";
+import {escape} from "./common/regExpUtil";
 
-var pathToRegexp = require("path-to-regexp");
-
+/**
+ * A template for matching urls for routing. A template describes a relative URL and uses the same format as
+ */
 export class UrlTemplate {
 
     /**
@@ -26,37 +28,116 @@ export class UrlTemplate {
      */
     private _queryParams: Map<string, string>;
 
+    /**
+     * Constructs a url template.
+     * @param template The template.
+     */
     constructor(template: string) {
 
-        var url = new Url(template);
+        template = Url.normalize(template);
 
-        if(url.protocol || url.hostname || url.port || url.hash) {
-            throw new Error("Only the pathname and query parts can be specified in a template.");
+        if(template.indexOf("#") != -1) {
+            throw new Error("Hash not supported in template.");
         }
 
-        if(!url.pathname) {
-            throw new Error("Template must specify a path");
+        var queryIndex = template.indexOf("?");
+
+        this._parsePath(queryIndex == -1 ? template : template.substring(0, queryIndex));
+
+        if(queryIndex != -1) {
+            this._parseQuery(template.substring(queryIndex + 1));
         }
+    }
+
+    /**
+     * Parses the template path.
+     * @param text The path to parse
+     * @hidden
+     */
+    private _parsePath(text: string): void {
+
+        var tokens: { value: string, parameter?: boolean}[] = [],
+            i = 0,
+            end: number,
+            l = text.length;
 
 
-        var pathParams: any[] = [];
-        this._pattern = pathToRegexp(url.pathname, pathParams);
-
-        if(pathParams.length > 0) {
-            this._pathParams = pathParams.map(x => x.name);
-        }
-
-        if(url.query) {
-            var queryParams = parseQueryString(url.query);
-            for(let p in queryParams) {
-                if(queryParams.hasOwnProperty(p)) {
-                    let operationParams = queryParams[p];
-                    if(!operationParams || operationParams.length < 2 || operationParams[0] != ":") {
-                        throw new Error(`Invalid query parameter '${p}'. Value must be format ':name'.`);
-                    }
-                    // save the map between the query param and the operation param, trimming off the leading colon
-                    (this._queryParams || (this._queryParams = new Map()).set(p, operationParams.substring(1)));
+        while(i < l) {
+            end = text.indexOf("{", i);
+            if(end == -1) end = l;
+            if(i == end) {
+                throw new Error("Invalid path. Parameters must be separated by a literal.")
+            }
+            tokens.push({ value: text.substring(i, end) });
+            if (end < l) {
+                i = end + 1;
+                end = text.indexOf("}", i);
+                if (end == -1) {
+                    throw new Error("Invalid path. Unmatched '{'.");
                 }
+                tokens.push({ value: text.substring(i, end), parameter: true });
+            }
+            i = end + 1;
+        }
+
+        var expression = "^";
+        for (i = 0, l = tokens.length; i < l; i++) {
+            var token = tokens[i];
+            if(token.parameter) {
+                expression += "(.+)";
+                if(!this._pathParams) {
+                    this._pathParams = [];
+                }
+                else if (this._pathParams.indexOf(token.value) != -1) {
+                    throw new Error(`Invalid path. Duplicate parameter '${token.value}'.`);
+                }
+                this._pathParams.push(token.value);
+            }
+            else {
+                expression += escape(token.value);
+            }
+        }
+
+        this._pattern = new RegExp(expression, "i");
+    }
+
+    /**
+     * Parses the template query string
+     * @param text The query string to parse
+     * @hidden
+     */
+    private _parseQuery(text: string): void {
+
+        var query = parseQueryString(text);
+        this._queryParams = new Map();
+
+        var seen = new Set<string>();
+
+        for(let name in query) {
+            if(query.hasOwnProperty(name)) {
+                var value = query[name];
+
+                var error: string;
+                if(!value) {
+                    error = "Missing value";
+                }
+                else if(value.length < 3 || value[0] != "{" || value[value.length-1] != "}") {
+                    error = "Value must be a parameter name in the format '{name}'";
+                }
+                else {
+                    var param = value.substring(1, value.length - 1);
+
+                    if ((this._pathParams && this._pathParams.indexOf(param) != -1) || seen.has(param)) {
+                        error = `Duplicate parameter name '${param}'`;
+                    }
+                }
+                if(error) {
+                    throw new Error(`Invalid query '${name}': ${error}.`);
+                }
+
+                // save the map between the query param and the operation param, trimming off the leading colon
+                this._queryParams.set(name, param);
+                seen.add(param);
             }
         }
     }

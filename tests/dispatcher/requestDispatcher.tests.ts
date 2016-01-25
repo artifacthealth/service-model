@@ -99,7 +99,6 @@ describe('RequestDispatcher', () => {
             message.url = new Url(address);
 
             dispatcher.dispatch(new DummyRequestContext(message, (err, response) => {
-                console.log(response)
                 assert.ok(err);
                 assert.include(err.message, "Aborted");
                 done();

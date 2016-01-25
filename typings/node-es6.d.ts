@@ -145,3 +145,58 @@ interface MapConstructor {
     prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
+
+interface WeakMap<K, V> {
+    clear(): void;
+    delete(key: K): boolean;
+    get(key: K): V;
+    has(key: K): boolean;
+    set(key: K, value?: V): WeakMap<K, V>;
+    [Symbol.toStringTag]: string;
+}
+
+interface WeakMapConstructor {
+    new (): WeakMap<any, any>;
+    new <K, V>(): WeakMap<K, V>;
+    new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    prototype: WeakMap<any, any>;
+}
+declare var WeakMap: WeakMapConstructor;
+
+interface Set<T> {
+    add(value: T): Set<T>;
+    clear(): void;
+    delete(value: T): boolean;
+    entries(): IterableIterator<[T, T]>;
+    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
+    has(value: T): boolean;
+    keys(): IterableIterator<T>;
+    size: number;
+    values(): IterableIterator<T>;
+    [Symbol.iterator]():IterableIterator<T>;
+    [Symbol.toStringTag]: string;
+}
+
+interface SetConstructor {
+    new (): Set<any>;
+    new <T>(): Set<T>;
+    new <T>(iterable: Iterable<T>): Set<T>;
+    prototype: Set<any>;
+}
+declare var Set: SetConstructor;
+
+interface WeakSet<T> {
+    add(value: T): WeakSet<T>;
+    clear(): void;
+    delete(value: T): boolean;
+    has(value: T): boolean;
+    [Symbol.toStringTag]: string;
+}
+
+interface WeakSetConstructor {
+    new (): WeakSet<any>;
+    new <T>(): WeakSet<T>;
+    new <T>(iterable: Iterable<T>): WeakSet<T>;
+    prototype: WeakSet<any>;
+}
+declare var WeakSet: WeakSetConstructor;
