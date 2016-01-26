@@ -47,14 +47,14 @@ export class RestMessageFormatter implements MessageFormatter {
                         this._cast[i] = castString;
                     }
                     else if(parameter.type.isNumber) {
-                        this._cast[i] = castNumber;
+                        this._cast[i] = parseFloat;
                     }
                     else if(parameter.type.isBoolean) {
                         this._cast[i] = castBoolean;
                     }
                     else {
                         // TODO: Handle date cast?
-                        throw new Error(`Invalid parameter '${parameter.name}'. Parameters on REST enabled operations must by of type String, Number, or Boolean unless annotated with @Body.`);
+                        throw new Error(`Invalid parameter '${parameter.name}'. Parameters on REST enabled operations must be of type String, Number, or Boolean unless annotated with @InjectBody.`);
                     }
                 }
             }
@@ -76,7 +76,7 @@ export class RestMessageFormatter implements MessageFormatter {
 
         if(parameter.hasAnnotation(InjectBodyAnnotation)) {
             if(this._bodyParameter !== undefined) {
-                throw new Error("Only one operation parameter can be decorated with @Body");
+                throw new Error("Only one operation parameter can be decorated with @InjectBody.");
             }
             this._bodyParameter = parameter.index;
             return true;
@@ -111,22 +111,12 @@ export class RestMessageFormatter implements MessageFormatter {
     }
 }
 
-function castNumber(text: string): number {
-
-    if(text == null) return <any>text;
-
-    if(text.indexOf(".") != -1) {
-        return parseFloat(text);
-    }
-    else {
-        return parseInt(text);
-    }
-}
-
 function castString(text: string): string {
+
     return text;
 }
 
 function castBoolean(text: string): boolean {
+
     return text === "true";
 }

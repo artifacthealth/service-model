@@ -1,6 +1,6 @@
 {
   "name": "@artifacthealth/service-model",
-  "description": "A web services framework for node servers built with Typescript.",
+  "description": "An object oriented web service framework inspired by Windows Communication Foundation.",
   "version": "0.2.10",
   "author": {
     "name": "Artifact Health, LLC",
@@ -23,7 +23,7 @@
     "definition": "index.d.ts"
   },
   "dependencies": {
-    "reflect-helper": "^0.1.10",
+    "reflect-helper": "^0.1.11",
     "semver": "^4.3.1"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {createRestEndpoint, createRestEndpointDescription} from "../helpers";
+import {createEndpoint, createEndpointDescription, RestTodoService} from "../helpers";
 import {Message} from "../../src/message";
 import {Url} from "../../src/url";
 import {RestOperationSelector} from "../../src/dispatcher/restOperationSelector";
@@ -29,6 +29,6 @@ describe('RestOperationSelector', () => {
 
     function createOperationSelector(): RestOperationSelector {
 
-        return new RestOperationSelector(createRestEndpointDescription(), createRestEndpoint());
+        return new RestOperationSelector(createEndpointDescription(RestTodoService), createEndpoint(RestTodoService));
     }
 });

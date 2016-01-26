@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {createOperation, createEndpoint} from "../helpers";
+import {createOperation, createEndpoint, RpcCalculatorService} from "../helpers";
 import {DispatchOperation} from "../../src/dispatcher/dispatchOperation";
 
 describe('DispatchOperation', () => {
@@ -13,7 +13,7 @@ describe('DispatchOperation', () => {
 
         it('throws an error if the operation name is not provided', () => {
 
-            assert.throws(() => new DispatchOperation(createEndpoint(), undefined), "Missing required parameter 'name'.");
+            assert.throws(() => new DispatchOperation(createEndpoint(RpcCalculatorService), undefined), "Missing required parameter 'name'.");
         });
     });
 
@@ -21,14 +21,14 @@ describe('DispatchOperation', () => {
 
         it('throws an error if formatter is not defined', () => {
 
-            var operation = createOperation();
+            var operation = createOperation(RpcCalculatorService, "add2");
             operation.formatter = undefined;
             assert.throws(() => operation.validate(), "Undefined 'formatter'");
         });
 
         it('throws an error if invoker is not defined', () => {
 
-            var operation = createOperation();
+            var operation = createOperation(RpcCalculatorService, "add2");
             operation.invoker = undefined;
             assert.throws(() => operation.validate(), "Undefined 'invoker'");
         });

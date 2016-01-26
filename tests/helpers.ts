@@ -11,6 +11,9 @@ import {ServiceDescription} from "../src/description/serviceDescription";
 import {RequestDispatcher} from "../src/dispatcher/requestDispatcher";
 import {RestBehavior} from "../src/behaviors/restBehavior";
 import {TodoService} from "./fixtures/todoService";
+import {Constructor} from "../src/common/constructor";
+import {EndpointBehavior} from "../src/description/endpointBehavior";
+import {TestCastService} from "./fixtures/castArgs";
 
 export function hasOperation(endpoint: EndpointDescription, operation: string): boolean {
 
@@ -26,96 +29,83 @@ export function getOperation(endpoint: EndpointDescription, operation: string): 
     }
 }
 
-export function createOperation(): DispatchOperation {
+export function createOperation(args: HelperEndpointArgs, operationName: string): DispatchOperation {
 
-    return createEndpoint().operations[0];
+    var operations = createEndpoint(args).operations;
+    for(var i = 0; i < operations.length; i++) {
+        if(operations[i].name == operationName) return operations[i];
+    }
 }
 
-export function createEndpoint(): DispatchEndpoint {
+export function createEndpoint(args: HelperEndpointArgs): DispatchEndpoint {
 
-    return createService().endpoints[0];
+    return createService(args).endpoints[0];
 }
 
-export function createService(): DispatchService {
+export function createService(args: HelperEndpointArgs): DispatchService {
 
-    return createDispatcher().services[0];
+    return createDispatcher(args).services[0];
 }
 
-export function createDispatcher(): RequestDispatcher {
+export function createDispatcher(args: HelperEndpointArgs): RequestDispatcher {
+
+    return createDispatcherFactory(args).createDispatcher();
+}
+
+export function createOperationDescription(args: HelperEndpointArgs, operationName: string): OperationDescription {
+
+    var operations = createEndpointDescription(args).contract.operations;
+    for(var i = 0; i < operations.length; i++) {
+        if(operations[i].name == operationName) return operations[i];
+    }
+}
+
+export function createEndpointDescription(args: HelperEndpointArgs): EndpointDescription {
+
+    return createServiceDescription(args).endpoints[0];
+}
+
+export function createServiceDescription(args: HelperEndpointArgs): ServiceDescription {
+
+    return createDispatcherFactory(args).services[0];
+}
+
+export function createDispatcherFactory(args: HelperEndpointArgs): DispatcherFactory {
 
     var factory = new DispatcherFactory();
-    var service = factory.addService(CalculatorService);
-    service.addEndpoint("Calculator", "/services/calculator-service/", [new RpcBehavior(), new DebugBehavior()]);
-
-    return factory.createDispatcher();
+    var service = factory.addService(args.service);
+    service.addEndpoint(args.contract, args.path, args.endpointBehaviors);
+    return factory;
 }
 
-export function createOperationDescription(): OperationDescription {
+export interface HelperEndpointArgs {
 
-    return createEndpointDescription().contract.operations[0];
+    service: Constructor<any>;
+    contract: string;
+    path: string;
+    endpointBehaviors: EndpointBehavior[];
 }
 
-export function createEndpointDescription(): EndpointDescription {
+export var RpcCalculatorService: HelperEndpointArgs = {
 
-    return createServiceDescription().endpoints[0];
+    service: CalculatorService,
+    contract: "Calculator",
+    path: "/services/calculator-service/",
+    endpointBehaviors: [new RpcBehavior(), new DebugBehavior()]
 }
 
-export function createServiceDescription(): ServiceDescription {
+export var RestTodoService: HelperEndpointArgs = {
 
-    var factory = new DispatcherFactory();
-    var service = factory.addService(CalculatorService);
-    service.addEndpoint("Calculator", "/services/calculator-service/", [new RpcBehavior(), new DebugBehavior()]);
-    return service;
+    service: TodoService,
+    contract: "Todo",
+    path: "/services/todo",
+    endpointBehaviors: [new RestBehavior(), new DebugBehavior()]
 }
 
-export function createRestOperation(): DispatchOperation {
+export var RestTestCastService: HelperEndpointArgs = {
 
-    return createRestEndpoint().operations[1]; // getTask
-}
-
-export function createRestOperationWithBody(): DispatchOperation {
-
-    return createRestEndpoint().operations[4]; // updateTask
-}
-
-export function createRestEndpoint(): DispatchEndpoint {
-
-    return createRestService().endpoints[0];
-}
-
-export function createRestService(): DispatchService {
-
-    return createRestDispatcher().services[0];
-}
-
-export function createRestDispatcher(): RequestDispatcher {
-
-    var factory = new DispatcherFactory();
-    var service = factory.addService(TodoService);
-    service.addEndpoint("Todo", "/services/todo/", [new RestBehavior(), new DebugBehavior()]);
-
-    return factory.createDispatcher();
-}
-
-export function createRestOperationDescription(): OperationDescription {
-
-    return createRestEndpointDescription().contract.operations[1];
-}
-
-export function createRestOperationDescriptionWithBody(): OperationDescription {
-
-    return createRestEndpointDescription().contract.operations[4]; // updateTask
-}
-
-export function createRestEndpointDescription(): EndpointDescription {
-
-    return createRestServiceDescription().endpoints[0];
-}
-
-export function createRestServiceDescription(): ServiceDescription {
-
-    var factory = new DispatcherFactory();
-    var service = factory.addService(TodoService);
-    service.addEndpoint("Todo", "/services/todo/", [new RestBehavior(), new DebugBehavior()]);
-    return service;
+    service: TestCastService,
+    contract: "TestCast",
+    path: "/services/cast",
+    endpointBehaviors: [new RestBehavior(), new DebugBehavior()]
 }

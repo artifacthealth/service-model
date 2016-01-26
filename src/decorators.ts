@@ -44,7 +44,7 @@ export declare function Debug(): ClassDecorator;
 
 /**
  * Specifies that the operation is callable via a REST api. This is useful for supporting HTTP methods that do not have
- * shortcut decorators.
+ * shortcut decorators. Shortcut decorators are available for GET, POST, PUT DELETE, and HEAD methods.
  * @param options Describes how the operation should be called.
  *
  * ### Example
@@ -84,7 +84,7 @@ export declare function WebGet(template: string): MethodDecorator;
  * ```typescript
  *  @Operation()
  *  @WebPost("/")
- *  createTask(@InjectBody() task: Task, callback: Callback): void {
+ *  createTask(@InjectBody() task: Task, callback: ResultCallback<number>): void {
  *      ...
  *  }
  * ```

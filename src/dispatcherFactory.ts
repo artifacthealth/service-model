@@ -25,9 +25,9 @@ import { ReflectContext } from "reflect-helper";
 export class DispatcherFactory {
 
     /**
-     * @hidden
+     * List of service descriptions configured for the dispatcher factory.
      */
-    private _services: ServiceDescription[] = [];
+    services: ServiceDescription[] = [];
 
     /**
      * @hidden
@@ -46,7 +46,7 @@ export class DispatcherFactory {
         }
 
         var service = new ServiceDescription(this._context.getType(ctr), name);
-        this._services.push(service);
+        this.services.push(service);
         return service;
     }
 
@@ -57,13 +57,13 @@ export class DispatcherFactory {
 
         // Build the request dispatcher
         var dispatcher = new RequestDispatcher();
-        for(var i = 0; i < this._services.length; i++) {
-            dispatcher.services.push(this._createDispatchService(dispatcher, this._services[i]));
+        for(var i = 0; i < this.services.length; i++) {
+            dispatcher.services.push(this._createDispatchService(dispatcher, this.services[i]));
         }
 
         // Apply behaviors
-        for(var i = 0; i < this._services.length; i++) {
-            this._applyServiceBehaviors(dispatcher.services[i], this._services[i]);
+        for(var i = 0; i < this.services.length; i++) {
+            this._applyServiceBehaviors(dispatcher.services[i], this.services[i]);
         }
 
         dispatcher.validate();

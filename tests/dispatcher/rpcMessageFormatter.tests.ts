@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {createOperationDescription} from "../helpers";
+import {createOperationDescription, RpcCalculatorService} from "../helpers";
 import {RpcMessageFormatter} from "../../src/dispatcher/rpcMessageFormatter";
 import {Message} from "../../src/message";
 
@@ -47,7 +47,7 @@ describe('RpcMessageFormatter', () => {
 
     function createFormatter(): RpcMessageFormatter {
 
-        var operation = createOperationDescription();
+        var operation = createOperationDescription(RpcCalculatorService, "add2");
         return new RpcMessageFormatter(operation);
     }
 });
