@@ -9,6 +9,7 @@ import { WebInvokeAnnotation, InjectBodyAnnotation } from "../annotations";
 import { Parameter } from "reflect-helper";
 import { Url } from "../url";
 import { DispatchEndpoint } from "./dispatchEndpoint";
+import { Binary } from "../binary";
 
 /**
  * @hidden

@@ -56,16 +56,6 @@ export class HttpError implements Error {
         Error.call(this, message);
         (<any>Error).captureStackTrace(this, this.constructor);
     }
-
-    /**
-     * Returns true if the error is a HttpError; otherwise, returns false.
-     * @param err The error.
-     */
-    static isHttpError(err: Error): boolean {
-
-        // Use duck-typing
-        return err && (err instanceof Error) && err.hasOwnProperty("statusCode");
-    }
 }
 
 // TypeScript declares Error as an Interface instead of a class so use prototypical inheritance

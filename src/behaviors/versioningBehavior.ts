@@ -18,18 +18,18 @@ export class VersioningBehavior implements ContractBehavior, EndpointBehavior, B
      * Constructs a VersioningBehavior object.
      * @param version The current contract version.
      */
-    constructor(args: { version: string, contract?: string }) {
+    constructor(options: VersioningOptions) {
 
-        if(!args) {
-            throw new Error("Missing required argument 'args'.");
+        if(!options) {
+            throw new Error("Missing required argument 'options'.");
         }
 
-        if(!args.version) {
-            throw new Error("Missing required argument 'args.version'.");
+        if(!options.version) {
+            throw new Error("Missing required argument 'options.version'.");
         }
 
-        this._version = args.version;
-        this.contract = args.contract;
+        this._version = options.version;
+        this.contract = options.contract;
     }
 
     applyContractBehavior (description: ContractDescription, endpoint: DispatchEndpoint): void {
@@ -43,4 +43,21 @@ export class VersioningBehavior implements ContractBehavior, EndpointBehavior, B
         this.applyContractBehavior(description.contract, endpoint);
     }
 
+}
+
+/**
+ * Options for a [[VersioningBehavior]].
+ */
+export interface VersioningOptions {
+
+    /**
+     * The version of the service contract in [semver](http://semver.org/) format.
+     */
+    version: string;
+
+    /**
+     * The name of the contract that is the target of the versioning behavior. This is required for when the service has
+     * more than one contract defined.
+     */
+    contract?: string;
 }

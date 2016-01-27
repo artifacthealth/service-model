@@ -1,6 +1,6 @@
 import { makeDecorator } from "reflect-helper";
 import { Constructor } from "./common/constructor";
-import { VersioningBehavior } from "./behaviors/versioningBehavior";
+import { VersioningBehavior, VersioningOptions } from "./behaviors/versioningBehavior";
 import { DebugBehavior } from "./behaviors/debugBehavior";
 import {
     ContractAnnotation,
@@ -12,10 +12,9 @@ import {
     WebDeleteAnnotation,
     WebHeadAnnotation,
     WebInvokeAnnotation,
-    InjectBodyAnnotation
+    InjectBodyAnnotation,
+    OperationOptions
 } from "./annotations";
-import { OperationOptions } from "./description/operationOptions";
-import { VersioningOptions } from "./behaviors/versioningOptions";
 
 /**
  * Specifies that a class implements a contract.

@@ -1,7 +1,7 @@
 {
   "name": "@artifacthealth/service-model",
   "description": "An object oriented web service framework inspired by Windows Communication Foundation.",
-  "version": "0.2.10",
+  "version": "0.2.12",
   "author": {
     "name": "Artifact Health, LLC",
     "url": "http://www.artifacthealth.com"

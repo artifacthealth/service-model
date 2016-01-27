@@ -8,6 +8,7 @@ export { OperationContext } from "./operationContext";
 export { RequestContext } from "./requestContext";
 export { Url } from "./url";
 export { HttpStatusCode } from "./httpStatusCode";
+export { Binary } from "./binary";
 
 export { ContractBehavior } from "./description/contractBehavior";
 export { ContractDescription } from "./description/contractDescription";
@@ -35,7 +36,20 @@ export { BaseAddressMessageFilter } from "./dispatcher/baseAddressMessageFilter"
 export { RegExpAddressMessageFilter } from "./dispatcher/regExpAddressMessageFilter";
 
 export { RpcBehavior } from "./behaviors/rpcBehavior";
+export { RestBehavior } from "./behaviors/restBehavior";
 export { VersioningBehavior } from "./behaviors/versioningBehavior";
 export { DebugBehavior } from "./behaviors/debugBehavior";
 
-export { Contract, Operation, Versioning, Debug } from "./decorators";
+export {
+    Contract,
+    Operation,
+    Versioning,
+    Debug,
+    WebInvoke,
+    WebGet,
+    WebPost,
+    WebPut,
+    WebDelete,
+    WebHead,
+    InjectBody
+} from "./decorators";

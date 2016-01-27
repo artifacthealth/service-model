@@ -29,14 +29,4 @@ export class FaultError extends HttpError {
         this.code = code;
         this.detail = detail;
     }
-
-    /**
-     * Returns true if the error is a FaultError; otherwise, returns false.
-     * @param err The error.
-     */
-    static isFaultError(err: Error): boolean {
-
-        // Use duck-typing
-        return HttpError.isHttpError(err) && err.hasOwnProperty("code") && err.hasOwnProperty("detail");
-    }
 }

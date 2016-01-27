@@ -12,7 +12,7 @@ import {RpcMessageFormatter} from "../../src/dispatcher/rpcMessageFormatter";
 import {VersioningBehavior} from "../../src/behaviors/versioningBehavior";
 import {VersionMessageInspector} from "../../src/dispatcher/versionMessageInspector";
 
-describe('DebugBehavior', () => {
+describe('VersioningBehavior', () => {
 
     var address = "/services/calculator-service/";
 
@@ -22,13 +22,13 @@ describe('DebugBehavior', () => {
 
             assert.throws(() => {
                 new VersioningBehavior(undefined);
-            }, "Missing required argument 'args'.");
+            }, "Missing required argument 'options'.");
         });
 
         it('throws an error if args.version is not specified', () => {
             assert.throws(() => {
                 new VersioningBehavior({ version: undefined });
-            }, "Missing required argument 'args.version'.")
+            }, "Missing required argument 'options.version'.")
         });
     });
 

@@ -1,17 +1,17 @@
 import {EndpointBehavior} from "../description/endpointBehavior";
 import {EndpointDescription} from "../description/endpointDescription";
 import {DispatchEndpoint} from "../dispatcher/dispatchEndpoint";
-import {AddressMessageFilter} from "../dispatcher/addressMessageFilter";
 import {RestMessageFormatter} from "../dispatcher/restMessageFormatter";
 import {RestFaultFormatter} from "../dispatcher/restFaultFormatter";
 import {RestOperationSelector} from "../dispatcher/restOperationSelector";
+import {BaseAddressMessageFilter} from "../dispatcher/baseAddressMessageFilter";
 
 export class RestBehavior implements EndpointBehavior {
 
     applyEndpointBehavior(description: EndpointDescription, endpoint: DispatchEndpoint): void {
 
         endpoint.faultFormatter = new RestFaultFormatter();
-        endpoint.filter = new AddressMessageFilter(endpoint.address).and(endpoint.filter);
+        endpoint.filter = new BaseAddressMessageFilter(endpoint.address).and(endpoint.filter);
         endpoint.operationSelector = new RestOperationSelector(description, endpoint);
 
         // Note that we assume the operations in the dispatcher line up with the operations in the description. This is

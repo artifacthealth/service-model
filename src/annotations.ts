@@ -14,7 +14,32 @@ export class ContractAnnotation {
     }
 }
 
-import {OperationOptions} from "./description/operationOptions";
+/**
+ * Options available for [[Operation]] decorator.
+ */
+export interface OperationOptions {
+    /**
+     * The name of the operation. If not specified, defaults to the name of the method.
+     */
+    name?: string;
+
+    /**
+     * Indicates if the operation is one way. Default is false. One-way operations immediately return to the client
+     * without waiting for a result.
+     */
+    isOneWay?: boolean;
+
+    /**
+     * Specifies the timeout for the operation. If not specified, defaults to the timeout for the service.
+     */
+    timeout?: number;
+
+    /**
+     * Indicates the name of the target contract for this operation. This is required when the service has more than
+     * one contract.
+     */
+    contract?: string;
+}
 
 /**
  * Metadata that describes a method on a service as part of a service contract.
@@ -129,7 +154,7 @@ export class WebPutAnnotation extends WebInvokeAnnotation {
      * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
      */
     constructor(template: string) {
-        super({ method: "GET", template: template });
+        super({ method: "PUT", template: template });
     }
 
 }
@@ -146,7 +171,7 @@ export class WebPostAnnotation extends WebInvokeAnnotation {
      * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
      */
     constructor(template: string) {
-        super({ method: "GET", template: template });
+        super({ method: "POST", template: template });
     }
 }
 
@@ -162,7 +187,7 @@ export class WebDeleteAnnotation extends  WebInvokeAnnotation {
      * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
      */
     constructor(template: string) {
-        super({ method: "GET", template: template });
+        super({ method: "DELETE", template: template });
     }
 }
 
@@ -177,7 +202,7 @@ export class WebHeadAnnotation extends WebInvokeAnnotation {
      * @param template The URL template for the operation. For more information, see [[UrlTemplate]].
      */
     constructor(template: string) {
-        super({ method: "GET", template: template });
+        super({ method: "HEAD", template: template });
     }
 }
 

@@ -259,7 +259,7 @@ export class ServiceDescription {
 
         var finalParameter = method.parameters.length > 0 && method.parameters[method.parameters.length-1];
         if(!finalParameter || (finalParameter.type && !finalParameter.type.isFunction)) {
-            throw new Error("Final parameter on operation must be a callback function.");
+            throw new Error(`Invalid operation '${operationDescription.name}' on service '${this.name}'. Final parameter on operation must be a callback function.`);
         }
 
         if(finalParameter && !finalParameter.type) {

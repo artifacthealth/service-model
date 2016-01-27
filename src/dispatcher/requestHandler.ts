@@ -211,7 +211,7 @@ export class RequestHandler implements RequestContext {
     private _sendFault(err: Error): void {
 
         var fault: FaultError;
-        if(FaultError.isFaultError(err)) {
+        if(err instanceof FaultError) {
             fault = <FaultError>err;
         }
         else {
