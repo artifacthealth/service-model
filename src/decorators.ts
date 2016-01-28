@@ -39,12 +39,32 @@ export declare function Service(options?: ServiceOptions): ClassDecorator;
  * Specifies that [[VersioningBehavior]] should be used for a service contract. If used, the version of the contract
  * must be provided in [semver](http://semver.org/) format.
  * @param options The options provided to the [[VersioningBehavior]].
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Contract("Calculator")
+ *  @Versioning({ version: "1.0.0" })
+ *  export class CalculatorService {
+ *      ...
+ *  }
+ * ```
  */
 export declare function Versioning(options: VersioningOptions): ClassDecorator;
 
 /**
  * Specifies that a service should provide error details, such as stack traces, in errors that are returned to the client.
- * This should be removed in production.
+ * This decorator should not be used in production.
+ *
+ * ### Example
+ *
+ * ```typescript
+ *  @Contract("Calculator")
+ *  @Debug()
+ *  export class CalculatorService {
+ *      ...
+ *  }
+ * ```
  */
 export declare function Debug(): ClassDecorator;
 
