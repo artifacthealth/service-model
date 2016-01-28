@@ -1,7 +1,7 @@
 import { Message } from "../message";
 
 /**
- * Abstract base class for classes used to filter messages. Not intended to be instantiated directly.
+ * Abstract base class for classes used to filter messages.
  */
 export abstract class MessageFilter {
 

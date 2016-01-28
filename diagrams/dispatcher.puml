@@ -1,0 +1,41 @@
+@startuml
+hide members
+
+RequestDispatcher *-- DispatchService : services
+DispatchService *-- DispatchEndpoint : endpoints
+DispatchService *-- InstanceProvider : instanceProvider
+DispatchEndpoint *-- DispatchOperation : operations
+DispatchEndpoint *-- MessageFilter : filter
+DispatchEndpoint *-- OperationSelector : operationSelector
+DispatchEndpoint *-- MessageInspector : messageInspectors
+DispatchEndpoint *-- ErrorHandler : errorHandlers
+DispatchEndpoint *-- FaultFormatter : faultFormatter
+DispatchOperation *-- MessageFormatter : formatter
+DispatchOperation *-- OperationInvoker : invoker
+
+abstract class MessageFilter {
+}
+
+interface FaultFormatter {
+}
+
+interface OperationSelector {
+}
+
+interface MessageInspector {
+}
+
+interface ErrorHandler {
+}
+
+interface OperationInvoker {
+}
+
+interface MessageFormatter {
+}
+
+interface InstanceProvider {
+}
+
+
+@enduml

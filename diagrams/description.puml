@@ -1,0 +1,25 @@
+@startuml
+hide members
+
+DispatcherFactory *-- ServiceDescription : services
+ServiceDescription *-- EndpointDescription : endpoints
+ServiceDescription *- ServiceBehavior : behaviors
+EndpointDescription *-- ContractDescription : contract
+EndpointDescription *- EndpointBehavior : behaviors
+ContractDescription *-- OperationDescription : operations
+ContractDescription *- ContractBehavior : behaviors
+OperationDescription *- OperationBehavior : behaviors
+
+interface EndpointBehavior {
+}
+
+interface ServiceBehavior {
+}
+
+interface ContractBehavior {
+}
+
+interface OperationBehavior {
+}
+
+@enduml
