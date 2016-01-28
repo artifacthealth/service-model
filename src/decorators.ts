@@ -2,6 +2,7 @@ import { makeDecorator } from "reflect-helper";
 import { Constructor } from "./common/constructor";
 import { VersioningBehavior, VersioningOptions } from "./behaviors/versioningBehavior";
 import { DebugBehavior } from "./behaviors/debugBehavior";
+import { ServiceBehaviorAnnotation, ServiceOptions } from "./behaviors/serviceBehaviorAnnotation";
 import {
     ContractAnnotation,
     OperationAnnotation,
@@ -27,6 +28,12 @@ export declare function Contract(name?: string): ClassDecorator;
  * @param options The options for the operation.
  */
 export declare function Operation(options?: OperationOptions): MethodDecorator;
+
+/**
+ * Allows configuration of options for a service.
+ * @param options The options for the service.
+ */
+export declare function Service(options?: ServiceOptions): ClassDecorator;
 
 /**
  * Specifies that [[VersioningBehavior]] should be used for a service contract. If used, the version of the contract
@@ -159,6 +166,7 @@ export declare function InjectBody(): ParameterDecorator;
  */
 exports.Contract = makeDecorator(ContractAnnotation);
 exports.Operation = makeDecorator(OperationAnnotation);
+exports.Service = makeDecorator(ServiceBehaviorAnnotation);
 exports.Versioning = makeDecorator(VersioningBehavior);
 exports.Debug = makeDecorator(DebugBehavior);
 exports.WebInvoke = makeDecorator(WebInvokeAnnotation);

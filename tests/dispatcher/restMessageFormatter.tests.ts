@@ -119,6 +119,22 @@ describe('RestMessageFormatter', () => {
             });
         });
 
+        it("casts path parameter to Date if operation parameter is a Date", (done) => {
+
+            var message = new Message();
+            message.url = new Url("http://somehost.com/services/cast/date/2011-10-05T14:48:00.000Z");
+
+            createFormatter("testCastDate", RestTestCastService).deserializeRequest(message, (err, args) => {
+                if(err) return done(err);
+
+                assert.lengthOf(args, 1);
+                assert.instanceOf(args[0], Date);
+                assert.strictEqual(args[0].getTime(), Date.parse("2011-10-05T14:48:00.000Z"));
+
+                done();
+            });
+        });
+
         it("passes through path parameter as string if operation parameter is a string", (done) => {
 
             var message = new Message();

@@ -1,7 +1,8 @@
-import { Operation, Contract, Versioning } from "../../src/decorators";
+import { Operation, Contract, Service, Versioning } from "../../src/decorators";
 import { ResultCallback } from "../../src/common/resultCallback";
 
 @Contract("Calculator")
+@Service({ operationContext: true })
 export class CalculatorService {
 
     @Operation({ name: "add2" })

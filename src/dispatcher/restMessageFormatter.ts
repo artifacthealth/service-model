@@ -42,18 +42,17 @@ export class RestMessageFormatter implements MessageFormatter {
             if(!this._checkForInjectBody(parameter)) {
 
                 // setup cast functions if we have a type for the parameter
-                if(parameter.type) {
-                    if(parameter.type.isString) {
-                        this._cast[i] = castString;
-                    }
-                    else if(parameter.type.isNumber) {
+                if(parameter.type && !parameter.type.isString) {
+                    if(parameter.type.isNumber) {
                         this._cast[i] = parseFloat;
                     }
                     else if(parameter.type.isBoolean) {
                         this._cast[i] = castBoolean;
                     }
+                    else if(parameter.type.isAssignableTo(Date)) {
+                        this._cast[i] = castDate;
+                    }
                     else {
-                        // TODO: Handle date cast?
                         throw new Error(`Invalid parameter '${parameter.name}'. Parameters on REST enabled operations must be of type String, Number, or Boolean unless annotated with @InjectBody.`);
                     }
                 }
@@ -93,7 +92,9 @@ export class RestMessageFormatter implements MessageFormatter {
             for(var i = 0; i < args.length; i++) {
 
                 if(i !== this._bodyParameter) {
-                    args[i] = this._cast[i](parsed.get(this._parameters[i].name));
+                    var cast = this._cast[i],
+                        value = parsed.get(this._parameters[i].name);
+                    args[i] = cast ? cast(value) : value;
                 }
             }
         }
@@ -111,12 +112,16 @@ export class RestMessageFormatter implements MessageFormatter {
     }
 }
 
-function castString(text: string): string {
-
-    return text;
-}
-
 function castBoolean(text: string): boolean {
 
     return text === "true";
+}
+
+/**
+ * Converts string in ISO 8601 format to a Date object. Other formats may be accepts but results could be inconsistent.
+ * @param text Date in ISO 8601 format.
+ */
+function castDate(text: string): Date {
+
+    return new Date(text);
 }

@@ -21,4 +21,10 @@ export class TestCastService {
     testCastString(a: string, callback: Callback): void {
 
     }
+
+    @Operation()
+    @WebGet("/date/{a}")
+    testCastDate(a: Date, callback: Callback): void {
+
+    }
 }

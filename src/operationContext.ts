@@ -2,16 +2,34 @@ import * as domain from "domain";
 import { RequestContext } from "./requestContext";
 
 /**
- * The operation context is used to find out information about request that trigger the current operation. The operation
- * context can also be used to store information associated with a particular operation across async gaps.
+ * Provides information about the context of the current operation.
+ *
+ * The OperationContext is used to find out information about the request that trigger the current operation. The
+ * operation context can also be used to store information associated with a particular operation across async gaps.
  *
  * In order to store data associated with the current operation across async gaps, a domain is created during
  * operation invocation. This has the added benefit of being able to capture exceptions and route them through the error
- * handling pipeline. Note that if unhandled errors are caught, the [[RequestDispatcher]] should be closed and the process
- * should exit once all pending operations have returned (or timed out).
+ * handling pipeline.
  *
- * Creation of the operation context can be disabled for a service by setting [[operationContextRequired]] to false on
- * the [[DispatchService]]. See the [node documentation](https://nodejs.org/api/domain.html) for more information.
+ * Note that if unhandled exceptions are caught, the [[RequestDispatcher]] should be closed by calling [[close]] and the
+ * process should exit once all pending operations have completed. (This is indicated by the `closed`
+ * event on the [[RequestDispatcher]].) See the [node documentation](https://nodejs.org/api/domain.html) for more
+ * information.
+ *
+ * Creation of an OperationContext is be enabled for a service by setting [[operationContextRequired]] to true on
+ * the [[DispatchService]]. This can be accomplished by adding the [[Service]] decorator to the service implementation:
+ *
+ * ```typescript
+ * @Service({ operationContext: true })
+ * @Contract("Calculator")
+ * class CalculatorService {
+ *     ...
+ * }
+ * ```
+ *
+ * Note that [domains have been deprecated](https://github.com/nodejs/node/issues/66) in Node.js and will be removed in
+ * the future. According to the discussion referenced above, they will not be removed until a viable alternative is
+ * introduced. However, this may introduce breaking changes in the usage of OperationContext.
  */
 export class OperationContext {
 

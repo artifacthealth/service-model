@@ -18,9 +18,9 @@ export class DispatchService {
     instanceProvider: InstanceProvider;
 
     /**
-     * Specifies whether to create an OperationContext for operations in this service. The default value is 'true'.
+     * Specifies whether to create an [[OperationContext]] for operations in this service. The default value is 'false'.
      */
-    operationContextRequired = true;
+    operationContextRequired = false;
 
     constructor(public dispatcher: RequestDispatcher, name: string) {
 

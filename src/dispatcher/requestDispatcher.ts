@@ -11,6 +11,14 @@ import { NullLogger } from "../nullLogger";
 
 /**
  * Responsible for dispatching service requests.
+ *
+ * ### Events
+ * * `closing` - Triggered when [[close]] is called on the RequestDispatcher. This event indicates that the dispatcher is
+ * no longer accepting new requests.
+ * * `closed` - Triggered after the RequestedDispatched closes. This event indicates that all pending requests have
+ * completed or timed out.
+ * * `error` - Trigger if an unhandled exception is raised in an operation. This event is only relevant if an
+ * [[OperationContext]] is created.
  */
 export class RequestDispatcher extends EventEmitter {
 
@@ -104,6 +112,7 @@ export class RequestDispatcher extends EventEmitter {
 
         this.emit('closing');
 
+        // if there are not any pending requests when close is called then close immediately.
         if(this._requestCount == 0 && this._closing) {
             this._closed = true;
             this.emit('closed');
