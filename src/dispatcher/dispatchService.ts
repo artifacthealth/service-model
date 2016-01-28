@@ -47,6 +47,11 @@ export class DispatchService {
         this.endpoints.forEach(endpoint => endpoint.validate());
     }
 
+    /**
+     * Throws a configuration error.
+     * @param message A message to display
+     * @hidden
+     */
     private _throwConfigError(message: string): void {
 
         throw new Error("Service '" + this.name + "' incorrectly configured." + message);

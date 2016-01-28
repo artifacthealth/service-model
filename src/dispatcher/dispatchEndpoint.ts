@@ -108,6 +108,8 @@ export class DispatchEndpoint {
     }
 
     /**
+     * Throws a configuration error.
+     * @param message A message to display
      * @hidden
      */
     private _throwConfigError(message: string): void {
