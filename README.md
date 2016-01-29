@@ -1,14 +1,15 @@
 # service-model
 **An object oriented web service framework inspired by Windows Communication Foundation**
 
-Discussion here
-
+The service-model module provides an extensible web service framework for Node. The API is inspired by the Windows 
+Communication Foundation (WCF). This module is focused on the dispatching of service requests and does not handle the 
+underlying transport or encoding. Therefore, service-model must be paired with a server component such as 
+[Express](http://expressjs.com/) or [Restify](http://restify.com/).
 
 ## Installation
 
 service-model can be installed using [npm](https://www.npmjs.com/):
- 
- 
+  
 ```sh
 $ npm install service-model --save
 ```
@@ -66,7 +67,7 @@ later.
 ### Dispatching Requests
 
 The previously configured factory is then used to create a [[RequestDispatcher]] which is responsible for handling
-service requests. In this example we configure an [express](https://www.npmjs.com/package/express) web server
+service requests. In this example we configure an [Express](https://www.npmjs.com/package/express) web server
 to delegate all requests with a base path of "/api" to the RequestDispatcher. The service is now available.
 
 ```typescript
@@ -131,3 +132,7 @@ $ curl http://localhost:3000/api/rest/calculator/add/1/2
 
 3
 ```
+
+## License
+
+Licensed under the Apache License 2.0.  
