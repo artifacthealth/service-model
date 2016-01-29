@@ -9,6 +9,14 @@ import { Url } from "../url";
 
 /**
  * Represents a service in the dispatcher. Exposes the configuration options for the service.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  RequestDispatcher *-- DispatchService : services
+ *  DispatchService *-- DispatchEndpoint : endpoints
+ *  DispatchService *-- InstanceProvider : instanceProvider
+ * </uml>
  */
 export class DispatchService {
 

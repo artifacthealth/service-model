@@ -84,8 +84,7 @@ gulp.task('docs', function() {
         entryPoint: "index",
         includeDeclarations: true,
         excludeExternals: true,
-        excludeNotExported: true,
-        plugin: ['comment']
+        excludeNotExported: true
     }));
 });
 

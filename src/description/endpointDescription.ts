@@ -4,6 +4,15 @@ import { Url } from "../url";
 
 /**
  * A description of a service endpoint.
+ *
+ * <uml>
+ * hide members
+ * hide circle
+ * ServiceDescription *-- EndpointDescription : endpoints
+ * EndpointDescription *-- ContractDescription : contract
+ * EndpointDescription *-- Url : address
+ * EndpointDescription *-- EndpointBehavior : behaviors
+ * </uml>
  */
 export class EndpointDescription {
 

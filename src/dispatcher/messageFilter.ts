@@ -2,6 +2,13 @@ import { Message } from "../message";
 
 /**
  * Abstract base class for classes used to filter messages.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  MessageFilter <|-- AddressMessageFilter
+ *  MessageFilter <|-- RegExpAddressMessageFilter
+ * </uml>
  */
 export abstract class MessageFilter {
 

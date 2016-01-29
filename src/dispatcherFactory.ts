@@ -20,7 +20,38 @@ import { Url } from "./url";
 import { ReflectContext } from "reflect-helper";
 
 /**
- * Creates a [[RequestDispatcher]] based on the service descriptions.
+ * The DispatcherFactory is the primary class used to configure the service model, and is responsible for creating the
+ * [[RequestDispatcher]] based on the service descriptions.
+ *
+ * <uml>
+ * hide members
+ * hide circle
+ * DispatcherFactory *-- ServiceDescription : services
+ * ServiceDescription *-- EndpointDescription : endpoints
+ * ServiceDescription *- ServiceBehavior : behaviors
+ * EndpointDescription *-- ContractDescription : contract
+ * EndpointDescription *- EndpointBehavior : behaviors
+ * ContractDescription *-- OperationDescription : operations
+ * ContractDescription *- ContractBehavior : behaviors
+ * OperationDescription *- OperationBehavior : behaviors
+ * </uml>
+ *
+ * ### Example
+ *
+ * Once our service is defined, we add it to a DispatcherFactory. We then add an endpoint to the service,
+ * providing the name of the contract, the base address for the endpoint, and a list of endpoint behaviors.
+ *
+ * ```typescript
+ * import { DispatcherFactory, RpcBehavior } from "service-model";
+ *
+ * var factory = new DispatcherFactory();
+ *
+ * factory.addService(CalculatorService)
+ *             .addEndpoint("Calculator", "/api/calculator", [new RpcBehavior()]);
+ * ```
+ *
+ * In this case, we add the [[RpcBehavior]] which indicates that operations on this endpoint will be available
+ * through RPC.
  */
 export class DispatcherFactory {
 

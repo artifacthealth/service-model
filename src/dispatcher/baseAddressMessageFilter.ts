@@ -6,6 +6,13 @@ import { RegExpAddressMessageFilter } from "./regExpAddressMessageFilter";
 /**
  * A message filter that filters messages based on the message url path. The message is considered a match
  * if path in the url of the message begins with the path in the url of the filter.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  MessageFilter <|-- RegExpAddressMessageFilter
+ *  RegExpAddressMessageFilter <|-- BaseAddressMessageFilter
+ * </uml>
  */
 export class BaseAddressMessageFilter extends RegExpAddressMessageFilter {
 

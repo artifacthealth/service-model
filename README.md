@@ -3,12 +3,6 @@
 
 Discussion here
 
-####Feature 1
-discussion 
-
-####Feature 2
-discussion 
-
 
 ## Installation
 
@@ -61,8 +55,9 @@ import { DispatcherFactory, RpcBehavior } from "service-model";
 var factory = new DispatcherFactory();
 
 factory.addService(CalculatorService)
-           .addEndpoint("Calculator", "/api/calculator", [new RpcBehavior()]);
+           .addEndpoint("Calculator", "/api/rpc/calculator", [new RpcBehavior()]);
 ```
+
 In this case, we add the [[RpcBehavior]] which indicates that operations on this endpoint will be available through 
 RPC. Operations can also be made available through REST by adding the [[RestBehavior]] which will be described
 later.
@@ -115,24 +110,23 @@ export class CalculatorService {
 }
 ```
 
-The WebGet decorator defines a [[UrlTemplate]] for each method which is used to choose the operation for a given URL and 
-decode method parameters.
+The WebGet decorator defines a [[UrlTemplate]] for each method which is used to choose the operation and decode method 
+parameters.
 
-We then create the endpoint with the [[RestBehavior]] instead of the [[RpcBehavior]] previously used.
+We then create an endpoint with the [[RestBehavior]]. The `CalculatorService` now has two endpoints, supporting both 
+REST and RPC.
 
 ```typescript
-import { DispatcherFactory, RestBehavior } from "service-model";
-
-var factory = new DispatcherFactory();
+import { RestBehavior } from "service-model";
 
 factory.addService(CalculatorService)
-           .addEndpoint("Calculator", "/api/calculator", [new RestBehavior()]);
+           .addEndpoint("Calculator", "/api/rest/calculator", [new RestBehavior()]);
 ```
 
-The service operations are now available using HTTP GET requests:
+The service operations are available using HTTP GET requests:
 
 ```sh
-$ curl http://localhost:3000/api/calculator/add/1/2
+$ curl http://localhost:3000/api/rest/calculator/add/1/2
 
 3
 

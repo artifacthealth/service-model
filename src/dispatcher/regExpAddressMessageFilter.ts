@@ -3,6 +3,12 @@ import { Message } from "../message";
 
 /**
  * A message filter that filters message where the url pathname match a given regular expression.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  MessageFilter <|-- RegExpAddressMessageFilter
+ * </uml>
  */
 export class RegExpAddressMessageFilter extends MessageFilter {
 

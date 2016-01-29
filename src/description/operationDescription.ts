@@ -4,6 +4,14 @@ import { Method } from "reflect-helper";
 
 /**
  * A description of a service contract operation.
+ *
+ * <uml>
+ * hide members
+ * hide circle
+ * ContractDescription *-- OperationDescription : operations
+ * OperationDescription *-- OperationBehavior : behaviors
+ * OperationDescription *-- Method : method
+ * </uml>
  */
 export class OperationDescription {
 

@@ -3,6 +3,14 @@ import { ContractBehavior } from "./contractBehavior";
 
 /**
  * A description of a service contract.
+ *
+ * <uml>
+ * hide members
+ * hide circle
+ * EndpointDescription *-- ContractDescription : contract
+ * ContractDescription *-- OperationDescription : operations
+ * ContractDescription *-- ContractBehavior : behaviors
+ * </uml>
  */
 export class ContractDescription {
 

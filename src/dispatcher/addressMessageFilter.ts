@@ -5,6 +5,12 @@ import { Url } from "../url";
 /**
  * A message filter that filters messages based on the message url path. The message is considered a match
  * if the path in the url of the message is exactly the same as the path in the url of the filter.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  MessageFilter <|-- AddressMessageFilter
+ * </uml>
  */
 export class AddressMessageFilter extends MessageFilter {
 

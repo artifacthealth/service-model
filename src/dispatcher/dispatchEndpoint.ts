@@ -12,6 +12,18 @@ import { FaultFormatter } from "./faultFormatter";
 
 /**
  * Represents an endpoint for a service in the dispatcher. Exposes configuration options for the endpoint.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  DispatchService *-- DispatchEndpoint : endpoints
+ *  DispatchEndpoint *-- DispatchOperation : operations
+ *  DispatchEndpoint *- MessageFilter : filter
+ *  OperationSelector -* DispatchEndpoint : operationSelector
+ *  DispatchEndpoint *-- MessageInspector : messageInspectors
+ *  DispatchEndpoint *-- ErrorHandler : errorHandlers
+ *  DispatchEndpoint *-- FaultFormatter : faultFormatter
+ * </uml>
  */
 export class DispatchEndpoint {
 
@@ -26,7 +38,8 @@ export class DispatchEndpoint {
     filter: MessageFilter;
 
     /**
-     * Indicates the priority of the endpoint if more than one endpoint can process the message.
+     * Indicates the priority of the endpoint if more than one endpoint can process the message. A higher value
+     * indicates a higher priority. If all endpoints have the same priority then the first matching endpoint is used.
      */
     filterPriority: number = 0;
 

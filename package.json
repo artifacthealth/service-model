@@ -39,7 +39,8 @@
     "merge2": "^1.0.0",
     "mocha": "^2.0.1",
     "run-sequence": "^1.1.5",
-    "source-map-support": "^0.4.0"
+    "source-map-support": "^0.4.0",
+    "typedoc-plantuml": "^1.0.1"
   },
   "keywords": [
     "service",
