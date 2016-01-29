@@ -4,14 +4,14 @@
 export class MessageHeaders {
 
     /**
-     * Object map used to hold headers. We use an object
+     * Object map used to hold headers.
      * @hidden
      */
-    private _headers: { [name: string]: string; }
+    private _headers: { [name: string]: string; };
 
     /**
      * Constructs a MessagesHeaders object.
-     * @param headers Object map of headers.
+     * @param headers Object map of headers. *Header keys must be lowercase.*
      */
     constructor(headers?: { [name: string]: string; }) {
 

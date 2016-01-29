@@ -2,7 +2,7 @@
 **An object oriented web service framework inspired by Windows Communication Foundation**
 
 The service-model module provides an extensible web service framework for Node. The API is inspired by the Windows 
-Communication Foundation (WCF). This module is focused on the dispatching of service requests and does not handle the 
+Communication Foundation (WCF). This module focuses on the dispatching of service requests and does not handle the 
 underlying transport or encoding. Therefore, service-model must be paired with a server component such as 
 [Express](http://expressjs.com/) or [Restify](http://restify.com/).
 
@@ -135,4 +135,6 @@ $ curl http://localhost:3000/api/rest/calculator/add/1/2
 
 ## License
 
-Licensed under the Apache License 2.0.  
+Licensed under the Apache License 2.0. Note that Microsoft released an open source implementation of their .NET 
+Framework as the [Mono Project](http://www.mono-project.com/). The components of the Mono Project that relate to this
+module are licensed under the MIT X11 terms.

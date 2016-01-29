@@ -17,7 +17,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "grunt"
+    "test": "gulp"
   },
   "typescript": {
     "definition": "index.d.ts"
@@ -44,7 +44,9 @@
   },
   "keywords": [
     "service",
+    "rest",
     "rpc",
+    "decorators",
     "typescript"
   ]
 }
