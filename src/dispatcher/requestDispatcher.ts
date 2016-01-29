@@ -33,7 +33,7 @@ import { NullLogger } from "../nullLogger";
 export class RequestDispatcher extends EventEmitter {
 
     /**
-     * Timeout in milliseconds for close operation to complete after requested. Any requests that have completed before
+     * Timeout in milliseconds for close operation to complete. Any requests that have not completed before
      * the timeout are aborted.
      */
     closeTimeout = 30000;
