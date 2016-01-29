@@ -67,7 +67,7 @@ later.
 
 The previously configured factory is then used to create a [[RequestDispatcher]] which is responsible for handling
 service requests. In this example we configure an [express](https://www.npmjs.com/package/express) web server
-to delegate all requests with a base path of "/api" to the RequestDispatcher. 
+to delegate all requests with a base path of "/api" to the RequestDispatcher. The service is now available.
 
 ```typescript
 import * as express from "express";
@@ -81,6 +81,7 @@ app.use("/api*", (req, res) => {
 
 app.listen(3000);
 ```
+
 
 ## REST Services
 
@@ -129,5 +130,4 @@ The service operations are available using HTTP GET requests:
 $ curl http://localhost:3000/api/rest/calculator/add/1/2
 
 3
-
 ```

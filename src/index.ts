@@ -4,6 +4,7 @@ export { HttpError } from "./httpError";
 export { FaultError } from "./faultError";
 export { Logger } from "./logger";
 export { Message } from "./message";
+export { MessageHeaders } from "./messageHeaders";
 export { OperationContext } from "./operationContext";
 export { RequestContext } from "./requestContext";
 export { Url } from "./url";
@@ -43,6 +44,7 @@ export { DebugBehavior } from "./behaviors/debugBehavior";
 export {
     Contract,
     Operation,
+    Service,
     Versioning,
     Debug,
     WebInvoke,

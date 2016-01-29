@@ -6,6 +6,14 @@ import { DefaultOperationInvoker } from "./defaultOperationInvoker";
 
 /**
  * Represents an operation on a service endpoint in the dispatcher. Exposes configuration options for the operation.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  DispatchEndpoint *-- DispatchOperation : operations
+ *  DispatchOperation *-- OperationInvoker : invoker
+ *  DispatchOperation *-- MessageFormatter : formatter
+ * </uml>
  */
 export class DispatchOperation {
 

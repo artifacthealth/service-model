@@ -12,6 +12,15 @@ import { NullLogger } from "../nullLogger";
 /**
  * Responsible for dispatching service requests.
  *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  DispatcherFactory .> RequestDispatcher
+ *  EventEmitter <|.. RequestDispatcher
+ *  RequestDispatcher *-- DispatchService : services
+ *  RequestDispatcher *- Logger : logger
+ * </uml>
+ *
  * ### Events
  * * `closing` - Triggered when [[close]] is called on the RequestDispatcher. This event indicates that the dispatcher is
  * no longer accepting new requests.
@@ -19,6 +28,7 @@ import { NullLogger } from "../nullLogger";
  * completed or timed out.
  * * `error` - Trigger if an unhandled exception is raised in an operation. This event is only relevant if an
  * [[OperationContext]] is created.
+ *
  */
 export class RequestDispatcher extends EventEmitter {
 

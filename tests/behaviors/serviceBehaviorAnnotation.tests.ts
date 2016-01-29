@@ -30,21 +30,21 @@ describe('ServiceBehaviorAnnotation', () => {
             var dispatcher = factory.createDispatcher();
 
             assert.equal(dispatcher.services[0].name, "test");
-            assert.isTrue(dispatcher.services[0].operationContextRequired);
+            assert.isTrue(dispatcher.services[0].createOperationContext);
         });
 
-        it('sets operationContextRequired on DispatchService', () => {
+        it('sets createOperationContext on DispatchService', () => {
 
             var factory = new DispatcherFactory();
             var service = factory.addService(CalculatorService);
-            service.behaviors.push(new ServiceBehaviorAnnotation({ operationContext: false }));
+            service.behaviors.push(new ServiceBehaviorAnnotation({ createOperationContext: false }));
 
             service.addEndpoint("Calculator", "/service", [new RpcBehavior()]);
 
             var dispatcher = factory.createDispatcher();
 
             assert.equal(dispatcher.services[0].name, "CalculatorService");
-            assert.isFalse(dispatcher.services[0].operationContextRequired);
+            assert.isFalse(dispatcher.services[0].createOperationContext);
         });
     });
 });

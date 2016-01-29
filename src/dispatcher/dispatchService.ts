@@ -15,7 +15,7 @@ import { Url } from "../url";
  *  hide circle
  *  RequestDispatcher *-- DispatchService : services
  *  DispatchService *-- DispatchEndpoint : endpoints
- *  DispatchService *-- InstanceProvider : instanceProvider
+ *  DispatchService *- InstanceProvider : instanceProvider
  * </uml>
  */
 export class DispatchService {
@@ -28,7 +28,7 @@ export class DispatchService {
     /**
      * Specifies whether to create an [[OperationContext]] for operations in this service. The default value is 'false'.
      */
-    operationContextRequired = false;
+    createOperationContext = false;
 
     constructor(public dispatcher: RequestDispatcher, name: string) {
 

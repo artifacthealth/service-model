@@ -27,13 +27,7 @@ import { ReflectContext } from "reflect-helper";
  * hide members
  * hide circle
  * DispatcherFactory *-- ServiceDescription : services
- * ServiceDescription *-- EndpointDescription : endpoints
- * ServiceDescription *- ServiceBehavior : behaviors
- * EndpointDescription *-- ContractDescription : contract
- * EndpointDescription *- EndpointBehavior : behaviors
- * ContractDescription *-- OperationDescription : operations
- * ContractDescription *- ContractBehavior : behaviors
- * OperationDescription *- OperationBehavior : behaviors
+ * DispatcherFactory .> RequestDispatcher
  * </uml>
  *
  * ### Example

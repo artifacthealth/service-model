@@ -47,7 +47,7 @@ export class RequestHandler implements RequestContext {
         }
         this._callback = callback;
 
-        if(!this._endpoint.service.operationContextRequired) {
+        if(!this._endpoint.service.createOperationContext) {
             this._handleRequest();
         }
         else {

@@ -15,7 +15,7 @@ export class ServiceBehaviorAnnotation implements ServiceBehavior {
     /**
      * Specifies whether to create an OperationContext for operations in this service. The default value is 'false'.
      */
-    operationContext: boolean;
+    createOperationContext: boolean;
 
     constructor(options: ServiceOptions) {
 
@@ -24,7 +24,7 @@ export class ServiceBehaviorAnnotation implements ServiceBehavior {
         }
 
         this.name = options.name;
-        this.operationContext = options.operationContext;
+        this.createOperationContext = options.createOperationContext;
     }
 
     applyServiceBehavior(description: ServiceDescription, service: DispatchService): void {
@@ -33,8 +33,8 @@ export class ServiceBehaviorAnnotation implements ServiceBehavior {
             service.name = this.name;
         }
 
-        if(this.operationContext != null) {
-            service.operationContextRequired = this.operationContext;
+        if(this.createOperationContext != null) {
+            service.createOperationContext = this.createOperationContext;
         }
     }
 }
@@ -52,5 +52,5 @@ export interface ServiceOptions {
     /**
      * Specifies whether to create an OperationContext for operations in this service. The default value is 'false'.
      */
-    operationContext?: boolean;
+    createOperationContext?: boolean;
 }

@@ -1,5 +1,6 @@
 import { Url } from "./url";
 import { HttpStatusCode } from "./httpStatusCode";
+import { MessageHeaders } from "./messageHeaders";
 
 /**
  * Represents a request to or a response from a service.
@@ -22,10 +23,9 @@ export class Message {
     method: string;
 
     /**
-     * The HTTP headers. If on a request message these represent the header on the request. If on a response message
-     * these represent the headers that will be set on the HTTP response.
+     * The HTTP headers.
      */
-    headers = new Map<string, string>();
+    headers: MessageHeaders;
 
     /**
      * The body of the message.
@@ -35,10 +35,12 @@ export class Message {
     /**
      * Constructs a message.
      * @param body The body of the message.
+     * @params headers The headers for the message.
      */
-    constructor(body?: any) {
+    constructor(body?: any, headers?: MessageHeaders) {
 
         this.body = body;
+        this.headers = headers || new MessageHeaders();
     }
 
     /**
