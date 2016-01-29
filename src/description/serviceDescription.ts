@@ -64,7 +64,7 @@ export class ServiceDescription {
         this.name = name || serviceType.name;
 
         // Now go through list of all type attributes looking for any service behaviors
-        this.serviceType.getAnnotations().forEach(annotation => {
+        this.serviceType.getAnnotations(true).forEach(annotation => {
             if(this._isServiceBehavior(annotation)) {
                 this.behaviors.push(annotation);
             }
@@ -153,7 +153,7 @@ export class ServiceDescription {
         this._contracts = [];
 
         // Go through list of contract attributes stubbing out contracts and looking for duplicates
-        var contactAttributes = this.serviceType.getAnnotations(ContractAnnotation);
+        var contactAttributes = this.serviceType.getAnnotations(ContractAnnotation, true);
         for(var i = 0; i < contactAttributes.length; i++) {
             var contactAttribute = contactAttributes[i];
             if(this._hasContract(contactAttribute.name)) {
@@ -169,7 +169,7 @@ export class ServiceDescription {
         }
 
         // Now go through list of all type attributes looking for any contract behaviors
-        this.serviceType.getAnnotations().forEach(annotation => {
+        this.serviceType.getAnnotations(true).forEach(annotation => {
             if(this._isContractBehavior(annotation)) {
                 var targetContract = this._getTargetContract(annotation);
                 if(!targetContract) {
