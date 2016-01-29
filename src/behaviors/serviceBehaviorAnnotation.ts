@@ -3,7 +3,13 @@ import { ServiceDescription } from "../description/serviceDescription";
 import { DispatchService } from "../dispatcher/dispatchService";
 
 /**
- * Allows configuration of options on a [[DispatchService]]
+ * Service behavior that allows for configuration of service options.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  ServiceBehavior <|.. ServiceBehaviorAnnotation
+ * </uml>
  */
 export class ServiceBehaviorAnnotation implements ServiceBehavior {
 

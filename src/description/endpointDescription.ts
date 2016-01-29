@@ -10,8 +10,8 @@ import { Url } from "../url";
  * hide circle
  * ServiceDescription *-- EndpointDescription : endpoints
  * EndpointDescription *-- ContractDescription : contract
- * EndpointDescription *-- Url : address
- * EndpointDescription *-- EndpointBehavior : behaviors
+ * Url -* EndpointDescription : address
+ * EndpointDescription *- EndpointBehavior : behaviors
  * </uml>
  */
 export class EndpointDescription {

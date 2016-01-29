@@ -14,6 +14,13 @@ import { BehaviorAnnotation } from "../description/behaviorAnnotation";
  * a contract using the [[Versioning]] decorator or to a specific endpoint by adding an instance of VersioningBehavior
  * to the list of behaviors for the endpoint.
  *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  ContractBehavior <|.. VersioningBehavior
+ *  EndpointBehavior <|.. VersioningBehavior
+ * </uml>
+ *
  * ### Example
  *
  * ```typescript

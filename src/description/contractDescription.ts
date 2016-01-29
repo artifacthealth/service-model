@@ -9,7 +9,7 @@ import { ContractBehavior } from "./contractBehavior";
  * hide circle
  * EndpointDescription *-- ContractDescription : contract
  * ContractDescription *-- OperationDescription : operations
- * ContractDescription *-- ContractBehavior : behaviors
+ * ContractDescription *- ContractBehavior : behaviors
  * </uml>
  */
 export class ContractDescription {

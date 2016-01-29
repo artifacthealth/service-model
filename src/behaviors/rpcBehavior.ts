@@ -8,6 +8,15 @@ import { VersionMessageFilter } from "../dispatcher/versionMessageFilter";
 import { MessageFilter } from "../dispatcher/messageFilter";
 import { AddressMessageFilter } from "../dispatcher/addressMessageFilter";
 
+/**
+ * Endpoint behavior that enables RPC communication on an endpoint.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  EndpointBehavior <|.. RpcBehavior
+ * </uml>
+ */
 export class RpcBehavior implements EndpointBehavior {
 
     applyEndpointBehavior(description: EndpointDescription, endpoint: DispatchEndpoint): void {

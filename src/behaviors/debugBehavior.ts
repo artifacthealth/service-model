@@ -7,6 +7,13 @@ import { DispatchService } from "../dispatcher/dispatchService";
 
 /**
  * Service and Endpoint Behavior that enabled debugging information to be sent to the client.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  EndpointBehavior <|.. DebugBehavior
+ *  ServiceBehavior <|.. DebugBehavior
+ * </uml>
  */
 export class DebugBehavior implements EndpointBehavior, ServiceBehavior {
 
@@ -22,6 +29,11 @@ export class DebugBehavior implements EndpointBehavior, ServiceBehavior {
         }
     }
 
+    /**
+     * Enables debugging information in error messages for an endpoint.
+     * @param endpoint The target endpoint.
+     * @hidden
+     */
     private _enableDebugging(endpoint: DispatchEndpoint): void {
 
         endpoint.includeErrorDetailInFault = true;

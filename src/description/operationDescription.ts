@@ -9,7 +9,7 @@ import { Method } from "reflect-helper";
  * hide members
  * hide circle
  * ContractDescription *-- OperationDescription : operations
- * OperationDescription *-- OperationBehavior : behaviors
+ * OperationDescription *- OperationBehavior : behaviors
  * OperationDescription *-- Method : method
  * </uml>
  */

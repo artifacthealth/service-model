@@ -17,8 +17,8 @@ import { ContractAnnotation, OperationAnnotation } from "../annotations";
  * hide circle
  * DispatcherFactory *-- ServiceDescription : services
  * ServiceDescription *-- EndpointDescription : endpoints
- * ServiceDescription *-- Type : serviceType
- * ServiceDescription *-- ServicetBehavior : behaviors
+ * Type -* ServiceDescription : serviceType
+ * ServiceDescription *- ServiceBehavior : behaviors
  * </uml>
  */
 export class ServiceDescription {

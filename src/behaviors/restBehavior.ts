@@ -6,6 +6,15 @@ import {RestFaultFormatter} from "../dispatcher/restFaultFormatter";
 import {RestOperationSelector} from "../dispatcher/restOperationSelector";
 import {BaseAddressMessageFilter} from "../dispatcher/baseAddressMessageFilter";
 
+/**
+ * Endpoint behavior that enables REST communication on an endpoint.
+ *
+ * <uml>
+ *  hide members
+ *  hide circle
+ *  EndpointBehavior <|.. RestBehavior
+ * </uml>
+ */
 export class RestBehavior implements EndpointBehavior {
 
     applyEndpointBehavior(description: EndpointDescription, endpoint: DispatchEndpoint): void {

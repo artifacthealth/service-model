@@ -91,7 +91,7 @@ export class WebInvokeOptions {
     method: string;
 
     /**
-     * The URL template for the operationL. For more information, see [[UrlTemplate]].
+     * The URL template for the operation. For more information, see [[UrlTemplate]].
      */
     template: string;
 }
