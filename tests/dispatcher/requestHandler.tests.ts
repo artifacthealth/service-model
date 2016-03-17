@@ -7,10 +7,10 @@ import {DebugBehavior} from "../../src/behaviors/debugBehavior";
 import {Message} from "../../src/message";
 import {Url} from "../../src/url";
 import {DummyRequestContext} from "../dummRequestContext";
-import {ResultCallback} from "../../src/common/resultCallback";
+import {ResultCallback} from "../../src/common/callbackUtil";
 import {HttpStatusCode} from "../../src/httpStatusCode";
-import {ErrorHandler} from "../../src/dispatcher/errorHandler";
-import {RequestContext} from "../../src/requestContext";
+import {ErrorHandler} from "../../src/dispatcher/dispatchEndpoint";
+import {RequestContext} from "../../src/operationContext";
 
 describe('RequestHandler', () => {
 

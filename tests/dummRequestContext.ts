@@ -1,6 +1,6 @@
-import {RequestContext} from "../src/requestContext";
+import {RequestContext} from "../src/operationContext";
 import {Message} from "../src/message";
-import {ResultCallback} from "../src/common/resultCallback";
+import {ResultCallback} from "../src/common/callbackUtil";
 
 export class DummyRequestContext implements RequestContext {
 

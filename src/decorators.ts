@@ -1,5 +1,4 @@
 import { makeDecorator } from "reflect-helper";
-import { Constructor } from "./common/constructor";
 import { VersioningBehavior, VersioningOptions } from "./behaviors/versioningBehavior";
 import { DebugBehavior } from "./behaviors/debugBehavior";
 import { ServiceBehaviorAnnotation, ServiceOptions } from "./behaviors/serviceBehaviorAnnotation";

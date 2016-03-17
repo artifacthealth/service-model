@@ -1,5 +1,4 @@
-import { ServiceBehavior } from "../description/serviceBehavior";
-import { ServiceDescription } from "../description/serviceDescription";
+import { ServiceDescription, ServiceBehavior } from "../description/serviceDescription";
 import { DispatchService } from "../dispatcher/dispatchService";
 
 /**

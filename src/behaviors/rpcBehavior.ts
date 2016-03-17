@@ -1,5 +1,4 @@
-import { EndpointBehavior } from "../description/endpointBehavior";
-import { EndpointDescription } from "../description/endpointDescription";
+import { EndpointDescription, EndpointBehavior } from "../description/endpointDescription";
 import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
 import { RpcFaultFormatter } from "../dispatcher/rpcFaultFormatter";
 import { RpcMessageFormatter } from "../dispatcher/rpcMessageFormatter";

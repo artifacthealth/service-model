@@ -1,5 +1,4 @@
-import { ResultCallback } from "../common/resultCallback";
-import { MessageFormatter } from "./messageFormatter";
+import { ResultCallback } from "../common/callbackUtil";
 import { Message } from "../message";
 import { FaultError } from "../faultError";
 import { OperationDescription } from "../description/operationDescription";
@@ -9,6 +8,7 @@ import { WebInvokeAnnotation, InjectBodyAnnotation } from "../annotations";
 import { Parameter } from "reflect-helper";
 import { Url } from "../url";
 import { DispatchEndpoint } from "./dispatchEndpoint";
+import {MessageFormatter} from "./dispatchOperation";
 
 /**
  * @hidden

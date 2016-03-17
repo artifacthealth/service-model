@@ -1,18 +1,13 @@
-import { Constructor } from "./common/constructor";
 import { RequestDispatcher } from "./dispatcher/requestDispatcher";
-import { ServiceDescription } from "./description/serviceDescription";
+import { ServiceDescription, ServiceBehavior } from "./description/serviceDescription";
 import { DispatchService } from "./dispatcher/dispatchService";
-import { EndpointDescription } from "./description/endpointDescription";
+import { EndpointDescription, EndpointBehavior } from "./description/endpointDescription";
 import { DispatchEndpoint } from "./dispatcher/dispatchEndpoint";
-import { OperationDescription } from "./description/operationDescription";
+import { OperationDescription, OperationBehavior } from "./description/operationDescription";
 import { DispatchOperation } from "./dispatcher/dispatchOperation";
 import { DefaultOperationInvoker } from "./dispatcher/defaultOperationInvoker";
 import { DefaultInstanceProvider } from "./dispatcher/defaultInstanceProvider";
-import { ServiceBehavior } from "./description/serviceBehavior";
-import { EndpointBehavior } from "./description/endpointBehavior";
-import { ContractBehavior } from "./description/contractBehavior";
-import { OperationBehavior } from "./description/operationBehavior";
-import { ContractDescription } from "./description/contractDescription";
+import { ContractDescription, ContractBehavior } from "./description/contractDescription";
 import { RpcOperationSelector } from "./dispatcher/rpcOperationSelector";
 import { RpcMessageFormatter } from "./dispatcher/rpcMessageFormatter";
 import { RpcFaultFormatter } from "./dispatcher/rpcFaultFormatter";
@@ -212,4 +207,13 @@ export class DispatcherFactory {
 
         description.behaviors.forEach(behavior => behavior.applyOperationBehavior(description, operation));
     }
+}
+
+/**
+ * Interface for a constructor.
+ */
+export interface Constructor<T> {
+
+    name?: string;
+    new(...args: any[]): T;
 }

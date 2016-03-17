@@ -1,8 +1,8 @@
-import {EndpointDescription} from "../src/description/endpointDescription";
+import {EndpointDescription, EndpointBehavior} from "../src/description/endpointDescription";
 import {OperationDescription} from "../src/description/operationDescription";
 import {DispatchOperation} from "../src/dispatcher/dispatchOperation";
 import {DispatchEndpoint} from "../src/dispatcher/dispatchEndpoint";
-import {DispatcherFactory} from "../src/dispatcherFactory";
+import {DispatcherFactory, Constructor} from "../src/dispatcherFactory";
 import {CalculatorService} from "./fixtures/calculatorService";
 import {RpcBehavior} from "../src/behaviors/rpcBehavior";
 import {DebugBehavior} from "../src/behaviors/debugBehavior";
@@ -11,8 +11,6 @@ import {ServiceDescription} from "../src/description/serviceDescription";
 import {RequestDispatcher} from "../src/dispatcher/requestDispatcher";
 import {RestBehavior} from "../src/behaviors/restBehavior";
 import {TodoService} from "./fixtures/todoService";
-import {Constructor} from "../src/common/constructor";
-import {EndpointBehavior} from "../src/description/endpointBehavior";
 import {TestCastService} from "./fixtures/castArgs";
 
 export function hasOperation(endpoint: EndpointDescription, operation: string): boolean {

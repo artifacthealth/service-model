@@ -1,6 +1,6 @@
-import { OperationBehavior } from "./operationBehavior"
-import { ContractDescription } from "./contractDescription";
-import { Method } from "reflect-helper";
+import {ContractDescription} from "./contractDescription";
+import {Method} from "reflect-helper";
+import {DispatchOperation} from "../dispatcher/dispatchOperation";
 
 /**
  * A description of a service contract operation.
@@ -66,4 +66,17 @@ export class OperationDescription {
         this.method = method;
         this.name = name || method.name;
     }
+}
+
+/**
+ * Describes a type that can be used to extend the behavior of an operation.
+ */
+export interface OperationBehavior {
+
+    /**
+     * Applies the a behavior extension to a [[DispatchOperation]].
+     * @param description A description of the operation.
+     * @param operation The runtime operation.
+     */
+    applyOperationBehavior (description: OperationDescription, operation: DispatchOperation): void;
 }

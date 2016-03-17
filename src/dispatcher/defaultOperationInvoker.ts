@@ -1,8 +1,8 @@
-import { ResultCallback } from "../common/resultCallback";
-import { OperationInvoker } from "./operationInvoker";
+import { ResultCallback } from "../common/callbackUtil";
 import { OperationDescription } from "../description/operationDescription";
 import { FaultError } from "../faultError";
 import { Method } from "reflect-helper";
+import {OperationInvoker} from "./dispatchOperation";
 
 /**
  * @hidden

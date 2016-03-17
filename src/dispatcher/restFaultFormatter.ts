@@ -1,7 +1,7 @@
-import { ResultCallback } from "../common/resultCallback";
-import { FaultFormatter } from "./faultFormatter";
+import { ResultCallback } from "../common/callbackUtil";
 import { Message } from "../message";
 import { FaultError } from "../faultError";
+import {FaultFormatter} from "./dispatchEndpoint";
 
 /**
  * @hidden

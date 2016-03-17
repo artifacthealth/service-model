@@ -1,7 +1,5 @@
-import { InstanceProvider } from "./instanceProvider";
 import { DispatchEndpoint } from "./dispatchEndpoint";
 import { MessageFilter } from "./messageFilter";
-import { ErrorHandler } from "./errorHandler";
 import { RequestDispatcher } from "./requestDispatcher";
 import { Message } from "../message";
 import { BaseAddressMessageFilter } from "./baseAddressMessageFilter";
@@ -64,4 +62,16 @@ export class DispatchService {
 
         throw new Error("Service '" + this.name + "' incorrectly configured." + message);
     }
+}
+
+/**
+ * Describes a type that can provide service insteances.
+ */
+export interface InstanceProvider {
+
+    /**
+     * Gets an instance of a service.
+     * @param message The request message.
+     */
+    getInstance(message: Message): Object;
 }

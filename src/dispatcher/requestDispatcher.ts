@@ -1,13 +1,12 @@
 import { EventEmitter } from "events";
-import { Callback } from "../common/callback";
+import { Callback } from "../common/callbackUtil";
 import { DispatchService } from "./dispatchService";
 import { DispatchEndpoint } from "./dispatchEndpoint";
-import { RequestContext } from "../requestContext";
 import { Message } from "../message";
 import { RequestHandler } from "./requestHandler";
 import { HttpStatusCode } from "../httpStatusCode";
-import { Logger } from "../logger";
-import { NullLogger } from "../nullLogger";
+import { Logger, NullLogger } from "../nullLogger";
+import { RequestContext } from "../operationContext";
 
 /**
  * Responsible for dispatching service requests.
@@ -213,3 +212,4 @@ export class RequestDispatcher extends EventEmitter {
         }
     }
 }
+

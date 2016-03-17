@@ -1,4 +1,4 @@
-import {RequestContext} from "./requestContext";
+import {RequestContext} from "./operationContext";
 import {Message} from "./message";
 import {Url} from "./url";
 import {MessageHeaders} from "./messageHeaders";
@@ -8,7 +8,13 @@ export class ExpressRequestContext implements RequestContext {
     message: Message;
     user: any;
 
+    /**
+     * @hidden
+     */
     private _res: ExpressResponse;
+    /**
+     * @hidden
+     */
     private _req: ExpressRequest;
 
     constructor(req: ExpressRequest, res: ExpressResponse) {
@@ -53,6 +59,9 @@ export class ExpressRequestContext implements RequestContext {
     }
 }
 
+/**
+ * @hidden
+ */
 export interface ExpressRequest {
 
     body: any;
@@ -65,6 +74,9 @@ export interface ExpressRequest {
     removeListener(event: string, listener: Function): ExpressRequest;
 }
 
+/**
+ * @hidden
+ */
 export interface ExpressResponse {
 
     status(code: number): ExpressResponse;

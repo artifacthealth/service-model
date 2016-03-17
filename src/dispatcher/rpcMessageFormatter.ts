@@ -1,9 +1,9 @@
-import { ResultCallback } from "../common/resultCallback";
-import { MessageFormatter } from "./messageFormatter";
+import { ResultCallback } from "../common/callbackUtil";
 import { Message } from "../message";
 import { FaultError } from "../faultError";
 import { OperationDescription } from "../description/operationDescription";
 import { HttpStatusCode } from "../httpStatusCode";
+import {MessageFormatter} from "./dispatchOperation";
 
 /**
  * @hidden

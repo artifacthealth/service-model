@@ -1,8 +1,6 @@
-import { EndpointBehavior } from "../description/endpointBehavior";
-import { ServiceBehavior } from "../description/serviceBehavior";
-import { EndpointDescription } from "../description/endpointDescription";
+import { EndpointDescription, EndpointBehavior } from "../description/endpointDescription";
 import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
-import { ServiceDescription } from "../description/serviceDescription";
+import { ServiceDescription, ServiceBehavior } from "../description/serviceDescription";
 import { DispatchService } from "../dispatcher/dispatchService";
 
 /**

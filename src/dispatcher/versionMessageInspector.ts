@@ -1,5 +1,5 @@
-import { MessageInspector } from "./messageInspector";
 import { Message } from "../message";
+import {MessageInspector} from "./dispatchEndpoint";
 
 /**
  * Message inspector adds Vary header to response for endpoints that use versioning.

@@ -1,12 +1,9 @@
-import { ContractBehavior } from "../description/contractBehavior";
-import { EndpointBehavior } from "../description/endpointBehavior";
-import { ContractDescription } from "../description/contractDescription";
+import { ContractDescription, ContractBehavior, BehaviorAnnotation } from "../description/contractDescription";
 import { VersionMessageFilter } from "../dispatcher/versionMessageFilter";
 import { VersionMessageInspector } from "../dispatcher/versionMessageInspector";
 import { MessageFilter } from "../dispatcher/messageFilter";
-import { EndpointDescription } from "../description/endpointDescription";
+import { EndpointDescription, EndpointBehavior } from "../description/endpointDescription";
 import { DispatchEndpoint } from "../dispatcher/dispatchEndpoint";
-import { BehaviorAnnotation } from "../description/behaviorAnnotation";
 
 /**
  * Contract and endpoint behavior that allows an endpoint to be selected by version number as specified by the client.

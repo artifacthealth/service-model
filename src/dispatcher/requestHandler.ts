@@ -1,13 +1,11 @@
 import { create as createDomain } from "domain";
 import { DispatchEndpoint } from "./dispatchEndpoint";
 import { DispatchOperation } from "./dispatchOperation";
-import { RequestContext } from "../requestContext";
 import { Message } from "../message";
 import { HttpStatusCode } from "../httpStatusCode";
 import { FaultError } from "../faultError";
-import { Callback } from "../common/callback";
-import { onlyOnce } from "../common/callbackUtil";
-import { OperationContext } from "../operationContext";
+import { Callback, onlyOnce } from "../common/callbackUtil";
+import { OperationContext, RequestContext } from "../operationContext";
 
 /**
  * @hidden

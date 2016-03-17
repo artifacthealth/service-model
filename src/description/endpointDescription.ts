@@ -1,6 +1,6 @@
-import { ContractDescription } from "./contractDescription";
-import { EndpointBehavior } from "./endpointBehavior";
-import { Url } from "../url";
+import {ContractDescription} from "./contractDescription";
+import {Url} from "../url";
+import {DispatchEndpoint} from "../dispatcher/dispatchEndpoint";
 
 /**
  * A description of a service endpoint.
@@ -49,4 +49,17 @@ export class EndpointDescription {
         this.address = new Url(address);
         this.contract = contract;
     }
+}
+
+/**
+ * Describes a type that can be used to extend the behavior of an endpoint.
+ */
+export interface EndpointBehavior {
+
+    /**
+     * Applies the a behavior extension to a [[DispatchEndpoint]].
+     * @param description A description of the endpoint.
+     * @param endpoint The runtime endpoint.
+     */
+    applyEndpointBehavior (description: EndpointDescription, endpoint: DispatchEndpoint): void;
 }

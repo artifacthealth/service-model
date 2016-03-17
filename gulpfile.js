@@ -75,17 +75,24 @@ gulp.task('test-debug', function(done) {
 });
 
 gulp.task('docs', function() {
-    return gulp.src(['src/**/*.ts']).pipe(typedoc({
+    return gulp.src(['typings/**/*.ts', 'src/**/*.ts']).pipe(typedoc({
         target: 'es5',
         module: "commonjs",
-        out: 'docs',
+        out: 'build/docs',
         mode: "file",
         name: "service-model",
         entryPoint: "index",
-        includeDeclarations: true,
+        includeDeclarations: false,
         excludeExternals: true,
-        excludeNotExported: true
+        excludeNotExported: true,
+        plugin: ['comment']
     }));
+});
+
+gulp.task('release-docs', function(done) {
+
+    return gulp.src(['build/docs/**/*.*' ])
+        .pipe(gulp.dest('docs'));
 });
 
 gulp.task('pre-coverage', function () {

@@ -1,13 +1,11 @@
-import { EndpointDescription } from "./endpointDescription";
-import { EndpointBehavior } from "./endpointBehavior";
-import { ContractDescription } from "./contractDescription";
-import { OperationDescription } from "./operationDescription";
-import { ServiceBehavior } from "./serviceBehavior";
-import { Url } from "../url";
-import { Constructor } from "../common/constructor";
-import { Type, Method } from "reflect-helper";
-import { RpcBehavior } from "../behaviors/rpcBehavior";
-import { ContractAnnotation, OperationAnnotation } from "../annotations";
+import {EndpointDescription, EndpointBehavior} from "./endpointDescription";
+import {ContractDescription} from "./contractDescription";
+import {OperationDescription} from "./operationDescription";
+import {Url} from "../url";
+import {Type, Method} from "reflect-helper";
+import {RpcBehavior} from "../behaviors/rpcBehavior";
+import {ContractAnnotation, OperationAnnotation} from "../annotations";
+import {DispatchService} from "../dispatcher/dispatchService";
 
 /**
  * A description of a service.
@@ -301,4 +299,17 @@ export class ServiceDescription {
             }
         }
     }
+}
+
+/**
+ * Describes a type that can be used to extend the behavior of a service.
+ */
+export interface ServiceBehavior {
+
+    /**
+     * Applies the a behavior extension to a [[DispatchService]].
+     * @param description A description of the behavior.
+     * @param service The runtime service.
+     */
+    applyServiceBehavior (description: ServiceDescription, service: DispatchService): void;
 }

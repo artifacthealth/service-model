@@ -1,7 +1,7 @@
-import { OperationSelector } from "./operationSelector";
 import { Message } from "../message";
 import { DispatchOperation } from "./dispatchOperation";
 import { DispatchEndpoint } from "./dispatchEndpoint";
+import {OperationSelector} from "./dispatchEndpoint";
 
 /**
  * @hidden

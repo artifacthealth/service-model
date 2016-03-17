@@ -1,5 +1,5 @@
 import { Operation, Contract, Service, Versioning } from "../../src/decorators";
-import { ResultCallback } from "../../src/common/resultCallback";
+import { ResultCallback } from "../../src/common/callbackUtil";
 import {OperationContext} from "../../src/operationContext";
 
 @Contract("Calculator")

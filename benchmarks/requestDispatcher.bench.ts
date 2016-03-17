@@ -1,16 +1,15 @@
 import { DispatcherFactory } from "../src/dispatcherFactory";
 import { CalculatorService } from "../tests/fixtures/calculatorService";
-import { RequestContext } from "../src/requestContext";
 import { Message } from "../src/message";
 import { Url } from "../src/url";
 import { FaultError } from "../src/faultError";
 import { HttpError } from "../src/httpError";
 import { HttpStatusCode } from "../src/httpStatusCode";
-import { OperationContext } from '../src/operationContext';
+import { OperationContext, RequestContext } from '../src/operationContext';
 import { VersioningBehavior } from "../src/behaviors/versioningBehavior";
 import { RpcBehavior } from "../src/behaviors/rpcBehavior";
 import { DebugBehavior } from "../src/behaviors/debugBehavior";
-import { ResultCallback } from "../src/common/resultCallback";
+import { ResultCallback } from "../src/common/callbackUtil";
 import { DummyRequestContext } from "../tests/dummRequestContext";
 
 suite("RequestDispatcher", () => {

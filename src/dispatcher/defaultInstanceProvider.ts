@@ -1,8 +1,7 @@
-import { InstanceProvider } from "./instanceProvider";
-import { ServiceDescription } from "../description/serviceDescription";
-import { Message } from "../message";
-import { Constructor } from "../common/constructor";
-import { Type } from "reflect-helper";
+import {ServiceDescription} from "../description/serviceDescription";
+import {Message} from "../message";
+import {Type} from "reflect-helper";
+import {InstanceProvider} from "./dispatchService";
 
 /**
  * @hidden

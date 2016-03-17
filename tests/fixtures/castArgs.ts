@@ -1,5 +1,5 @@
 import { Operation, Contract, WebGet, WebPost, WebPut, WebDelete, WebHead, InjectBody } from "../../src/decorators";
-import { ResultCallback } from "../../src/common/resultCallback";
+import { ResultCallback } from "../../src/common/callbackUtil";
 
 @Contract("TestCast")
 export class TestCastService {

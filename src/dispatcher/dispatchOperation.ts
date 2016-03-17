@@ -1,8 +1,8 @@
-import { MessageFormatter } from "./messageFormatter";
-import { OperationInvoker } from "./operationInvoker";
-import { DispatchEndpoint } from "./dispatchEndpoint";
-import { OperationDescription } from "../description/operationDescription";
-import { DefaultOperationInvoker } from "./defaultOperationInvoker";
+import {DispatchEndpoint} from "./dispatchEndpoint";
+import {OperationDescription} from "../description/operationDescription";
+import {DefaultOperationInvoker} from "./defaultOperationInvoker";
+import {ResultCallback} from "../common/callbackUtil";
+import {Message} from "../message";
 
 /**
  * Represents an operation on a service endpoint in the dispatcher. Exposes configuration options for the operation.
@@ -79,4 +79,39 @@ export class DispatchOperation {
 
         throw new Error("Operation '" + this.name + "' on service '" + this.endpoint.service.name + "' incorrectly configured. " + message);
     }
+}
+
+
+/**
+ * Describes a type that can invoker service methods.
+ */
+export interface OperationInvoker {
+
+    /**
+     * Invokes a service method on the given service instance.
+     * @param instance The service instance.
+     * @param args A list of arguments applied to the method.
+     * @param callback Called with result of the operation.
+     */
+    invoke(instance: Object, args: any[], callback: ResultCallback<any>):  void;
+}
+
+/**
+ * Represents a type that is able to deserialize requests and serialize replies.
+ */
+export interface MessageFormatter {
+
+    /**
+     * Deserialize a request message.
+     * @param message The request message.
+     * @param callback Called with a list of arguments that will be applied to the operation.
+     */
+    deserializeRequest(message: Message, callback: ResultCallback<any[]>): void;
+
+    /**
+     * Serializes a reply message.
+     * @param result The result from the operation.
+     * @param callback Called with the reply message.
+     */
+    serializeReply(result: any, callback: ResultCallback<Message>): void;
 }

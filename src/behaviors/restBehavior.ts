@@ -1,5 +1,4 @@
-import {EndpointBehavior} from "../description/endpointBehavior";
-import {EndpointDescription} from "../description/endpointDescription";
+import {EndpointDescription, EndpointBehavior} from "../description/endpointDescription";
 import {DispatchEndpoint} from "../dispatcher/dispatchEndpoint";
 import {RestMessageFormatter} from "../dispatcher/restMessageFormatter";
 import {RestFaultFormatter} from "../dispatcher/restFaultFormatter";

@@ -1,4 +1,3 @@
-import { OperationSelector } from "./operationSelector";
 import { Message } from "../message";
 import { DispatchOperation } from "./dispatchOperation";
 import { DispatchEndpoint } from "./dispatchEndpoint";
@@ -6,6 +5,7 @@ import { EndpointDescription } from "../description/endpointDescription";
 import {UrlTemplate} from "../urlTemplate";
 import {WebInvokeAnnotation} from "../annotations";
 import {Url} from "../url";
+import {OperationSelector} from "./dispatchEndpoint";
 
 /**
  * @hidden
