@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/artifacthealth/service-model.svg?branch=master)](https://travis-ci.org/artifacthealth/service-model)
+
 # service-model
 **An object oriented web service framework inspired by Windows Communication Foundation**
 
@@ -6,6 +8,7 @@ Communication Foundation (WCF). This module focuses on the dispatching of servic
 underlying transport or encoding. Therefore, service-model must be paired with a server component such as 
 [Express](http://expressjs.com/) or [Restify](http://restify.com/). Also note that you'll need the appropriate 
 middleware for the type of transport you are using, such as the JSON [body-parser](https://www.npmjs.com/package/body-parser).
+API documentation is available [here](http://artifacthealth.github.io/service-model).
 
 ## Installation
 
