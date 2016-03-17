@@ -9,7 +9,7 @@ export { OperationContext } from "./operationContext";
 export { RequestContext } from "./requestContext";
 export { Url } from "./url";
 export { HttpStatusCode } from "./httpStatusCode";
-export { Binary } from "./binary";
+export { ExpressRequestContext } from "./expressRequestContext";
 
 export { ContractBehavior } from "./description/contractBehavior";
 export { ContractDescription } from "./description/contractDescription";

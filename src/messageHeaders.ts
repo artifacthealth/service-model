@@ -66,6 +66,28 @@ export class MessageHeaders {
     }
 
     /**
+     * Merges in the messages headers, overwriting any existing headers.
+     * @param headers The headers to merge
+     */
+    merge(headers: MessageHeaders): void {
+
+        var obj: any = headers.toObject();
+        if(obj) {
+            if(!this._headers) {
+                this._headers = {};
+            }
+
+            for (var name in obj) {
+                if (obj.hasOwnProperty(name)) {
+                    // skip using `this.set`, since headers are coming from a MessageHeaders object we know that all
+                    // the keys will be lowercase
+                    this._headers[name] = obj[name];
+                }
+            }
+        }
+    }
+
+    /**
      * Returns the headers as an object map. Will return `undefined` if no headers have been set.
      */
     toObject(): Object {

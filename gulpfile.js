@@ -75,7 +75,7 @@ gulp.task('test-debug', function(done) {
 });
 
 gulp.task('docs', function() {
-    return gulp.src(['typings/**/*.ts', 'src/**/*.ts']).pipe(typedoc({
+    return gulp.src(['src/**/*.ts']).pipe(typedoc({
         target: 'es5',
         module: "commonjs",
         out: 'docs',

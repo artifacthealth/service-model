@@ -1,5 +1,6 @@
 import * as domain from "domain";
 import { RequestContext } from "./requestContext";
+import {MessageHeaders} from "./messageHeaders";
 
 /**
  * Provides information about the context of the current operation.
@@ -43,6 +44,12 @@ export class OperationContext {
      * the context of the execution of an operation.
      */
     items = new Map<string, any>();
+
+    /**
+     * Outgoing headers to be added to HTTP response. Note that the headers are not added if a fault is returned or for
+     * one-way operations.
+     */
+    outgoingHeaders = new MessageHeaders();
 
     /**
      * Gets the OperationContext associated with the active domain. Throws an error if there is not an active domain.

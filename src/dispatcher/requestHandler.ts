@@ -157,6 +157,10 @@ export class RequestHandler implements RequestContext {
             operation.formatter.serializeReply(result, (err, message) => {
                 if (err) return this._handleError(err);
 
+                // if we are using an operation context then merge in an outgoing headers
+                if(this._endpoint.service.createOperationContext) {
+                    message.headers.merge(OperationContext.current.outgoingHeaders);
+                }
                 this.reply(message);
             });
         });

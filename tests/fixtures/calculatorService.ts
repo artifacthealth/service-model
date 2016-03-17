@@ -1,5 +1,6 @@
 import { Operation, Contract, Service, Versioning } from "../../src/decorators";
 import { ResultCallback } from "../../src/common/resultCallback";
+import {OperationContext} from "../../src/operationContext";
 
 @Contract("Calculator")
 @Service({ createOperationContext: true })
@@ -52,6 +53,13 @@ export class CalculatorService {
     throwError(callback: Callback): void {
 
         throw new Error("Some error");
+    }
+
+    @Operation()
+    customHeaders(callback: Callback): void {
+        OperationContext.current.outgoingHeaders.set("customheader", "somevalue");
+
+        callback();
     }
 
     notifyCalled = 0;

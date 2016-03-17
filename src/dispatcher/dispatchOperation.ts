@@ -39,12 +39,6 @@ export class DispatchOperation {
     isOneWay: boolean;
 
     /**
-     * Timeout for the operation in milliseconds. If not specified defaults to a minute. A value of 0 indicates that
-     * operation does not timeout.
-     */
-    timeout: number;
-
-    /**
      * Constructs a dispatch operation.
      * @param endpoint The endpoint.
      * @param name The name of the operation.

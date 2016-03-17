@@ -1,7 +1,7 @@
 {
-  "name": "@artifacthealth/service-model",
+  "name": "service-model",
   "description": "An object oriented web service framework inspired by Windows Communication Foundation.",
-  "version": "0.2.13",
+  "version": "0.2.17",
   "author": {
     "name": "Artifact Health, LLC",
     "url": "http://www.artifacthealth.com"
@@ -44,6 +44,7 @@
   },
   "keywords": [
     "service",
+    "wcf",
     "rest",
     "rpc",
     "decorators",

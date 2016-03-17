@@ -4,7 +4,8 @@
 The service-model module provides an extensible web service framework for Node. The API is inspired by the Windows 
 Communication Foundation (WCF). This module focuses on the dispatching of service requests and does not handle the 
 underlying transport or encoding. Therefore, service-model must be paired with a server component such as 
-[Express](http://expressjs.com/) or [Restify](http://restify.com/).
+[Express](http://expressjs.com/) or [Restify](http://restify.com/). Also note that you'll need the appropriate 
+middleware for the type of transport you are using, such as the JSON body-parser.
 
 ## Installation
 
@@ -16,8 +17,7 @@ $ npm install service-model --save
 
 ## Getting Started
 
-For brevity, the example here is only given in TypeScript but please refer to [examples]() for a full example in plain 
-JavaScript.
+For brevity, the example here is only given in TypeScript. JavaScript examples coming soon.
 
 ### Defining a Service Contract
 
@@ -68,7 +68,8 @@ later.
 
 The previously configured factory is then used to create a [[RequestDispatcher]] which is responsible for handling
 service requests. In this example we configure an [Express](https://www.npmjs.com/package/express) web server
-to delegate all requests with a base path of "/api" to the RequestDispatcher. The service is now available.
+to delegate all requests with a base path of "/api" to the RequestDispatcher. The [[ExpressRequestContext]] comes 
+packaged in the library but a [[RequestContext]] can easily be created for other server platforms. 
 
 ```typescript
 import * as express from "express";
@@ -125,7 +126,7 @@ factory.addService(CalculatorService)
            .addEndpoint("Calculator", "/api/rest/calculator", [new RestBehavior()]);
 ```
 
-The service operations are available using HTTP GET requests:
+The service operations are now available using HTTP GET requests:
 
 ```sh
 $ curl http://localhost:3000/api/rest/calculator/add/1/2

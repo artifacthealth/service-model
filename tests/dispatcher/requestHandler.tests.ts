@@ -164,6 +164,25 @@ describe('RequestHandler', () => {
             handler.process(() => {});
         });
 
+        it('merges in headers from OperationContext', (done) => {
+
+            var factory = new DispatcherFactory();
+            var service = factory.addService(CalculatorService);
+            service.addEndpoint("Calculator", address, [new RpcBehavior(), new DebugBehavior()]);
+
+            var message = new Message({ customHeaders: [] });
+            message.url = new Url(address);
+
+            var dispatcher = factory.createDispatcher();
+            var handler = new RequestHandler(dispatcher.services[0].endpoints[0], new DummyRequestContext(message, (err, response) => {
+
+                assert.deepEqual(response.headers.toObject(), {
+                   "customheader": "somevalue"
+                });
+                done();
+            }));
+            handler.process(() => {});
+        });
     });
 
     function createHandler(body: any = { add2: [1, 2] }, callback?: ResultCallback<Message>, debug = true): RequestHandler {
