@@ -79,9 +79,10 @@
 						process should exit once all pending operations have completed. (This is indicated by the <code>closed</code>
 						event on the <a href="requestdispatcher.html">RequestDispatcher</a>.) See the <a href="https://nodejs.org/api/domain.html">node documentation</a> for more
 					information.</p>
-					<p>Creation of an OperationContext is be enabled for a service by setting [[operationContextRequired]] to true on
-					the <a href="dispatchservice.html">DispatchService</a>. This can be accomplished by adding the <a href="../globals.html#service">Service</a> decorator to the service implementation:</p>
-					<pre><code class="lang-typescript"> @Service({ operationContext: <span class="hljs-literal">true</span> })
+					<p>Creation of an OperationContext is disabled by default. It is be enabled for a service by setting
+						<a href="dispatchservice.html#createoperationcontext">createOperationContext</a> to true on the <a href="dispatchservice.html">DispatchService</a>. This can be accomplished by adding the <a href="../globals.html#service">Service</a>
+					decorator to the service implementation:</p>
+					<pre><code class="lang-typescript"> @Service({ createOperationContext: <span class="hljs-literal">true</span> })
  @Contract(<span class="hljs-string">"Calculator"</span>)
  <span class="hljs-keyword">class</span> CalculatorService {
      ...
@@ -129,7 +130,7 @@
 					<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L46">operationContext.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L47">operationContext.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -145,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">outgoing<wbr>Headers<span class="tsd-signature-symbol">:</span> <a href="messageheaders.html" class="tsd-signature-type">MessageHeaders</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L52">operationContext.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L53">operationContext.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -161,7 +162,7 @@
 					<div class="tsd-signature tsd-kind-icon">request<wbr>Context<span class="tsd-signature-symbol">:</span> <a href="../interfaces/requestcontext.html" class="tsd-signature-type">RequestContext</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L40">operationContext.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L41">operationContext.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -184,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L57">operationContext.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L58">operationContext.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -197,7 +198,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L66">operationContext.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/operationContext.ts#L67">operationContext.ts:67</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
