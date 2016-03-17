@@ -69,7 +69,7 @@ later.
 The previously configured factory is then used to create a [RequestDispatcher](http://artifacthealth.github.io/service-model/classes/requestdispatcher.html) which is responsible for handling
 service requests. In this example we configure an [Express](https://www.npmjs.com/package/express) web server
 to delegate all requests with a base path of "/api" to the RequestDispatcher. The [ExpressRequestContext](http://artifacthealth.github.io/service-model/classes/expressrequestcontext.html) comes 
-packaged in the library but a [RequestContext](http://artifacthealth.github.io/service-model/classes/requestcontext.html) can easily be created for other server platforms. 
+packaged in the library but a [RequestContext](http://artifacthealth.github.io/service-model/interfaces/requestcontext.html) can easily be created for other server platforms. 
 
 ```typescript
 import * as express from "express";
