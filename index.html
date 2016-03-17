@@ -1,0 +1,392 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>service-model</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script src="assets/js/modernizr.js"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">service-model</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> service-model</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="service-model">service-model</h1>
+				<p><strong>An object oriented web service framework inspired by Windows Communication Foundation</strong></p>
+				<p>The service-model module provides an extensible web service framework for Node. The API is inspired by the Windows
+					Communication Foundation (WCF). This module focuses on the dispatching of service requests and does not handle the
+					underlying transport or encoding. Therefore, service-model must be paired with a server component such as
+					<a href="http://expressjs.com/">Express</a> or <a href="http://restify.com/">Restify</a>. Also note that you&#39;ll need the appropriate
+				middleware for the type of transport you are using, such as the JSON body-parser.</p>
+				<h2 id="installation">Installation</h2>
+				<p>service-model can be installed using <a href="https://www.npmjs.com/">npm</a>:</p>
+				<pre><code class="lang-sh">$ npm install service-model --save
+</code></pre>
+				<h2 id="getting-started">Getting Started</h2>
+				<p>For brevity, the example here is only given in TypeScript. JavaScript examples coming soon.</p>
+				<h3 id="defining-a-service-contract">Defining a Service Contract</h3>
+				<p>We define a service contract, <code>Calculator</code>, that has two operations, <code>add</code> and <code>subtract</code>. The contract is specified
+				using decorators on the service implementation, <code>CalculatorService</code>. </p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { Operation, Contract } from <span class="hljs-string">"service-model"</span>;
+
+@Contract(<span class="hljs-string">"Calculator"</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> CalculatorService {
+
+    @Operation()
+    add(x: <span class="hljs-built_in">number</span>, y: <span class="hljs-built_in">number</span>, callback: ResultCallback&lt;<span class="hljs-built_in">number</span>&gt;): <span class="hljs-built_in">void</span> {
+
+        callback(<span class="hljs-literal">null</span>, x + y);
+    }
+
+    @Operation()
+    subtract(x: <span class="hljs-built_in">number</span>, y: <span class="hljs-built_in">number</span>, callback: ResultCallback&lt;<span class="hljs-built_in">number</span>&gt;): <span class="hljs-built_in">void</span> {
+
+        callback(<span class="hljs-literal">null</span>, x - y);
+    }
+}
+</code></pre>
+				<h3 id="configuring-the-dispatcherfactory">Configuring the DispatcherFactory</h3>
+				<p>Once our service is defined, we add it to a <a href="classes/dispatcherfactory.html">DispatcherFactory</a>. We then add an endpoint to the service,
+				providing the name of the contract, the base address for the endpoint, and a list of endpoint behaviors.</p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { DispatcherFactory, RpcBehavior } from <span class="hljs-string">"service-model"</span>;
+
+<span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> DispatcherFactory();
+
+factory.addService(CalculatorService)
+           .addEndpoint(<span class="hljs-string">"Calculator"</span>, <span class="hljs-string">"/api/rpc/calculator"</span>, [<span class="hljs-keyword">new</span> RpcBehavior()]);
+</code></pre>
+				<p>In this case, we add the <a href="classes/rpcbehavior.html">RpcBehavior</a> which indicates that operations on this endpoint will be available through
+					RPC. Operations can also be made available through REST by adding the <a href="classes/restbehavior.html">RestBehavior</a> which will be described
+				later.</p>
+				<h3 id="dispatching-requests">Dispatching Requests</h3>
+				<p>The previously configured factory is then used to create a <a href="classes/requestdispatcher.html">RequestDispatcher</a> which is responsible for handling
+					service requests. In this example we configure an <a href="https://www.npmjs.com/package/express">Express</a> web server
+					to delegate all requests with a base path of &quot;/api&quot; to the RequestDispatcher. The <a href="classes/expressrequestcontext.html">ExpressRequestContext</a> comes
+				packaged in the library but a [[RequestContext]] can easily be created for other server platforms. </p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> * as express from <span class="hljs-string">"express"</span>;
+
+<span class="hljs-keyword">var</span> app = express();
+<span class="hljs-keyword">var</span> dispatcher = factory.createDispatcher();
+
+app.use(<span class="hljs-string">"/api*"</span>, (req, res) =&gt; {
+    dispatcher.dispatch(<span class="hljs-keyword">new</span> ExpressRequestContext(req, res));
+});
+
+app.listen(<span class="hljs-number">3000</span>);
+</code></pre>
+				<h2 id="rest-services">REST Services</h2>
+				<p>Service operations can be made available through a REST api by adding decorators to the service implementation methods.
+					Revisiting the previously defined <code>CalculatorService</code> we add the <a href="globals.html#webget">WebGet</a> decorator to the <code>add</code> and <code>subtract</code>
+				methods. </p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { Operation, Contract, WebGet } from <span class="hljs-string">"service-model"</span>;
+
+@Contract(<span class="hljs-string">"Calculator"</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> CalculatorService {
+
+    @Operation()
+    @WebGet(<span class="hljs-string">"/add/{x}/{y}"</span>)
+    add(x: <span class="hljs-built_in">number</span>, y: <span class="hljs-built_in">number</span>, callback: ResultCallback&lt;<span class="hljs-built_in">number</span>&gt;): <span class="hljs-built_in">void</span> {
+
+        callback(<span class="hljs-literal">null</span>, x + y);
+    }
+
+    @Operation()
+    @WebGet(<span class="hljs-string">"/subtract/{x}/{y}"</span>)
+    subtract(x: <span class="hljs-built_in">number</span>, y: <span class="hljs-built_in">number</span>, callback: ResultCallback&lt;<span class="hljs-built_in">number</span>&gt;): <span class="hljs-built_in">void</span> {
+
+        callback(<span class="hljs-literal">null</span>, x - y);
+    }
+}
+</code></pre>
+				<p>The WebGet decorator defines a <a href="classes/urltemplate.html">UrlTemplate</a> for each method which is used to choose the operation and decode method
+				parameters.</p>
+				<p>We then create an endpoint with the <a href="classes/restbehavior.html">RestBehavior</a>. The <code>CalculatorService</code> now has two endpoints, supporting both
+				REST and RPC.</p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { RestBehavior } from <span class="hljs-string">"service-model"</span>;
+
+factory.addService(CalculatorService)
+           .addEndpoint(<span class="hljs-string">"Calculator"</span>, <span class="hljs-string">"/api/rest/calculator"</span>, [<span class="hljs-keyword">new</span> RestBehavior()]);
+</code></pre>
+				<p>The service operations are now available using HTTP GET requests:</p>
+				<pre><code class="lang-sh">$ curl http://localhost:<span class="hljs-number">3000</span>/api/rest/calculator/add/<span class="hljs-number">1</span>/<span class="hljs-number">2</span>
+
+<span class="hljs-number">3</span>
+</code></pre>
+				<h2 id="license">License</h2>
+				<p>Licensed under the Apache License 2.0. Note that Microsoft released an open source implementation of their .NET
+					Framework as the <a href="http://www.mono-project.com/">Mono Project</a>. The components of the Mono Project that relate to this
+				module are licensed under the MIT X11 terms.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="enums/httpstatuscode.html" class="tsd-kind-icon">Http<wbr>Status<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/addressmessagefilter.html" class="tsd-kind-icon">Address<wbr>Message<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/baseaddressmessagefilter.html" class="tsd-kind-icon">Base<wbr>Address<wbr>Message<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/contractdescription.html" class="tsd-kind-icon">Contract<wbr>Description</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/debugbehavior.html" class="tsd-kind-icon">Debug<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dispatchendpoint.html" class="tsd-kind-icon">Dispatch<wbr>Endpoint</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dispatchoperation.html" class="tsd-kind-icon">Dispatch<wbr>Operation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dispatchservice.html" class="tsd-kind-icon">Dispatch<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/dispatcherfactory.html" class="tsd-kind-icon">Dispatcher<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/endpointdescription.html" class="tsd-kind-icon">Endpoint<wbr>Description</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/expressrequestcontext.html" class="tsd-kind-icon">Express<wbr>Request<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/faulterror.html" class="tsd-kind-icon">Fault<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/httperror.html" class="tsd-kind-icon">Http<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/message.html" class="tsd-kind-icon">Message</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/messagefilter.html" class="tsd-kind-icon">Message<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/messageheaders.html" class="tsd-kind-icon">Message<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/operationcontext.html" class="tsd-kind-icon">Operation<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/operationdescription.html" class="tsd-kind-icon">Operation<wbr>Description</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/regexpaddressmessagefilter.html" class="tsd-kind-icon">Reg<wbr>Exp<wbr>Address<wbr>Message<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/requestdispatcher.html" class="tsd-kind-icon">Request<wbr>Dispatcher</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/restbehavior.html" class="tsd-kind-icon">Rest<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/rpcbehavior.html" class="tsd-kind-icon">Rpc<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/servicebehaviorannotation.html" class="tsd-kind-icon">Service<wbr>Behavior<wbr>Annotation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/servicedescription.html" class="tsd-kind-icon">Service<wbr>Description</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/url.html" class="tsd-kind-icon">Url</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/urltemplate.html" class="tsd-kind-icon">Url<wbr>Template</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/versioningbehavior.html" class="tsd-kind-icon">Versioning<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/webinvokeoptions.html" class="tsd-kind-icon">Web<wbr>Invoke<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/expressrequest.html" class="tsd-kind-icon">Express<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/expressresponse.html" class="tsd-kind-icon">Express<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/operationoptions.html" class="tsd-kind-icon">Operation<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/serviceoptions.html" class="tsd-kind-icon">Service<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/urlarguments.html" class="tsd-kind-icon">Url<wbr>Arguments</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/versioningoptions.html" class="tsd-kind-icon">Versioning<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#contract" class="tsd-kind-icon">Contract</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#debug" class="tsd-kind-icon">Debug</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#injectbody" class="tsd-kind-icon">Inject<wbr>Body</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#operation" class="tsd-kind-icon">Operation</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#service" class="tsd-kind-icon">Service</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#versioning" class="tsd-kind-icon">Versioning</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#webdelete" class="tsd-kind-icon">Web<wbr>Delete</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#webget" class="tsd-kind-icon">Web<wbr>Get</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#webhead" class="tsd-kind-icon">Web<wbr>Head</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#webinvoke" class="tsd-kind-icon">Web<wbr>Invoke</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#webpost" class="tsd-kind-icon">Web<wbr>Post</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#webput" class="tsd-kind-icon">Web<wbr>Put</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
