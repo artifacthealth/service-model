@@ -82,6 +82,7 @@ gulp.task('docs', function() {
         mode: "file",
         name: "service-model",
         entryPoint: "index",
+        umlFormat: "svg",
         includeDeclarations: false,
         excludeExternals: true,
         excludeNotExported: true,
