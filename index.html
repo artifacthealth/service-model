@@ -69,7 +69,7 @@
 					Communication Foundation (WCF). This module focuses on the dispatching of service requests and does not handle the
 					underlying transport or encoding. Therefore, service-model must be paired with a server component such as
 					<a href="http://expressjs.com/">Express</a> or <a href="http://restify.com/">Restify</a>. Also note that you&#39;ll need the appropriate
-				middleware for the type of transport you are using, such as the JSON body-parser.</p>
+				middleware for the type of transport you are using, such as the JSON <a href="https://www.npmjs.com/package/body-parser">body-parser</a>.</p>
 				<h2 id="installation">Installation</h2>
 				<p>service-model can be installed using <a href="https://www.npmjs.com/">npm</a>:</p>
 				<pre><code class="lang-sh">$ npm install service-model --save
@@ -98,7 +98,7 @@
 }
 </code></pre>
 				<h3 id="configuring-the-dispatcherfactory">Configuring the DispatcherFactory</h3>
-				<p>Once our service is defined, we add it to a <a href="classes/dispatcherfactory.html">DispatcherFactory</a>. We then add an endpoint to the service,
+				<p>Once our service is defined, we add it to a <a href="http://artifacthealth.github.io/service-model/classes/dispatcherfactory.html">DispatcherFactory</a>. We then add an endpoint to the service,
 				providing the name of the contract, the base address for the endpoint, and a list of endpoint behaviors.</p>
 				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { DispatcherFactory, RpcBehavior } from <span class="hljs-string">"service-model"</span>;
 
@@ -107,14 +107,14 @@
 factory.addService(CalculatorService)
            .addEndpoint(<span class="hljs-string">"Calculator"</span>, <span class="hljs-string">"/api/rpc/calculator"</span>, [<span class="hljs-keyword">new</span> RpcBehavior()]);
 </code></pre>
-				<p>In this case, we add the <a href="classes/rpcbehavior.html">RpcBehavior</a> which indicates that operations on this endpoint will be available through
-					RPC. Operations can also be made available through REST by adding the <a href="classes/restbehavior.html">RestBehavior</a> which will be described
+				<p>In this case, we add the <a href="http://artifacthealth.github.io/service-model/classes/rpcbehavior.html">RpcBehavior</a> which indicates that operations on this endpoint will be available through
+					RPC. Operations can also be made available through REST by adding the <a href="http://artifacthealth.github.io/service-model/classes/restbehavior.html">RestBehavior</a> which will be described
 				later.</p>
 				<h3 id="dispatching-requests">Dispatching Requests</h3>
-				<p>The previously configured factory is then used to create a <a href="classes/requestdispatcher.html">RequestDispatcher</a> which is responsible for handling
+				<p>The previously configured factory is then used to create a <a href="http://artifacthealth.github.io/service-model/classes/requestdispatcher.html">RequestDispatcher</a> which is responsible for handling
 					service requests. In this example we configure an <a href="https://www.npmjs.com/package/express">Express</a> web server
-					to delegate all requests with a base path of &quot;/api&quot; to the RequestDispatcher. The <a href="classes/expressrequestcontext.html">ExpressRequestContext</a> comes
-				packaged in the library but a [[RequestContext]] can easily be created for other server platforms. </p>
+					to delegate all requests with a base path of &quot;/api&quot; to the RequestDispatcher. The <a href="http://artifacthealth.github.io/service-model/classes/expressrequestcontext.html">ExpressRequestContext</a> comes
+				packaged in the library but a <a href="http://artifacthealth.github.io/service-model/classes/requestcontext.html">RequestContext</a> can easily be created for other server platforms. </p>
 				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> * as express from <span class="hljs-string">"express"</span>;
 
 <span class="hljs-keyword">var</span> app = express();
@@ -128,7 +128,7 @@ app.listen(<span class="hljs-number">3000</span>);
 </code></pre>
 				<h2 id="rest-services">REST Services</h2>
 				<p>Service operations can be made available through a REST api by adding decorators to the service implementation methods.
-					Revisiting the previously defined <code>CalculatorService</code> we add the <a href="globals.html#webget">WebGet</a> decorator to the <code>add</code> and <code>subtract</code>
+					Revisiting the previously defined <code>CalculatorService</code> we add the <a href="http://artifacthealth.github.io/service-model/globals.html#webget">WebGet</a> decorator to the <code>add</code> and <code>subtract</code>
 				methods. </p>
 				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { Operation, Contract, WebGet } from <span class="hljs-string">"service-model"</span>;
 
@@ -150,9 +150,9 @@ app.listen(<span class="hljs-number">3000</span>);
     }
 }
 </code></pre>
-				<p>The WebGet decorator defines a <a href="classes/urltemplate.html">UrlTemplate</a> for each method which is used to choose the operation and decode method
+				<p>The WebGet decorator defines a <a href="http://artifacthealth.github.io/service-model/classes/urltemplate.html">UrlTemplate</a> for each method which is used to choose the operation and decode method
 				parameters.</p>
-				<p>We then create an endpoint with the <a href="classes/restbehavior.html">RestBehavior</a>. The <code>CalculatorService</code> now has two endpoints, supporting both
+				<p>We then create an endpoint with the <a href="http://artifacthealth.github.io/service-model/classes/restbehavior.html">RestBehavior</a>. The <code>CalculatorService</code> now has two endpoints, supporting both
 				REST and RPC.</p>
 				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { RestBehavior } from <span class="hljs-string">"service-model"</span>;
 
@@ -265,13 +265,61 @@ factory.addService(CalculatorService)
 						<a href="classes/webinvokeoptions.html" class="tsd-kind-icon">Web<wbr>Invoke<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/expressrequest.html" class="tsd-kind-icon">Express<wbr>Request</a>
+						<a href="interfaces/behaviorannotation.html" class="tsd-kind-icon">Behavior<wbr>Annotation</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/expressresponse.html" class="tsd-kind-icon">Express<wbr>Response</a>
+						<a href="interfaces/callback.html" class="tsd-kind-icon">Callback</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/constructor.html" class="tsd-kind-icon">Constructor</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/contractbehavior.html" class="tsd-kind-icon">Contract<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/endpointbehavior.html" class="tsd-kind-icon">Endpoint<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/errorhandler.html" class="tsd-kind-icon">Error<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/faultformatter.html" class="tsd-kind-icon">Fault<wbr>Formatter</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/instanceprovider.html" class="tsd-kind-icon">Instance<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/logger.html" class="tsd-kind-icon">Logger</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/loggeroptions.html" class="tsd-kind-icon">Logger<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/messageformatter.html" class="tsd-kind-icon">Message<wbr>Formatter</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/messageinspector.html" class="tsd-kind-icon">Message<wbr>Inspector</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/operationbehavior.html" class="tsd-kind-icon">Operation<wbr>Behavior</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/operationinvoker.html" class="tsd-kind-icon">Operation<wbr>Invoker</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/operationoptions.html" class="tsd-kind-icon">Operation<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/operationselector.html" class="tsd-kind-icon">Operation<wbr>Selector</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/requestcontext.html" class="tsd-kind-icon">Request<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/resultcallback.html" class="tsd-kind-icon">Result<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/servicebehavior.html" class="tsd-kind-icon">Service<wbr>Behavior</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/serviceoptions.html" class="tsd-kind-icon">Service<wbr>Options</a>

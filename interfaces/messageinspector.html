@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DispatcherFactory | service-model</title>
+	<title>MessageInspector | service-model</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="dispatcherfactory.html">DispatcherFactory</a>
+					<a href="messageinspector.html">MessageInspector</a>
 				</li>
 			</ul>
-			<h1>Class DispatcherFactory</h1>
+			<h1>Interface MessageInspector</h1>
 		</div>
 	</div>
 </header>
@@ -68,29 +68,15 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The DispatcherFactory is the primary class used to configure the service model, and is responsible for creating the
-						<a href="requestdispatcher.html">RequestDispatcher</a> based on the service descriptions.</p>
+						<p>Describes an extension point that can inspect and modify messages.</p>
 					</div>
-					<p><img src="../assets/images/uml8.png" alt=""></p>
-					<h3 id="example">Example</h3>
-					<p>Once our service is defined, we add it to a DispatcherFactory. We then add an endpoint to the service,
-					providing the name of the contract, the base address for the endpoint, and a list of endpoint behaviors.</p>
-					<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { DispatcherFactory, RpcBehavior } from <span class="hljs-string">"service-model"</span>;
-
-<span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> DispatcherFactory();
-
-factory.addService(CalculatorService)
-            .addEndpoint(<span class="hljs-string">"Calculator"</span>, <span class="hljs-string">"/api/calculator"</span>, [<span class="hljs-keyword">new</span> RpcBehavior()]);
-</code></pre>
-					<p>In this case, we add the <a href="rpcbehavior.html">RpcBehavior</a> which indicates that operations on this endpoint will be available
-					through RPC.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DispatcherFactory</span>
+						<span class="target">MessageInspector</span>
 					</li>
 				</ul>
 			</section>
@@ -99,97 +85,83 @@ factory.addService(CalculatorService)
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="dispatcherfactory.html#services" class="tsd-kind-icon">services</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="dispatcherfactory.html#addservice" class="tsd-kind-icon">add<wbr>Service</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="dispatcherfactory.html#createdispatcher" class="tsd-kind-icon">create<wbr>Dispatcher</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="messageinspector.html#afterreceiverequest" class="tsd-kind-icon">after<wbr>Receive<wbr>Request</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="messageinspector.html#beforesendreply" class="tsd-kind-icon">before<wbr>Send<wbr>Reply</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="services" class="tsd-anchor"></a>
-					<h3>services</h3>
-					<div class="tsd-signature tsd-kind-icon">services<span class="tsd-signature-symbol">:</span> <a href="servicedescription.html" class="tsd-signature-type">ServiceDescription</a><span class="tsd-signature-symbol">[]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/dispatcherFactory.ts#L50">dispatcherFactory.ts:50</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>List of service descriptions configured for the dispatcher factory.</p>
-						</div>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="addservice" class="tsd-anchor"></a>
-					<h3>add<wbr>Service</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Service<span class="tsd-signature-symbol">(</span>ctr<span class="tsd-signature-symbol">: </span><a href="../interfaces/constructor.html" class="tsd-signature-type">Constructor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="servicedescription.html" class="tsd-signature-type">ServiceDescription</a></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="afterreceiverequest" class="tsd-anchor"></a>
+					<h3>after<wbr>Receive<wbr>Request</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">after<wbr>Receive<wbr>Request<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="../classes/message.html" class="tsd-signature-type">Message</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/dispatcherFactory.ts#L62">dispatcherFactory.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/dispatcher/dispatchEndpoint.ts#L193">dispatcher/dispatchEndpoint.ts:193</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Adds a service.</p>
+									<p>Called after a message has been received but before it has been dispatched. Returns a value that is passed
+									to beforeSendReply.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ctr: <a href="../interfaces/constructor.html" class="tsd-signature-type">Constructor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>request: <a href="../classes/message.html" class="tsd-signature-type">Message</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The constructor for the service.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The name of the service. If not specified the name of the constructor is used.</p>
+										<p>The request message.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="servicedescription.html" class="tsd-signature-type">ServiceDescription</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="createdispatcher" class="tsd-anchor"></a>
-					<h3>create<wbr>Dispatcher</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Dispatcher<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="requestdispatcher.html" class="tsd-signature-type">RequestDispatcher</a></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="beforesendreply" class="tsd-anchor"></a>
+					<h3>before<wbr>Send<wbr>Reply</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">before<wbr>Send<wbr>Reply<span class="tsd-signature-symbol">(</span>reply<span class="tsd-signature-symbol">: </span><a href="../classes/message.html" class="tsd-signature-type">Message</a>, state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/dispatcherFactory.ts#L76">dispatcherFactory.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/artifacthealth/service-model/blob/master/src/dispatcher/dispatchEndpoint.ts#L200">dispatcher/dispatchEndpoint.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a request dispatcher used for dispatching service requests.</p>
+									<p>Called after the operation has returned but before the reply message is sent.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="requestdispatcher.html" class="tsd-signature-type">RequestDispatcher</a></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>reply: <a href="../classes/message.html" class="tsd-signature-type">Message</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The reply message.</p>
+									</div>
+								</li>
+								<li>
+									<h5>state: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The value returned from afterReceiveRequest.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -207,17 +179,14 @@ factory.addService(CalculatorService)
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="dispatcherfactory.html" class="tsd-kind-icon">Dispatcher<wbr>Factory</a>
+					<li class="current tsd-kind-interface">
+						<a href="messageinspector.html" class="tsd-kind-icon">Message<wbr>Inspector</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="dispatcherfactory.html#services" class="tsd-kind-icon">services</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="messageinspector.html#afterreceiverequest" class="tsd-kind-icon">after<wbr>Receive<wbr>Request</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="dispatcherfactory.html#addservice" class="tsd-kind-icon">add<wbr>Service</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="dispatcherfactory.html#createdispatcher" class="tsd-kind-icon">create<wbr>Dispatcher</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="messageinspector.html#beforesendreply" class="tsd-kind-icon">before<wbr>Send<wbr>Reply</a>
 							</li>
 						</ul>
 					</li>
