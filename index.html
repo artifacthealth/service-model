@@ -114,7 +114,7 @@ factory.addService(CalculatorService)
 				<p>The previously configured factory is then used to create a <a href="http://artifacthealth.github.io/service-model/classes/requestdispatcher.html">RequestDispatcher</a> which is responsible for handling
 					service requests. In this example we configure an <a href="https://www.npmjs.com/package/express">Express</a> web server
 					to delegate all requests with a base path of &quot;/api&quot; to the RequestDispatcher. The <a href="http://artifacthealth.github.io/service-model/classes/expressrequestcontext.html">ExpressRequestContext</a> comes
-				packaged in the library but a <a href="http://artifacthealth.github.io/service-model/classes/requestcontext.html">RequestContext</a> can easily be created for other server platforms. </p>
+				packaged in the library but a <a href="http://artifacthealth.github.io/service-model/interfaces/requestcontext.html">RequestContext</a> can easily be created for other server platforms. </p>
 				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> * as express from <span class="hljs-string">"express"</span>;
 
 <span class="hljs-keyword">var</span> app = express();
