@@ -76,6 +76,7 @@ packaged in the library but a [RequestContext](http://artifacthealth.github.io/s
 
 ```typescript
 import * as express from "express";
+import { ExpressRequestContext } from "service-model";
 
 var app = express();
 var dispatcher = factory.createDispatcher();

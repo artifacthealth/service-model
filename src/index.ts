@@ -9,6 +9,7 @@ export { OperationContext, RequestContext } from "./operationContext";
 export { Url } from "./url";
 export { HttpStatusCode } from "./httpStatusCode";
 export { ExpressRequestContext } from "./expressRequestContext";
+export { Callback, ResultCallback } from "./common/callbackUtil";
 
 export { ContractDescription, ContractBehavior } from "./description/contractDescription";
 export { EndpointDescription, EndpointBehavior } from "./description/endpointDescription";

@@ -7,7 +7,7 @@ import {Message} from "../message";
 import {Url} from "../url";
 import {RequestContext} from "../operationContext";
 import {FaultError} from "../faultError";
-import {ResultCallback} from "../common/callbackUtil";
+import {ResultCallback, Callback} from "../common/callbackUtil";
 
 /**
  * Represents an endpoint for a service in the dispatcher. Exposes configuration options for the endpoint.

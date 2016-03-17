@@ -70,8 +70,8 @@ export interface ExpressRequest {
     headers: { [key: string]: string; };
     originalUrl: string;
 
-    addListener(event: string, listener: Function): ExpressRequest;
-    removeListener(event: string, listener: Function): ExpressRequest;
+    addListener(event: string, listener: Function): any;
+    removeListener(event: string, listener: Function): any;
 }
 
 /**
