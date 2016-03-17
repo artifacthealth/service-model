@@ -17,11 +17,12 @@ import {Message} from "./message";
  * event on the [[RequestDispatcher]].) See the [node documentation](https://nodejs.org/api/domain.html) for more
  * information.
  *
- * Creation of an OperationContext is be enabled for a service by setting [[operationContextRequired]] to true on
- * the [[DispatchService]]. This can be accomplished by adding the [[Service]] decorator to the service implementation:
+ * Creation of an OperationContext is disabled by default. It is be enabled for a service by setting
+ * [[createOperationContext]] to true on the [[DispatchService]]. This can be accomplished by adding the [[Service]]
+ * decorator to the service implementation:
  *
  * ```typescript
- * @Service({ operationContext: true })
+ * @Service({ createOperationContext: true })
  * @Contract("Calculator")
  * class CalculatorService {
  *     ...
