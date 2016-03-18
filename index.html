@@ -118,6 +118,7 @@ factory.addService(CalculatorService)
 					to delegate all requests with a base path of &quot;/api&quot; to the RequestDispatcher. The <a href="http://artifacthealth.github.io/service-model/classes/expressrequestcontext.html">ExpressRequestContext</a> comes
 				packaged in the library but a <a href="http://artifacthealth.github.io/service-model/interfaces/requestcontext.html">RequestContext</a> can easily be created for other server platforms. </p>
 				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> * as express from <span class="hljs-string">"express"</span>;
+<span class="hljs-keyword">import</span> { ExpressRequestContext } from <span class="hljs-string">"service-model"</span>;
 
 <span class="hljs-keyword">var</span> app = express();
 <span class="hljs-keyword">var</span> dispatcher = factory.createDispatcher();
