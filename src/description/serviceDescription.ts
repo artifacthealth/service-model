@@ -42,6 +42,12 @@ export class ServiceDescription {
     serviceType: Type;
 
     /**
+     * Must be set to true when type metadata is not available. For example, when using plain JavaScript. By default an
+     * error is raised if type metadata is not available.
+     */
+    disableMissingMetadataError: boolean;
+
+    /**
      * A list of contracts implemented by the service.
      * @hidden
      */
@@ -269,8 +275,10 @@ export class ServiceDescription {
             throw new Error(`Invalid operation '${operationDescription.name}' on service '${this.name}'. Final parameter on operation must be a callback function.`);
         }
 
-        if(finalParameter && !finalParameter.type) {
-            throw new Error("Missing parameter type metadata. Please make sure the --emitDecoratorMetadata option is enabled on the TypeScript compiler.");
+        if(!this.disableMissingMetadataError && finalParameter && !finalParameter.type) {
+            throw new Error("Missing parameter type metadata. Please make sure the --emitDecoratorMetadata option is " +
+                "enabled on the TypeScript compiler. If using plain JavaScript set disableMissingMetadataError to " +
+                "true on the ServiceDescription.");
         }
 
         this._addOperationBehaviors(operationDescription, method);
