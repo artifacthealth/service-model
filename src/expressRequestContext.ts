@@ -39,11 +39,13 @@ export class ExpressRequestContext implements RequestContext {
         if(Buffer.isBuffer(message.body)) {
             this._res.end(<Buffer>message.body, 'binary');
         }
-        else if(typeof message.body.pipe === "function") {
+        else if(message.body && typeof message.body.pipe === "function") {
             message.body.pipe(this._res);
         }
         else {
-            this._res.send(message.body);
+            if(message.body != null) {
+                this._res.send(message.body);
+            }
             this._res.end();
         }
     }
