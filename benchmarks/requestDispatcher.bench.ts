@@ -10,7 +10,7 @@ import { VersioningBehavior } from "../src/behaviors/versioningBehavior";
 import { RpcBehavior } from "../src/behaviors/rpcBehavior";
 import { DebugBehavior } from "../src/behaviors/debugBehavior";
 import { ResultCallback } from "../src/common/callbackUtil";
-import { DummyRequestContext } from "../tests/dummRequestContext";
+import { DummyRequestContext } from "dummyRequestContext.ts";
 
 suite("RequestDispatcher", () => {
 
@@ -30,7 +30,7 @@ suite("RequestDispatcher", () => {
     });
 
     var message = new Message({"add2": [ 1, 2 ]});
-    message.headers.set("Accept-Version", "^1.0.0");
+    //message.headers.set("Accept-Version", "^1.0.0");
     message.url = new Url("/services/calculator-service/");
 
     test("dispatch", (done) => {

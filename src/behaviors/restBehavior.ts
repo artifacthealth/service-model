@@ -4,6 +4,7 @@ import {RestMessageFormatter} from "../dispatcher/restMessageFormatter";
 import {RestFaultFormatter} from "../dispatcher/restFaultFormatter";
 import {RestOperationSelector} from "../dispatcher/restOperationSelector";
 import {BaseAddressMessageFilter} from "../dispatcher/baseAddressMessageFilter";
+import {WebInvokeAnnotation} from "../annotations";
 
 /**
  * Endpoint behavior that enables REST communication on an endpoint.
@@ -31,11 +32,16 @@ export class RestBehavior implements EndpointBehavior {
         }
 
         for (var i = 0; i < operations.length; i++) {
-            if(endpoint.operations[i].name != operations[i].name) {
-                throw new Error("Mismatch between operations in DispatchEndpoint and EndpointDescription");
-            }
 
-            endpoint.operations[i].formatter = new RestMessageFormatter(endpoint, operations[i]);
+            // check if method is annotated as callback through the REST api
+            var annotation = operations[i].method.getAnnotations(WebInvokeAnnotation)[0];
+            if(annotation) {
+                if (endpoint.operations[i].name != operations[i].name) {
+                    throw new Error("Mismatch between operations in DispatchEndpoint and EndpointDescription");
+                }
+
+                endpoint.operations[i].formatter = new RestMessageFormatter(endpoint, operations[i]);
+            }
         }
     }
 }

@@ -31,9 +31,9 @@ export class DummyRequestContext implements RequestContext {
 
         if(this._callback) {
             var callback = this._callback;
-            process.nextTick(() => callback(err, message));
-            this._callback = function () {
-            };
+            callback(err, message);
+            /*this._callback = function () {
+            };*/
         }
     }
 }

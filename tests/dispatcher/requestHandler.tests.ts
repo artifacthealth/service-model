@@ -6,7 +6,7 @@ import {RpcBehavior} from "../../src/behaviors/rpcBehavior";
 import {DebugBehavior} from "../../src/behaviors/debugBehavior";
 import {Message} from "../../src/message";
 import {Url} from "../../src/url";
-import {DummyRequestContext} from "../dummRequestContext";
+import {DummyRequestContext} from "../dummyRequestContext";
 import {ResultCallback} from "../../src/common/callbackUtil";
 import {HttpStatusCode} from "../../src/httpStatusCode";
 import {ErrorHandler} from "../../src/dispatcher/dispatchEndpoint";

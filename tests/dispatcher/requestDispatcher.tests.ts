@@ -3,7 +3,7 @@ import {RequestDispatcher} from "../../src/dispatcher/requestDispatcher";
 import {DispatcherFactory} from "../../src/dispatcherFactory";
 import {CalculatorService} from "../fixtures/calculatorService";
 import {RpcBehavior} from "../../src/behaviors/rpcBehavior";
-import {DummyRequestContext} from "../dummRequestContext";
+import {DummyRequestContext} from "../dummyRequestContext";
 import {Message} from "../../src/message";
 import {Url} from "../../src/url";
 import {HttpStatusCode} from "../../src/httpStatusCode";
