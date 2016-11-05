@@ -10,7 +10,7 @@ import { VersioningBehavior } from "../src/behaviors/versioningBehavior";
 import { RpcBehavior } from "../src/behaviors/rpcBehavior";
 import { DebugBehavior } from "../src/behaviors/debugBehavior";
 import { ResultCallback } from "../src/common/callbackUtil";
-import { DummyRequestContext } from "dummyRequestContext.ts";
+import { DummyRequestContext } from "../tests/dummyRequestContext.ts";
 
 suite("RequestDispatcher", () => {
 

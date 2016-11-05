@@ -145,7 +145,7 @@ export class UrlTemplate {
         var seen = new Set<string>();
 
         for(let name in query) {
-            if(query.hasOwnProperty(name)) {
+            if(query[name] !== undefined) {
                 var value = query[name];
 
                 var error: string;
@@ -213,7 +213,7 @@ export class UrlTemplate {
                 if (this._queryParams && url.query) {
                     var queryParams = parseQueryString(url.query);
                     for (var p in queryParams) {
-                        if (queryParams.hasOwnProperty(p)) {
+                        if (queryParams[p] !== undefined) {
                             var key = this._queryParams.get(p);
                             if (key) {
                                 args.set(key, queryParams[p]);
