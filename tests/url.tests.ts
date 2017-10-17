@@ -27,6 +27,12 @@ describe('Url', () => {
             var url = new Url("test");
             assert.equal(url.pathname, "/test");
         });
+
+        it('normalizes to / for empty path', () => {
+
+            assert.equal(new Url("").pathname, "/");
+            assert.equal(new Url("/").pathname, "/");
+        });
     });
 
     describe('clone', () => {

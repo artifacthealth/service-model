@@ -238,8 +238,15 @@ export class UrlTemplate {
         // create a new instance of UrlTemplate without calling constructor
         var template = Object.create(UrlTemplate.prototype);
 
-        // make sure to trim the ^ from the existing RegExp
-        template._pattern = new RegExp("^" + escape(address.pathname) + this._pattern.source.substring(1), "i");
+        // special case for empty path
+        if (this._pattern.source == "^\\/$") {
+            // just use the prefix
+            template._pattern = new RegExp("^" + escape(address.pathname) + "$", "i");
+        }
+        else {
+            // make sure to trim the ^ from the existing RegExp
+            template._pattern = new RegExp("^" + escape(address.pathname) + this._pattern.source.substring(1), "i");
+        }
 
         // copy over other fields (UrlTemplate is immutable so this is OK)
         template._pathParams = this._pathParams;

@@ -86,6 +86,17 @@ describe('UrlTemplate', () => {
             var template = new UrlTemplate("/{id}");
             assert.isFalse(template.match(new Url("/path/get/1")));
         });
+
+        it('matches empty templates', () => {
+
+            var template1 = new UrlTemplate("");
+            assert.isTrue(template1.match(new Url("/")));
+            assert.isTrue(template1.match(new Url("")));
+
+            var template2 = new UrlTemplate("/");
+            assert.isTrue(template2.match(new Url("/")));
+            assert.isTrue(template2.match(new Url("")));
+        });
     });
 
     describe('parses', () => {
@@ -117,6 +128,23 @@ describe('UrlTemplate', () => {
             var template = new UrlTemplate("/path/{id}?x={px}");
             var args = template.parse(new Url("/path/1?x=10&y=11"));
             assert.isFalse(args.has("y"));
+        });
+    });
+
+    describe("prefix", () => {
+
+        it('prepends a prefix to the pattern', () => {
+
+            var template = new UrlTemplate("/path/{id}");
+            template = template.prefix(new Url("/something"));
+            assert.isTrue(template.match(new Url("https://someotherserver.com:8080/something/path/1?a=1")));
+        });
+
+        it("ensures that pattern remains normalized (no training slash)", () => {
+
+            var template = new UrlTemplate("");
+            template = template.prefix(new Url("/something"));
+            assert.isTrue(template.match(new Url("https://someotherserver.com:8080/something")));
         });
     });
 });
