@@ -231,28 +231,48 @@ export class UrlTemplate {
      * Returns a new UrlTemplate prefixed with the specified base address.
      * @param address The base address.
      */
-    prefix(address: Url): UrlTemplate {
+    prefix(address: Url): UrlTemplate;
+    prefix(prefixTemplate: UrlTemplate): UrlTemplate;
+    prefix(addressOrPrefixTemplate: any): UrlTemplate {
 
-        if(!address || !address.pathname) return this;
+        if (!addressOrPrefixTemplate) return this;
 
         // create a new instance of UrlTemplate without calling constructor
-        var template = Object.create(UrlTemplate.prototype);
+        var ret = Object.create(UrlTemplate.prototype);
+
+        var pattern: string;
+        if (addressOrPrefixTemplate instanceof UrlTemplate) {
+            pattern = UrlTemplate._getTemplatePattern(addressOrPrefixTemplate);
+        }
+        else {
+            pattern = UrlTemplate._getAddressPattern(addressOrPrefixTemplate);
+        }
 
         // special case for empty path
         if (this._pattern.source == "^\\/$") {
             // just use the prefix
-            template._pattern = new RegExp("^" + escape(address.pathname) + "$", "i");
+            ret._pattern = new RegExp("^" + pattern + "$", "i");
         }
         else {
             // make sure to trim the ^ from the existing RegExp
-            template._pattern = new RegExp("^" + escape(address.pathname) + this._pattern.source.substring(1), "i");
+            ret._pattern = new RegExp("^" + pattern + this._pattern.source.substring(1), "i");
         }
 
         // copy over other fields (UrlTemplate is immutable so this is OK)
-        template._pathParams = this._pathParams;
-        template._queryParams = this._queryParams;
+        ret._pathParams = this._pathParams;
+        ret._queryParams = this._queryParams;
 
-        return template;
+        return ret;
+    }
+
+    private static _getTemplatePattern(prefixTemplate: UrlTemplate): string {
+
+        return prefixTemplate._pattern.source.substring(1, prefixTemplate._pattern.source.length - 1);
+    }
+
+    private static _getAddressPattern(address: Url): string {
+
+        return !address.pathname ? "" : escape(address.pathname);
     }
 
     /**

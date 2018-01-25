@@ -133,7 +133,7 @@ describe('UrlTemplate', () => {
 
     describe("prefix", () => {
 
-        it('prepends a prefix to the pattern', () => {
+        it('prepends an address prefix to the pattern', () => {
 
             var template = new UrlTemplate("/path/{id}");
             template = template.prefix(new Url("/something"));
@@ -145,6 +145,13 @@ describe('UrlTemplate', () => {
             var template = new UrlTemplate("");
             template = template.prefix(new Url("/something"));
             assert.isTrue(template.match(new Url("https://someotherserver.com:8080/something")));
+        });
+
+        it('prepends a template prefix to the pattern', () => {
+
+            var template = new UrlTemplate("/path/{id}");
+            template = template.prefix(new UrlTemplate("/org/{orgId}"));
+            assert.isTrue(template.match(new Url("https://someotherserver.com:8080/org/1234/path/1?a=1")));
         });
     });
 });
