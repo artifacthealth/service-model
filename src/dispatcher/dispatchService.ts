@@ -4,6 +4,7 @@ import { RequestDispatcher } from "./requestDispatcher";
 import { Message } from "../message";
 import { BaseAddressMessageFilter } from "./baseAddressMessageFilter";
 import { Url } from "../url";
+import {RequestContext} from "../operationContext";
 
 /**
  * Represents a service in the dispatcher. Exposes the configuration options for the service.
@@ -72,6 +73,7 @@ export interface InstanceProvider {
     /**
      * Gets an instance of a service.
      * @param message The request message.
+     * @param request The request context.
      */
-    getInstance(message: Message): Object;
+    getInstance(message: Message, request: RequestContext): Object;
 }

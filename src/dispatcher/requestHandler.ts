@@ -144,7 +144,7 @@ export class RequestHandler implements RequestContext {
 
     private _invoke(operation: DispatchOperation, args: any[]): void {
 
-        var instance = this._endpoint.service.instanceProvider.getInstance(this.message);
+        var instance = this._endpoint.service.instanceProvider.getInstance(this.message, this._request);
 
         operation.invoker.invoke(instance, args, (err, result) => {
             if (err) return this._handleError(err);
