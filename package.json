@@ -1,7 +1,7 @@
 {
   "name": "service-model",
   "description": "An object oriented web service framework inspired by Windows Communication Foundation.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": {
     "name": "Artifact Health, LLC",
     "url": "http://www.artifacthealth.com"
@@ -23,7 +23,7 @@
     "definition": "index.d.ts"
   },
   "dependencies": {
-    "reflect-helper": "^0.1.11",
+    "reflect-helper": "^1.1.0",
     "semver": "^4.3.1"
   },
   "devDependencies": {
