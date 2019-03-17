@@ -11,6 +11,7 @@ import {ResultCallback} from "../../src/common/callbackUtil";
 import {HttpStatusCode} from "../../src/httpStatusCode";
 import {ErrorHandler} from "../../src/dispatcher/dispatchEndpoint";
 import {RequestContext} from "../../src/operationContext";
+import {EndpointBehavior} from "../../src/description/endpointDescription";
 
 describe('RequestHandler', () => {
 
@@ -189,7 +190,7 @@ describe('RequestHandler', () => {
 
         var factory = new DispatcherFactory();
         var service = factory.addService(CalculatorService);
-        var behaviors = [new RpcBehavior()];
+        var behaviors: EndpointBehavior[] = [new RpcBehavior()];
         if(debug) {
             behaviors.push(new DebugBehavior());
         }
